@@ -103,6 +103,29 @@ app.get('/api/productos', (req, res) => {
     const productos = db.prepare('SELECT * FROM productos ORDER BY fecha DESC').all();
     res.json(productos);
 });
+// Ruta para obtener PERFIL del usuario logueado
+app.get('/api/perfil', (req, res) => {
+
+    const token = req.headers['authorization'];
+    if (!token) {
+        return res.status(401).json({ error: 'Debes iniciar sesión' });
+    }
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        
+        // Obtener datos del usuario
+        const usuario = db.prepare('SELECT id, nombre, email, fecha_registro FROM usuarios WHERE id = ?').get(datos.id);
+        
+        // Obtener productos del usuario
+        const productos = db.prepare('SELECT * FROM productos WHERE vendedor_id = ?').all(datos.id);
+
+        res.json({ usuario, productos });
+
+    } catch (error) {
+        return res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
