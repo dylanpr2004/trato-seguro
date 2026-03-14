@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es"> 
+<head>
+    <meta charset="UTF-8">
+    <title>Trato Seguro CL - Inicio</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Un sitio donde tus compra/venta son seguras, sin riesgo de fraude.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <header class="header-principal">
+        <div class="header-top">
+            <div class="logo">
+                <h1>Trato Seguro CL</h1>
+            </div>
+            
+            <div class="search-bar">
+                <form action="busqueda.html" method="get" class="search-form-inline">
+                    <input type="text" placeholder="Buscar en Trato Seguro" aria-label="Buscar" name="query" class="search-input-field">
+                    <button type="submit" class="search-icon">🔍</button>
+                    <a href="busqueda.html" class="advanced-filter-btn" title="Filtro Avanzado">⚙️</a>
+                </form>
+            </div>
+
+            <div class="user-access">
+                <a class="login-text-link" href="login.html" id="btn-acceso">HOLA, ¡inicia sesión acá!</a>
+                <span class="login-icon">👤</span>
+            </div>
+        </div>  
+        
+        <nav class="header-nav">
+            <a href="/categorias" class="category-menu">☰ Categoría</a>
+            <a href="chat_general.html" class="nav-link">💬 Chat General</a> 
+            <a href="chat.html" class="nav-link">✉️ Chat Privado</a> 
+            <a href="/soporte" class="nav-link">Soporte</a>
+            <a href="/social" class="nav-link">Social</a> 
+        </nav>
+    </header>
+
+    <main class="hero-section">
+        <div class="hero-content">
+            <h1>Trato Seguro CL: Compra y Vende con Confianza</h1>
+            <p class="subtitle">La única plataforma que garantiza la autenticidad y el estado del producto antes de completar el pago.</p>
+            
+            <div class="cta-buttons">
+                <a href="publicar.html" class="button-primary button-cta centered-button">
+                    Quiero Vender Ahora
+                </a>
+                <a href="busqueda.html" class="button-secondary button-cta centered-button">
+                    Explorar Productos
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <section id="featured-products">
+        <h2>Productos Destacados de la Semana</h2>
+        <div class="product-grid" id="product-grid"></div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Trato Seguro CL</h3>
+                <p>Tu plataforma segura en Chile para comprar y vender.</p>
+                <p>Contacto: <a href="mailto:contacto@trato-seguro.cl">contacto@trato-seguro.cl</a></p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">📘</a>
+                    <a href="#" aria-label="Instagram">📸</a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Ayuda y Legal</h3>
+                <ul>
+                    <li><a href="/faq">Preguntas Frecuentes (FAQ)</a></li>
+                    <li><a href="/soporte">Centro de Soporte</a></li>
+                    <li><a href="/terminos">Términos y Condiciones</a></li>
+                    <li><a href="/privacidad">Política de Privacidad</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Garantía y Pagos</h3>
+                <p>Transacciones protegidas con los siguientes medios:</p>
+                <div class="payment-logos">
+                    <img src="ruta/a/visa-logo.png" alt="Visa">
+                    <img src="ruta/a/mastercard-logo.png" alt="Mastercard">
+                </div>
+                <p class="ssl-info">🔒 Sitio con Cifrado SSL</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Trato Seguro CL. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Detectar sesión
+        const token = localStorage.getItem('token');
+        const usuario = localStorage.getItem('usuario');
+        const btnAcceso = document.getElementById('btn-acceso');
+
+        if (token && usuario) {
+            btnAcceso.textContent = '👤 ' + usuario;
+            btnAcceso.href = 'perfil.html';
+        }
+
+        // Cargar productos reales desde la base de datos
+        async function cargarProductos() {
+            try {
+                const respuesta = await fetch('http://localhost:3000/api/productos');
+                const productos = await respuesta.json();
+
+                const grid = document.getElementById('product-grid');
+                
+                if (productos.length === 0) {
+                    grid.innerHTML = '<p style="text-align:center">No hay productos publicados aún.</p>';
+                    return;
+                }
+
+                grid.innerHTML = productos.map(p => `
+                    <div class="product-card">
+                        <div class="card-body">
+                            <h3>${p.titulo}</h3>
+                            <p class="price">$${Number(p.precio).toLocaleString('es-CL')} CLP</p>
+                            <span class="security-tag">${p.estado}</span>
+                            <p class="seller-note">Vendido por: ${p.vendedor_nombre}</p>
+                            <a href="detalle-producto.html" class="btn-product">Ver Detalle</a>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.log('Error cargando productos:', error);
+            }
+        }
+
+        cargarProductos();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,2043 @@
+/* 1. IMPORTACIÓN DE LA FUENTE DE GOOGLE FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* --- El resto de tus variables y CSS --- */
+/* 2. APLICACIÓN DE LA FUENTE AL CUERPO DE LA PÁGINA */
+body {
+    /* Establece la fuente principal. 'sans-serif' es el respaldo si Poppins falla. */
+    font-family: 'Poppins', sans-serif; 
+    line-height: 1.6; /* Mejora la legibilidad separando las líneas */
+    color: var(--color-gris-oscuro); /* Asegura que el texto general sea oscuro */
+    
+    /* Regla para el diseño de escritorio (Si todavía la necesitas para evitar el colapso) */
+    min-width: 1200px; 
+}
+h1, h2, h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700; /* Hace los títulos más gruesos y llamativos */
+    color: var(--color-principal); /* Utiliza tu color de marca para los títulos */
+}
+
+/* :root { ... } */
+/* colors.css - Definición de colores */
+:root {
+    /* Colores primarios de la marca */
+    --color-gris-oscuro: #333333;   /* Para el fondo del header */
+    --color-texto-claro: #FFFFFF;   /* Para el texto sobre fondo oscuro */
+    --color-fondo-contenido: #E6FEE8; /* Un verde muy claro (similar al lima de tu prototipo) */
+    
+    /* Color de acción (ej. para la lupa de búsqueda o futuros botones) */
+    --color-accion: #007BFF; /* Un azul de confianza */
+}
+/* Estilos generales del header */
+.header-principal {
+    width: 100%;
+    font-family: sans-serif; /* Usamos una fuente clara */
+}
+
+/* Estilo para la franja superior (Logo, Búsqueda, Usuario) */
+.header-top {
+    background-color: var(--color-gris-oscuro);
+    color: var(--color-texto-claro);
+    padding: 15px 30px; /* Espacio interno */
+    display: flex; /* Permite colocar los elementos uno al lado del otro */
+    justify-content: space-between; /* Distribuye el espacio entre los bloques */
+    align-items: center;
+}
+
+/* Estilo para la franja de navegación secundaria (Categorías, Soporte) */
+.header-nav {
+    background-color: #555555; /* Un gris ligeramente más claro para la separación */
+    padding: 10px 30px;
+}
+
+/* Estilo para los enlaces de navegación */
+.header-nav a {
+    color: var(--color-texto-claro);
+    text-decoration: none; /* Quita el subrayado de los enlaces */
+    margin-right: 25px;
+    font-weight: bold;
+}
+
+/* Estilo para el campo de búsqueda (para que se parezca al prototipo) */
+.search-bar {
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.search-bar input {
+    padding: 8px 10px;
+    border: none;
+    width: 300px; /* Ancho del campo de texto */
+}
+
+.search-icon {
+    background-color: var(--color-accion); /* Usamos el azul para que la lupa destaque */
+    color: var(--color-texto-claro);
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+/* Estilo para el área principal de contenido (el "body" o "main") */
+.content-area {
+    background-color: var(--color-fondo-contenido); 
+    /* Ajustamos el padding para darle buen espacio arriba y abajo */
+    padding: 100px 30px 100px 30px; 
+    /* Eliminamos el min-height fijo para que se ajuste al contenido */
+}
+/* Estilos para el banner principal */
+#hero-banner {
+    padding: 60px 0;
+    text-align: center; /* Centramos el texto y los botones */
+}
+
+#hero-banner h1 {
+    font-size: 2.5em; /* Grande y legible */
+    color: var(--color-gris-oscuro); 
+    margin-bottom: 15px;
+}
+
+#hero-banner p {
+    font-size: 1.2em;
+    color: #666; /* Un gris medio para el subtítulo */
+    max-width: 700px;
+    margin: 0 auto 30px auto; /* Centrar el párrafo */
+}
+
+/* Estilos para los botones de llamada a la acción */
+.cta-buttons a {
+    text-decoration: none;
+    padding: 12px 25px;
+    margin: 0 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+/* --- ESTILOS PARA EL BOTÓN PRINCIPAL (Unirse a Trato Seguro) --- */
+
+.button-primary {
+    /* Fondo: Verde Oscuro Sólido */
+    background-color: #008000;
+    
+    color: white; 
+    
+    padding: 12px 25px;
+    border-radius: 5px; 
+    text-decoration: none; /* ELIMINA EL SUBRAYADO AZUL */
+    font-weight: 700;
+    text-align: center;
+    display: block;
+    margin: 15px auto 0;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-primary:hover {
+    background-color: #006400; 
+}
+
+.button-secondary {
+    background-color: transparent;
+    color: var(--color-accion);
+    border: 2px solid var(--color-accion);
+}
+
+.button-secondary:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+/* Estilos para la sección de Pasos de Seguridad */
+#security-steps {
+    padding: 60px 30px;
+    text-align: center;
+}
+
+#security-steps h2 {
+    font-size: 2em;
+    margin-bottom: 40px;
+    color: var(--color-gris-oscuro);
+}
+
+.step-container {
+    display: flex;
+    justify-content: space-around; /* Distribuye las tres columnas */
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.step-item {
+    flex-basis: 30%; /* Cada columna ocupa el 30% del ancho */
+    padding: 20px;
+    background-color: var(--color-texto-claro); /* Fondo blanco para destacar */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil para darle profundidad */
+}
+
+.step-icon {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.step-item h3 {
+    color: var(--color-accion); /* Usamos el azul para los títulos de los pasos */
+    margin-bottom: 10px;
+}
+/* Estilos para la sección principal de productos */
+#featured-products {
+    padding: 60px 30px;
+    text-align: center;
+    background-color: var(--color-texto-claro); /* Fondo blanco para las tarjetas */
+}
+
+#featured-products h2 {
+    font-size: 2em;
+    margin-bottom: 40px;
+    color: var(--color-gris-oscuro);
+}
+
+.product-grid {
+    display: flex;
+    justify-content: center; /* Centramos el grid */
+    gap: 30px; /* Espacio entre las tarjetas */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-card {
+    flex-basis: 30%; /* Cada tarjeta ocupa un 30% del ancho del contenedor */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden; /* Asegura que la imagen esté contenida */
+    text-align: left;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px); /* Pequeño efecto al pasar el mouse */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.price {
+    font-size: 1.5em;
+    color: #388e3c; /* Un verde oscuro para el precio (asociado a dinero) */
+    font-weight: bold;
+    margin: 5px 0 10px 0;
+}
+
+.security-tag {
+    display: block;
+    font-size: 0.9em;
+    color: var(--color-accion); /* Usamos el azul de confianza */
+    background-color: #e3f2fd; /* Fondo azul muy claro para el tag */
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: fit-content;
+}
+
+.btn-product {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background-color: var(--color-accion);
+    color: var(--color-texto-claro);
+    text-decoration: none;
+    border-radius: 5px;
+}
+/* Estilos para el Footer (Pie de Página) */
+footer {
+    background-color: var(--color-gris-oscuro); 
+    color: var(--color-texto-claro);
+    font-family: sans-serif;
+    padding-top: 40px; 
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 0 30px 40px 30px; /* Padding inferior y lateral */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-col {
+    flex-basis: 30%;
+}
+
+.footer-col h3 {
+    color: var(--color-accion); /* Usamos el azul de acción para los títulos */
+    border-bottom: 2px solid #555;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+/* Estilos de lista (para los enlaces legales) */
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 8px;
+}
+
+.footer-col a {
+    color: #ccc; /* Un gris claro para los enlaces que se vea sobre el fondo oscuro */
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-col a:hover {
+    color: var(--color-texto-claro);
+}
+
+/* Estilos de Logos y Sellos */
+.payment-logos img {
+    height: 25px; 
+    margin-right: 10px;
+    filter: invert(100%); /* Hace que los logos de pago se vean blancos o claros sobre fondo oscuro */
+}
+
+.ssl-info {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #388e3c; /* Verde para la información de seguridad */
+}
+
+/* Estilo para la banda inferior de Copyright */
+.footer-bottom {
+    background-color: #222222; /* Un gris aún más oscuro */
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.8em;
+}
+/* Estilos para centrar el formulario de login */
+.login-main {
+    background-color: var(--color-fondo-contenido); /* Fondo verde claro */
+    min-height: 80vh; /* Asegura que ocupe casi toda la pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background-color: var(--color-texto-claro); /* Fondo blanco para el recuadro */
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para que se vea bien en móvil */
+    text-align: center;
+}
+
+.security-note {
+    color: #388e3c; /* Verde de seguridad */
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--color-gris-oscuro);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Asegura que el padding no cambie el ancho total */
+}
+
+/* Estilos para el botón primario ya los tienes, pero asegúrate de que se apliquen */
+.login-box .button-primary {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+}
+
+.login-links {
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+.login-links a {
+    color: var(--color-accion); /* Azul de acción */
+    text-decoration: none;
+}
+
+.error-text {
+    color: #e53935; /* Rojo para errores */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+/* Estilo para el área completa de Login/Registro */
+.user-access {
+    /* Asegura que el contenido esté centrado verticalmente */
+    display: flex; 
+    align-items: center; 
+}
+
+.login-link-area {
+    color: var(--color-texto-claro); /* Usa el color blanco de tu header */
+    text-decoration: none; /* Quita el subrayado */
+    /* Usamos flex para alinear el texto y el icono */
+    display: flex; 
+    align-items: center;
+    gap: 5px; /* Espacio pequeño entre el texto y el icono */
+    transition: opacity 0.3s;
+}
+
+.login-link-area:hover {
+    opacity: 0.8; /* Efecto sutil al pasar el mouse para indicar que es cliqueable */
+}
+
+/* Puedes eliminar o ajustar el estilo anterior del .login-icon si lo tenías */
+.login-icon {
+    font-size: 1.5em; /* Asegura que el icono sea visible */
+}
+/* Centrado del contenedor principal del login */
+.login-main {
+    background-color: var(--color-fondo-contenido); 
+    /* ¡Usamos la altura completa de la vista para centrar verticalmente! */
+    min-height: 85vh; 
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    padding: 20px; /* Aseguramos padding para móviles */
+}
+
+/* Estilos de la caja del formulario */
+.login-box {
+    background-color: var(--color-texto-claro); 
+    padding: 40px;
+    border-radius: 12px; /* Ligeramente más redondeado para un look moderno */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra más profunda para destacarse */
+    width: 100%;
+    max-width: 420px; 
+    text-align: center;
+    border: 1px solid #e0e0e0; /* Borde sutil */
+}
+/* Título */
+.login-box h2 {
+    color: var(--color-gris-oscuro);
+    font-size: 1.8em;
+    margin-bottom: 5px;
+}
+
+/* Nota de Seguridad */
+.security-note {
+    color: #388e3c; /* Verde de seguridad */
+    font-weight: bold;
+    font-size: 1em;
+    margin-bottom: 25px;
+    border-bottom: 1px dashed #c8e6c9; /* Línea de separación sutil */
+    padding-bottom: 15px;
+}
+
+/* Campos de Entrada */
+.input-group input {
+    width: 100%;
+    padding: 12px 15px; /* Más padding para que sean más fáciles de tocar/clicar */
+    border: 2px solid #ccc; /* Borde más grueso */
+    border-radius: 8px;
+    transition: border-color 0.3s;
+    font-size: 1em;
+}
+
+/* Efecto al enfocar (para usabilidad y seguridad) */
+.input-group input:focus {
+    border-color: var(--color-accion); /* Se ilumina con el azul de Trato Seguro */
+    outline: none; /* Quita el borde de enfoque predeterminado del navegador */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+/* Estilo para la línea de separación */
+.separator {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+    margin: 30px 0;
+}
+
+/* Estilo para la caja de advertencia */
+.security-warning {
+    text-align: left;
+    background-color: #fff3cd; /* Amarillo claro de advertencia */
+    border: 1px solid #ffeeba;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    color: #856404; /* Texto marrón/oscuro para contraste */
+}
+
+.security-warning p:first-child {
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.security-warning p {
+    margin: 5px 0;
+}
+/* Estilos para el contenedor principal */
+.product-detail-main {
+    background-color: #b2e3bb;
+    padding: 40px 20px;
+    
+}
+
+.product-container {
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Columna Izquierda (70%) */
+.product-visuals {
+    flex-basis: 70%;
+}
+
+.product-visuals h1 {
+    font-size: 2.2em;
+    color: var(--color-gris-oscuro);
+    margin-bottom: 20px;
+}
+
+.product-visuals img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain; /* Asegura que la imagen se vea completa */
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border: 1px solid #eee;
+}
+
+/* Columna Derecha (30%) - Sidebar */
+.purchase-info {
+    flex-basis: 30%;
+}
+
+/* Bloque de Precio y Compra */
+/* --- Modificación de .purchase-box --- */
+.purchase-box {
+    background-color: #EFEFEF; /* Gris muy claro, PERO MÁS VISIBLE que el #f7f7f7 */
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid #CCCCCC; /* Borde gris visible */
+    /* Añade esta línea si no la tienes, es crucial para la sombra: */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+}
+.price-large {
+    font-size: 2.5em;
+    color: #388e3c; /* Verde de dinero/oferta */
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.guarantee-note {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 15px;
+}
+
+/* Tarjeta del Vendedor (¡La clave de la confianza!) */
+/* --- Modificación de .seller-card --- */
+.seller-card {
+    border: 1px solid #CCCCCC; /* Mismo borde que el purchase-box */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #EFEFEF; /* Mismo fondo gris que el purchase-box */
+    text-align: left;
+    /* ... (asegúrate de quitar el fondo azul #eaf5ff) ... */
+}
+
+.seller-card h3 {
+    color: var(--color-accion); /* El texto del título mantiene tu color principal */
+    font-size: 1.1em;
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc; /* Un borde gris más claro */
+    margin-bottom: 15px;
+    /* Asegúrate de que no tenga background-color: none; si antes tenía uno */
+}
+
+.verified-tag {
+    font-weight: bold;
+    color: #388e3c; /* Verde de verificado */
+    margin-bottom: 5px;
+}
+/* Estilos para la Galería de Imágenes */
+.main-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain; 
+    border-radius: 8px;
+    margin-bottom: 15px; /* Reducimos el margen */
+    border: 1px solid #eee;
+}
+
+.thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    overflow-x: auto; /* Permite desplazamiento horizontal si hay muchas */
+}
+
+.thumbnails .thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.thumbnails .thumb:hover, .thumbnails .thumb.active {
+    border-color: var(--color-accion); /* Resalta la seleccionada */
+}
+/* --- ESTILOS DE CHECKOUT --- */
+
+.checkout-main {
+    padding: 40px 20px;
+}
+
+.checkout-title {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    color: var(--color-principal); /* O tu color de texto principal */
+    border-bottom: 2px solid var(--color-accion); /* Una línea que enfatice el inicio */
+    padding-bottom: 10px;
+}
+
+.checkout-container {
+    display: flex;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start; /* Asegura que las columnas empiecen arriba */
+}
+
+/* --- COLUMNA IZQUIERDA: FORMULARIO Y PAGO (70%) --- */
+.checkout-form-section {
+    flex-basis: 70%;
+    background-color: var(--color-texto-claro); /* Fondo blanco */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombra suave para un efecto de elevación */
+}
+
+.checkout-form-section h2 {
+    color: var(--color-principal);
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Estilos de los campos de formulario */
+.checkout-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas para los campos */
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--color-gris-oscuro);
+}
+
+.checkout-form input[type="text"] {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+.checkout-form input[type="text"]:focus {
+    border-color: var(--color-accion);
+    outline: none;
+}
+
+/* Opciones de Pago */
+.payment-methods {
+    margin-top: 20px;
+}
+
+.payment-card {
+    border: 2px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.payment-card.selected {
+    border-color: var(--color-accion);
+    background-color: #f0f8ff; /* Fondo azul claro para el seleccionado */
+    font-weight: 600;
+}
+
+.payment-card input[type="radio"] {
+    margin-right: 15px;
+    transform: scale(1.2); /* Hace el radio button un poco más grande */
+}
+
+.security-guarantee {
+    text-align: center;
+    font-size: 0.85em;
+    color: #4a4a4a;
+    margin-top: 15px;
+}
+
+/* --- COLUMNA DERECHA: RESUMEN DE ORDEN (30%) --- */
+.order-summary-section {
+    flex-basis: 30%;
+    /* Utiliza un color que contraste pero sea claro */
+    background-color: #e0f2f1; /* Verde/Azul claro para seguridad y resumen */
+    border: 1px solid #b2dfdb;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.order-summary-section h2 {
+    font-size: 1.4em;
+    color: var(--color-principal); 
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.product-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #b2dfdb;
+}
+
+.product-row img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.product-price-summary {
+    font-weight: bold;
+    color: #2e7d32; /* Un verde de precio */
+}
+
+.price-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.total-row {
+    font-size: 1.3em;
+    font-weight: 700;
+    border-top: 2px solid var(--color-principal);
+    padding-top: 10px;
+    margin-top: 15px;
+    color: var(--color-principal);
+}
+
+/* Caja de Garantía Trato Seguro */
+.assurance-box {
+    background-color: #c8e6c9; /* Verde más fuerte para la seguridad */
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: #388e3c;
+    border: 1px solid #81c784;
+}
+
+/* Clases de utilidad */
+.mt-40 { margin-top: 40px; }
+.mt-30 { margin-top: 30px; }
+.large-btn { padding: 15px 30px; font-size: 1.1em; width: 100%; }
+/* --- ESTILOS DE CONFIRMACIÓN DE COMPRA --- */
+
+.confirmation-main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 20px;
+    min-height: 80vh; /* Para que ocupe casi toda la pantalla */
+    background-color: var(--color-fondo-contenido); 
+}
+
+.confirmation-container {
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+}
+
+.success-box {
+    background-color: var(--color-texto-claro);
+    border: 3px solid #66bb6a; /* Borde verde fuerte para éxito */
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.success-icon {
+    font-size: 5em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.success-box h1 {
+    color: #43a047; /* Verde de éxito */
+    font-size: 2.2em;
+    margin-bottom: 10px;
+}
+
+.success-box h2 {
+    color: var(--color-gris-oscuro);
+    font-weight: 400;
+    font-size: 1.3em;
+    margin-bottom: 25px;
+}
+
+.order-id {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: #f1f8e9; /* Fondo muy claro para el ID */
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Pasos a seguir */
+.next-steps h3 {
+    font-size: 1.2em;
+    color: var(--color-principal);
+    margin-bottom: 10px;
+}
+
+.next-steps ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    max-width: 450px;
+    margin: 0 auto 30px;
+}
+
+.next-steps ul li {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="%234CAF50" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>') no-repeat left 5px;
+    background-size: 16px 16px;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+/* Botones de acción */
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* Recordatorio de seguridad fuera del cuadro principal */
+.security-reminder {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #ffe0b2; /* Naranja claro para precaución/recordatorio */
+    color: #e65100; /* Naranja oscuro */
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+}
+/* CLASE PARA BOTONES EN EL CENTRO DE LA PÁGINA DE INICIO */
+.centered-button {
+    display: inline-block !important; /* Fuerza el botón a tener solo el ancho de su contenido */
+    width: auto !important; /* Asegura que no ocupe el 100% */
+}
+/* --- ESTILOS DE PÁGINA DE PUBLICACIÓN --- */
+
+.publish-main {
+    padding: 40px 20px;
+    background-color: var(--color-fondo-contenido);
+}
+
+.publish-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--color-texto-claro);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.publish-title {
+    color: var(--color-principal);
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+.publish-subtitle {
+    color: var(--color-gris-oscuro);
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.publish-form {
+    display: grid;
+    /* Define 2 columnas de tamaño casi igual, con un espacio de 30px */
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px;
+}
+
+.publish-section h2 {
+    color: var(--color-accion); 
+    font-size: 1.4em;
+    padding-bottom: 10px;
+    border-bottom: none; /* ¡QUITAMOS LA LÍNEA! */
+    margin-bottom: 20px;
+}
+
+/* El bloque final del botón debe ocupar todo el ancho */
+.full-width {
+    grid-column: 1 / 3; /* Hace que este div abarque las dos columnas */
+    text-align: center;
+    margin-top: 20px;
+}
+
+.security-note {
+    font-size: 0.9em;
+    color: var(--color-gris-oscuro);
+    margin-top: 15px;
+}
+
+/* Utilidad para dar espacio */
+.mt-30 {
+    margin-top: 30px;
+}
+
+/* Estilo para la nota pequeña en la subida de archivos */
+.small-note {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Aseguramos que los inputs sigan viéndose bien */
+.publish-form .input-group {
+    margin-bottom: 15px;
+}
+.publish-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.publish-form input, 
+.publish-form textarea,
+.publish-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box; /* Crucial para que el padding no desborde el 100% */
+}
+.hero-section {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; /* <<< ASEGURA QUE EL TEXTO DENTRO SE CENTRA */
+    padding: 80px 20px;
+    background-color: var(--color-gris-claro); 
+}
+
+/* Y si el contenido sigue sin centrarse, fuerza también el texto del contenido */
+.hero-content {
+    max-width: 800px;
+    text-align: center; /* <<< FUERZA LA ALINEACIÓN DEL CONTENIDO */
+}
+/* --- ESTILOS PARA LA PÁGINA DE PERFIL (perfil.html) --- */
+
+.profile-main {
+    padding: 30px 20px;
+}
+
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+}
+
+/* 2.1. Menú Lateral (Sidebar) */
+.profile-sidebar {
+    width: 280px;
+    flex-shrink: 0; /* Evita que se encoja */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.profile-sidebar .user-info {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.profile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-nav a {
+    display: block;
+    padding: 10px 15px;
+    color: var(--color-gris-oscuro);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.profile-nav a:hover,
+.profile-nav a.active {
+    background-color: var(--color-principal);
+    color: white;
+}
+
+/* 2.2. Contenido Principal */
+.profile-content {
+    flex-grow: 1; /* Ocupa el resto del espacio */
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.profile-content h2 {
+    color: var(--color-accion);
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+}
+
+/* Media Query para el diseño responsive */
+@media (max-width: 900px) {
+    .profile-container {
+        flex-direction: column; /* Apila el menú y el contenido */
+    }
+    .profile-sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+.login-text-link {
+    color: white !important; 
+    text-decoration: none !important; 
+    font-weight: normal;
+    font-size: 1em;
+}
+
+.login-text-link:hover {
+    color: #cccccc !important;
+    text-decoration: underline; 
+}
+/* ============================================== */
+/* --- ESTILOS DE LA INTERFAZ DE CHAT (DM) --- */
+/* ============================================== */
+
+/* 1. Contenedor Principal: Activa la División en Columnas */
+.chat-container {
+    display: flex; /* <-- CRUCIAL: Divide el contenido en filas horizontales */
+    max-width: 1200px;
+    margin: 40px auto;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    height: 70vh; /* Altura de vista fija para simular app */
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    font-family: Arial, sans-serif; /* Aseguramos una fuente legible */
+}
+
+/* 2. Panel Lateral (Lista de Conversaciones) */
+.sidebar-conversations {
+    width: 300px;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px 0;
+    overflow-y: auto;
+    background-color: #f7f9fb; /* Fondo gris claro */
+    flex-shrink: 0;
+}
+
+.sidebar-conversations h2 {
+    padding: 0 20px 10px;
+    margin-top: 0;
+    color: var(--color-principal, #007bff); /* Usa fallback si no existe la variable */
+    border-bottom: 2px solid #e0eeef;
+}
+
+.chat-search {
+    width: calc(100% - 40px);
+    margin: 10px 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.conversation-item {
+    display: flex;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    align-items: center;
+    position: relative; /* Para posicionar el unread-count */
+}
+
+.conversation-item:hover {
+    background-color: #f0f2f5;
+}
+
+.conversation-item.active {
+    background-color: #e6f7ff;
+    border-left: 3px solid var(--color-principal, #007bff);
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-principal, #007bff);
+    color: white;
+    text-align: center;
+    line-height: 40px;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.conversation-info {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.conversation-info .username {
+    font-weight: bold;
+    display: block;
+    color: #333;
+}
+
+.conversation-info p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.time-stamp {
+    font-size: 0.75em;
+    color: #999;
+    align-self: flex-start;
+    margin-top: 5px;
+}
+
+.unread-count {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--color-alerta, #dc3545);
+    color: white;
+    font-size: 0.75em;
+    padding: 2px 7px;
+    border-radius: 12px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* 3. Ventana de Chat Activa */
+.chat-window {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column; /* Apila el header, historial y input verticalmente */
+}
+
+.chat-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f7f9fb;
+    flex-shrink: 0;
+}
+
+.chat-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+    color: var(--color-gris-oscuro, #343a40);
+}
+
+.message-history {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 4. Estilos de Burbujas de Mensajes */
+.message {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.message p {
+    margin: 0;
+}
+
+.message-time {
+    display: block;
+    font-size: 0.7em;
+    color: #777;
+    margin-top: 5px;
+    text-align: right;
+}
+
+/* Mensajes que envías (Tú) */
+.message.sent {
+    background-color: var(--color-principal, #007bff);
+    color: white;
+    align-self: flex-end; /* A la derecha */
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 15px; 
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+.message.sent .message-time {
+    color: #fffb;
+}
+
+/* Mensajes que recibes */
+.message.received {
+    background-color: #e9ecef; /* Gris claro para mensajes del otro usuario */
+    color: #333;
+    align-self: flex-start; /* A la izquierda */
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 15px; 
+    border-bottom-right-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+/* 5. Área de Input */
+.message-input-area {
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    flex-shrink: 0;
+    background-color: #f7f9fb;
+}
+
+.message-input-area textarea {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+    margin-right: 10px;
+    box-sizing: border-box;
+    height: 40px;
+}
+
+.send-button {
+    flex-shrink: 0; /* Evita que el botón se achique */
+    padding: 0 20px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    /* Usa la clase button-primary de tu CSS general */
+}
+/* --- ESTILOS PARA EL CHAT GENERAL / SALA COMÚN --- */
+
+.general-chat-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    height: 80vh; /* Altura de vista fija para el chat */
+    display: flex;
+    flex-direction: column;
+}
+
+.general-chat-container h2 {
+    color: var(--color-principal);
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-top: 0;
+    flex-shrink: 0;
+}
+
+/* Historial de Mensajes */
+.general-message-history {
+    flex-grow: 1; /* Ocupa todo el espacio disponible */
+    overflow-y: auto; /* Permite el scroll en el historial */
+    padding: 10px 0;
+}
+
+/* Estilo de cada Mensaje */
+.general-chat-message {
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mod-message {
+    background-color: #fff3cd; /* Amarillo pálido para mensajes de moderador */
+    border-left: 4px solid orange;
+    border-radius: 5px;
+}
+
+/* Barra de Información del Usuario (Nombre, Insignias, Hora) */
+.user-info-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.chat-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--color-principal, #007bff);
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.chat-username {
+    font-weight: bold;
+    color: var(--color-gris-oscuro, #333);
+    margin-right: 10px;
+}
+
+.message-time {
+    color: #999;
+    font-size: 0.8em;
+    margin-left: auto; /* Empuja la hora a la derecha */
+}
+
+/* Estilos de las Insignias (Badges) */
+.badge {
+    font-size: 0.7em;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-right: 8px;
+    white-space: nowrap; /* Evita que las insignias se rompan */
+}
+
+.badge.verified {
+    background-color: var(--color-exito, #28a745); /* Verde para verificado */
+    color: white;
+}
+
+.badge.location {
+    background-color: #e9ecef; /* Gris claro para ubicación */
+    color: #6c757d;
+}
+
+.badge.admin {
+    background-color: #6f42c1; /* Púrpura para administrador/moderador */
+    color: white;
+}
+
+.chat-content p {
+    margin: 0;
+    padding-left: 38px; /* Alinea el contenido con el nombre de usuario (ancho avatar + margin) */
+    font-size: 1em;
+    line-height: 1.4;
+    color: #333;
+}
+
+/* Área de Input del Chat General */
+.general-message-input-area {
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    flex-shrink: 0;
+    background-color: white;
+}
+
+.general-message-input-area textarea {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+    margin-right: 10px;
+    box-sizing: border-box;
+    height: 40px;
+}
+
+.general-message-input-area .send-button {
+    padding: 0 20px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+/* --- ESTILOS DE LA PÁGINA DE PERFIL DE USUARIO --- */
+
+.profile-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    display: flex; /* Activa la división en dos columnas */
+    gap: 30px;
+}
+
+/* 1. Columna Lateral (Información de Seguridad) */
+.profile-sidebar {
+    width: 350px;
+    flex-shrink: 0;
+    padding: 20px;
+    background-color: #f7f9fb; /* Fondo gris claro */
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.profile-sidebar section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-sidebar h3 {
+    color: var(--color-principal);
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+/* Identidad */
+.user-identity {
+    text-align: center;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.profile-avatar {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--color-principal, #007bff);
+    color: white;
+    text-align: center;
+    line-height: 80px;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.profile-username {
+    font-size: 1.6em;
+    margin: 5px 0 10px 0;
+    color: #333;
+}
+
+.profile-badge, .profile-location {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.verified-large {
+    background-color: var(--color-exito, #28a745);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 15px !important;
+}
+
+/* Reputación (Reutilizando estilos) */
+.reputation-score {
+    height: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.reputation-score .progress-bar {
+    height: 100%;
+    background-color: var(--color-exito, #28a745);
+    transition: width 0.5s ease-in-out;
+}
+
+.score-text {
+    display: block;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: var(--color-exito);
+    margin-bottom: 5px;
+}
+
+.score-detail {
+    font-size: 0.85em;
+    color: #6c757d;
+}
+
+/* Métricas Clave */
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 5px;
+}
+
+.metric-label {
+    color: #555;
+    font-weight: 500;
+}
+
+.metric-value {
+    font-weight: bold;
+    color: var(--color-gris-oscuro);
+}
+
+.profile-actions {
+    text-align: center;
+}
+
+.contact-btn {
+    width: 100%;
+    padding: 12px;
+}
+
+/* 2. Columna de Contenido (Productos y Actividad) */
+.profile-content {
+    flex-grow: 1;
+}
+
+/* Pestañas */
+.tab-controls {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 15px 20px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #6c757d;
+    transition: color 0.2s;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.tab-btn:hover {
+    color: var(--color-principal);
+}
+
+.tab-btn.active {
+    color: var(--color-principal);
+    border-bottom: 3px solid var(--color-principal);
+}
+
+.tab-content {
+    padding: 10px 0;
+}
+
+.hidden {
+    display: none !important;
+}
+.profile-social-network {
+    text-align: center;
+}
+
+.social-metrics {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.social-item {
+    text-align: center;
+}
+
+.social-count {
+    display: block;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--color-principal, #007bff);
+}
+
+.social-label {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+/* Previsualización de Amigos */
+.friends-preview {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.friend-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: var(--color-principal-claro, #e6f7ff); /* Color más claro que el principal */
+    color: var(--color-principal, #007bff);
+    text-align: center;
+    line-height: 35px;
+    font-weight: bold;
+    font-size: 0.9em;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.friend-avatar.more-count {
+    background-color: #f0f2f5;
+    color: #6c757d;
+}
+/* --- ESTILOS GENERALES DE LA PÁGINA DE DETALLE DE PRODUCTO (Ajustado) --- */
+
+.product-detail-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    display: flex; 
+    gap: 30px;
+    /* Para manejar títulos de móvil/escritorio */
+    position: relative; 
+}
+
+/* Esconder título de escritorio en móvil y viceversa */
+.product-title-desktop { display: block; }
+.product-title-mobile { display: none; }
+
+/* Columna Izquierda (Visual y Descripción) */
+.product-visuals {
+    flex: 2; /* Ocupa 2/3 del espacio */
+}
+
+/* Columna Derecha (Precio y Vendedor) */
+.purchase-info {
+    flex: 1; /* Ocupa 1/3 del espacio */
+    position: sticky; /* Fija la caja del vendedor al hacer scroll */
+    top: 20px; 
+    align-self: flex-start;
+}
+
+/* Galería de Imágenes */
+.main-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain; /* Usar 'contain' para ver la imagen completa */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+.thumbnail-strip {
+    display: flex;
+    gap: 10px;
+}
+.thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.thumb.active {
+    border-color: var(--color-principal, #007bff);
+}
+
+/* Caja de Compra y Precio */
+.purchase-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.price-large {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--color-peligro, #dc3545); 
+    margin: 10px 0 20px 0;
+}
+.buy-now-btn, .reserve-btn {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+.guarantee-note {
+    font-size: 0.9em;
+    color: var(--color-exito, #28a745);
+    text-align: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dotted #e0e0e0;
+}
+
+/* Tarjeta del Vendedor */
+.seller-card {
+    border: 1px solid var(--color-principal-claro, #e6f7ff);
+    background-color: #f7f9fb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.seller-card h3 {
+    color: var(--color-principal);
+    font-size: 1.1em;
+    border-bottom: 1px solid var(--color-principal-claro);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+.seller-details, .reputation-summary {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.seller-username {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-left: 10px;
+    color: var(--color-gris-oscuro);
+    text-decoration: none;
+}
+.score-text-small {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: var(--color-exito);
+    margin-right: 10px;
+}
+
+/* Acciones de Comunicación */
+.communication-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dotted #e0e0e0;
+}
+.contact-seller-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+.btn-secondary-small {
+    display: block;
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--color-principal);
+    text-decoration: none;
+}
+
+/* Estatus de Verificación */
+.verification-status {
+    padding: 15px;
+    background-color: #e6f7ff;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+.verified-tag, .location-tag {
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Adaptación Mobile (Opcional, pero recomendado) */
+@media (max-width: 768px) {
+    .product-detail-container {
+        flex-direction: column;
+    }
+    .product-title-desktop { display: none; }
+    .product-title-mobile { display: block; margin-bottom: 20px; font-size: 1.8em; }
+    .purchase-info { 
+        position: static; /* Desactiva el sticky en móvil */
+    }
+}
+/* --- ESTILOS DE LA PÁGINA DE BÚSQUEDA --- */
+
+.search-page-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 30px;
+}
+
+/* 1. SIDEBAR DE FILTROS */
+.filter-sidebar {
+    flex: 0 0 250px; /* Ancho fijo para el sidebar */
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    height: fit-content; /* Se ajusta a su contenido */
+    position: sticky; /* Fija los filtros al hacer scroll */
+    top: 20px;
+}
+
+.filter-sidebar h2 {
+    color: var(--color-principal);
+    border-bottom: 2px solid var(--color-principal-claro);
+    padding-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dotted #ccc;
+}
+
+.filter-group h3 {
+    font-size: 1.1em;
+    color: var(--color-gris-oscuro);
+    margin-bottom: 10px;
+}
+
+.filter-group select, .filter-group input[type="text"], .filter-group input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.apply-btn {
+    width: 100%;
+    margin-top: 5px;
+}
+
+
+/* 2. ÁREA DE RESULTADOS */
+.search-results {
+    flex: 1; /* Ocupa el resto del espacio disponible */
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.results-header h2 {
+    font-size: 1.5em;
+    color: var(--color-gris-oscuro);
+    margin: 0;
+}
+
+.sort-options select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+/* 3. TARJETA DE PRODUCTO */
+.product-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-link {
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-image {
+    width: 150px; /* Ancho fijo para la imagen en la lista */
+    height: 150px;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.product-title {
+    font-size: 1.2em;
+    color: var(--color-principal);
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.product-price {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--color-peligro);
+    margin-bottom: 10px;
+}
+
+.product-meta {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.reputation-badge {
+    display: inline-block;
+    background-color: var(--color-exito-claro);
+    color: var(--color-exito);
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.reputation-badge.verified {
+    background-color: var(--color-principal-claro);
+    color: var(--color-principal);
+}
+
+
+/* Adaptación Mobile */
+@media (max-width: 768px) {
+    .search-page-container {
+        flex-direction: column;
+    }
+    
+    .filter-sidebar {
+        position: static; /* Quita el sticky en móvil */
+        flex: 1;
+    }
+    
+    .card-link {
+        flex-direction: column;
+    }
+    
+    .product-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .results-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+/* --- ESTILOS PARA EL BOTÓN DE FILTRO AVANZADO --- */
+
+/* Ajustar el contenedor de la barra de búsqueda para acomodar el nuevo botón */
+.search-bar form {
+    display: flex; /* Asegura que todos los elementos estén en línea */
+    align-items: center;
+    /* Asegúrate de que no haya overflow que esconda el botón */
+}
+
+.advanced-filter-btn {
+    background-color: var(--color-secundario, #6c757d); /* Color discreto, gris por defecto */
+    color: white;
+    padding: 3px 9px; 
+    border: none;
+    cursor: pointer;
+    text-decoration: none; /* Es un enlace, no queremos subrayado */
+    font-size: 1.1em;
+    display: flex; /* Para centrar el icono ⚙️ */
+    align-items: center;
+    justify-content: center;
+    height: 80%; /* Ocupa la altura del input */
+    border-top-right-radius: 4px; /* Adapta el radio si el input y el botón de búsqueda lo tienen */
+    border-bottom-right-radius: 4px;
+    margin-left: -1px; /* Para que se pegue al botón de la lupa */
+    transition: background-color 0.2s;
+}
+
+.advanced-filter-btn:hover {
+    background-color: var(--color-secundario-oscuro, #5a6268);
+}
+/* Nuevo estilo para el mensaje informativo en el Checkout */
+.alert-box-info {
+    padding: 15px;
+    background-color: #f0f8ff; /* Azul claro */
+    border: 1px solid #cce5ff;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #004085;
+    margin-top: 15px;
+}
