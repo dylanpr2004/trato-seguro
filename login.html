@@ -46,7 +46,7 @@
         const password = document.getElementById('password').value;
 
         try {
-            const respuesta = await fetch('https://trato-seguro-production.up.railway.app', {
+            const respuesta = await fetch('https://trato-seguro-production.up.railway.app/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })

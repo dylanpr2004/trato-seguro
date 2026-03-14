@@ -111,7 +111,7 @@
         // Cargar productos reales desde la base de datos
         async function cargarProductos() {
             try {
-                const respuesta = await fetch('https://trato-seguro-production.up.railway.app');
+                const respuesta = await fetch('https://trato-seguro-production.up.railway.app/api/productos');
                 const productos = await respuesta.json();
 
                 const grid = document.getElementById('product-grid');

@@ -71,7 +71,7 @@
         }
 
         try {
-            const respuesta = await fetch('https://trato-seguro-production.up.railway.app', {
+            const respuesta = await fetch('https://trato-seguro-production.up.railway.app/api/registro', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombre, email, password })
