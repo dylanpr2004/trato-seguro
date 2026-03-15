@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario - Juan Vendedor Seguro</title>
+    <title>Perfil de Usuario - Trato Seguro CL</title>
     <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
@@ -42,30 +42,32 @@
                     <span class="metric-label">Última Conexión:</span>
                     <span class="metric-value">Hoy, 15:00 hrs</span>
                 </div>
-                <section class="profile-social-network">
-            <h3>Amistades y Seguidores</h3>
-            <div class="social-metrics">
-                <div class="social-item">
-                    <span class="social-count">12</span>
-                    <span class="social-label">Amigos</span>
+            </section>
+
+            <section class="profile-social-network">
+                <h3>Amistades y Seguidores</h3>
+                <div class="social-metrics">
+                    <div class="social-item">
+                        <span class="social-count">12</span>
+                        <span class="social-label">Amigos</span>
+                    </div>
+                    <div class="social-item">
+                        <span class="social-count">256</span>
+                        <span class="social-label">Seguidores</span>
+                    </div>
                 </div>
-                <div class="social-item">
-                    <span class="social-count">256</span>
-                    <span class="social-label">Seguidores</span>
+                <div class="friends-preview">
+                    <span class="friend-avatar" title="Pato R.">P</span>
+                    <span class="friend-avatar" title="Laura C.">L</span>
+                    <span class="friend-avatar" title="Soporte T.">S</span>
+                    <span class="friend-avatar more-count">+9</span>
                 </div>
-            </div>
-            
-            <div class="friends-preview">
-                <span class="friend-avatar" title="Pato R.">P</span>
-                <span class="friend-avatar" title="Laura C.">L</span>
-                <span class="friend-avatar" title="Soporte T.">S</span>
-                <span class="friend-avatar more-count">+9</span>
-            </div>
-        </section>
-          <div class="profile-actions">
-        <a href="chat.html" class="button-primary contact-btn">
-          ✉️ Contactar a Juan (Abrir DM)
-     </a>
+            </section>
+
+            <div class="profile-actions">
+                <a href="#" class="button-primary contact-btn">
+                    🚪 Cerrar Sesión
+                </a>
             </div>
             
         </aside>
@@ -73,59 +75,54 @@
         <section class="profile-content">
             
             <div class="tab-controls">
-                <button class="tab-btn active" data-tab="listings">Productos en Venta (15)</button>
-                <button class="tab-btn" data-tab="history">Historial de Preguntas y Respuestas (Q&A)</button>
+                <button class="tab-btn active" data-tab="listings">Productos en Venta</button>
+                <button class="tab-btn" data-tab="history">Historial Q&A</button>
             </div>
 
             <div class="tab-content active" id="listings">
-                <p style="padding: 15px; background-color: #e9f7e9; border: 1px solid #d4edda; border-radius: 5px;">
-                    Lista de Productos Activos para la Venta: Aquí se insertarán las tarjetas de productos del usuario.
-                </p>
+                <p style="padding: 15px;">Cargando productos...</p>
             </div>
 
             <div class="tab-content hidden" id="history">
                 <p style="padding: 15px; background-color: #f7f7e9; border: 1px solid #f7f7e0; border-radius: 5px;">
-                    Historial de Actividad (Preguntas y Respuestas): Mostrar las interacciones de Juan con otros productos.
+                    Historial de Actividad (Preguntas y Respuestas)
                 </p>
             </div>
             
         </section>
         
     </main>
+
     <script src="config.js"></script>
     <script>
     const token = localStorage.getItem('token');
     
-    // Si no está logueado, redirigir al login
     if (!token) {
         alert('Debes iniciar sesión para ver tu perfil');
         window.location.href = '/index.html';
     }
 
-    // Cargar datos del perfil
     async function cargarPerfil() {
         try {
-           const respuesta = await fetch(`${API_URL}/api/perfil`, {
+            const respuesta = await fetch(`${API_URL}/api/perfil`, {
                 headers: { 'authorization': token }
             });
 
             const datos = await respuesta.json();
 
-            // Mostrar nombre y email
             document.querySelector('.profile-username').textContent = '@' + datos.usuario.username;
             document.querySelector('.profile-location').textContent = '📍 ' + datos.usuario.nombre;
-            // Agregar email y teléfono al perfil
+
             const sidebar = document.querySelector('.profile-sidebar');
             const contactInfo = document.createElement('div');
             contactInfo.innerHTML = `
-            <div style="padding: 10px 0;">
-             <p>📧 ${datos.usuario.email}</p>
-            <p>📞 ${datos.usuario.telefono}</p>
-        </div>
-    `;
-    sidebar.appendChild(contactInfo);
+                <div style="padding: 10px 15px;">
+                    <p>📧 ${datos.usuario.email}</p>
+                    <p>📞 ${datos.usuario.telefono}</p>
+                </div>
+            `;
+            sidebar.appendChild(contactInfo);
 
-            // Mostrar productos del usuario
             const contenedor = document.getElementById('listings');
             if (datos.productos.length === 0) {
                 contenedor.innerHTML = '<p style="padding:15px">No tienes productos publicados aún.</p>';
@@ -146,15 +143,15 @@
         }
     }
 
-    // Botón cerrar sesión
-    document.querySelector('.contact-btn').textContent = '🚪 Cerrar Sesión';
-    document.querySelector('.contact-btn').onclick = function() {
+    document.querySelector('.contact-btn').onclick = function(e) {
+        e.preventDefault();
         localStorage.removeItem('token');
         localStorage.removeItem('usuario');
-        window.location.href = 'index.html';
+        localStorage.removeItem('email');
+        window.location.href = '/index.html';
     };
 
     cargarPerfil();
-</script>
-    </body>
+    </script>
+</body>
 </html>
