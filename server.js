@@ -16,24 +16,33 @@ app.get('/', (req, res) => {
 });
 
 // Ruta de REGISTRO
+
+// Ruta de REGISTRO
 app.post('/api/registro', async (req, res) => {
 
-    const { nombre, email, password } = req.body;
+    const { nombre, username, email, telefono, password } = req.body;
 
-    if (!nombre || !email || !password) {
+    if (!nombre || !username || !email || !telefono || !password) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    const usuarioExiste = db.prepare('SELECT id FROM usuarios WHERE email = ?').get(email);
-    if (usuarioExiste) {
+    // Verificar si el email ya existe
+    const emailExiste = db.prepare('SELECT id FROM usuarios WHERE email = ?').get(email);
+    if (emailExiste) {
         return res.status(400).json({ error: 'Este email ya está registrado' });
+    }
+
+    // Verificar si el username ya existe
+    const usernameExiste = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(username);
+    if (usernameExiste) {
+        return res.status(400).json({ error: 'Este nombre de usuario ya está en uso' });
     }
 
     const passwordEncriptada = await bcrypt.hash(password, 10);
 
     const resultado = db.prepare(
-        'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)'
-    ).run(nombre, email, passwordEncriptada);
+        'INSERT INTO usuarios (nombre, username, email, telefono, password) VALUES (?, ?, ?, ?, ?)'
+    ).run(nombre, username, email, telefono, passwordEncriptada);
 
     res.status(201).json({ mensaje: '¡Usuario registrado con éxito!', id: resultado.lastInsertRowid });
 });
@@ -58,12 +67,12 @@ app.post('/api/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-        { id: usuario.id, email: usuario.email },
+        { id: usuario.id, email: usuario.email, username: usuario.username },
         'clave-secreta-trato-seguro',
         { expiresIn: '24h' }
     );
 
-    res.json({ mensaje: '¡Login exitoso!', token });
+    res.json({ mensaje: '¡Login exitoso!', token, username: usuario.username });
 });
 // Ruta para PUBLICAR PRODUCTO
 app.post('/api/productos', async (req, res) => {
@@ -86,10 +95,10 @@ app.post('/api/productos', async (req, res) => {
         const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
 
         // Guardar el producto en la base de datos
-        const resultado = db.prepare(`
-            INSERT INTO productos (titulo, descripcion, precio, region, estado, vendedor_id, vendedor_nombre)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `).run(titulo, descripcion, precio, region, estado, datos.id, datos.email);
+       const resultado = db.prepare(`
+    INSERT INTO productos (titulo, descripcion, precio, region, estado, vendedor_id, vendedor_nombre)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).run(titulo, descripcion, precio, region, estado, datos.id, datos.username);
 
         res.status(201).json({ mensaje: '¡Producto publicado con éxito!', id: resultado.lastInsertRowid });
 
@@ -115,7 +124,7 @@ app.get('/api/perfil', (req, res) => {
         const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
         
         // Obtener datos del usuario
-        const usuario = db.prepare('SELECT id, nombre, email, fecha_registro FROM usuarios WHERE id = ?').get(datos.id);
+        const usuario = db.prepare('SELECT id, nombre, username, email, telefono, fecha_registro FROM usuarios WHERE id = ?').get(datos.id);
         
         // Obtener productos del usuario
         const productos = db.prepare('SELECT * FROM productos WHERE vendedor_id = ?').all(datos.id);

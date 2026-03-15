@@ -92,27 +92,38 @@
         </section>
         
     </main>
+    <script src="config.js"></script>
     <script>
     const token = localStorage.getItem('token');
     
     // Si no está logueado, redirigir al login
     if (!token) {
         alert('Debes iniciar sesión para ver tu perfil');
-        window.location.href = 'login.html';
+        window.location.href = '/index.html';
     }
 
     // Cargar datos del perfil
     async function cargarPerfil() {
         try {
-            const respuesta = await fetch('http://localhost:3000/api/perfil', {
+           const respuesta = await fetch(`${API_URL}/api/perfil`, {
                 headers: { 'authorization': token }
             });
 
             const datos = await respuesta.json();
 
             // Mostrar nombre y email
-            document.querySelector('.profile-username').textContent = datos.usuario.nombre;
-            document.querySelector('.profile-location').textContent = '📧 ' + datos.usuario.email;
+            document.querySelector('.profile-username').textContent = '@' + datos.usuario.username;
+            document.querySelector('.profile-location').textContent = '📍 ' + datos.usuario.nombre;
+            // Agregar email y teléfono al perfil
+            const sidebar = document.querySelector('.profile-sidebar');
+            const contactInfo = document.createElement('div');
+            contactInfo.innerHTML = `
+            <div style="padding: 10px 0;">
+             <p>📧 ${datos.usuario.email}</p>
+            <p>📞 ${datos.usuario.telefono}</p>
+        </div>
+    `;
+    sidebar.appendChild(contactInfo);
 
             // Mostrar productos del usuario
             const contenedor = document.getElementById('listings');

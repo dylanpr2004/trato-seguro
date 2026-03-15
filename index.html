@@ -96,7 +96,7 @@
             <p>&copy; 2025 Trato Seguro CL. Todos los derechos reservados.</p>
         </div>
     </footer>
-
+    <script src="config.js"></script>
     <script>
         // Detectar sesión
         const token = localStorage.getItem('token');
@@ -111,7 +111,7 @@
         // Cargar productos reales desde la base de datos
         async function cargarProductos() {
             try {
-                const respuesta = await fetch('https://trato-seguro-production.up.railway.app/api/productos');
+                const respuesta = await fetch(`${API_URL}/api/productos`);
                 const productos = await respuesta.json();
 
                 const grid = document.getElementById('product-grid');

@@ -136,7 +136,7 @@
             </form>
         </div>
     </main>
-    
+    <script src="config.js"></script>
     <script>
     // Verificar que el usuario está logueado
     const token = localStorage.getItem('token');
@@ -155,7 +155,7 @@
         const estado = document.getElementById('condition').value;
 
         try {
-            const respuesta = await fetch('https://trato-seguro-production.up.railway.app', {
+           const respuesta = await fetch(`${API_URL}/api/productos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

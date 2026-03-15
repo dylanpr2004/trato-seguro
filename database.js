@@ -7,12 +7,13 @@ db.exec(`
     CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT NOT NULL,
+        username TEXT UNIQUE NOT NULL,
         email TEXT UNIQUE NOT NULL,
+        telefono TEXT NOT NULL,
         password TEXT NOT NULL,
         fecha_registro TEXT DEFAULT CURRENT_TIMESTAMP
     )
 `);
-
 // Tabla de productos
 db.exec(`
     CREATE TABLE IF NOT EXISTS productos (
