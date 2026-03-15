@@ -1,14 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Trato Seguro CL</title>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
 <body>
     <main class="login-main">
         <section class="login-box">
             <h2>Iniciar Sesión en Trato Seguro CL</h2>
             <p class="security-note">🔒 Tu conexión es 100% segura y cifrada.</p>
-            <head>
-    <title>Iniciar Sesión - Trato Seguro CL</title>
-    <link rel="stylesheet" href="styles.css"> 
-</head>
 
-            <form action="/api/login" method="POST" id="login-form">
+            <form id="login-form">
                 
                 <div class="input-group">
                     <label for="email">Correo Electrónico</label>
@@ -24,13 +28,14 @@
                     Usuario o contraseña incorrectos.
                 </p>
 
-               <button type="submit" class="button-primary">Entrar a mi Cuenta</button>
+                <button type="submit" class="button-primary">Entrar a mi Cuenta</button>
+
                 <div class="login-links">
                     <hr class="separator">
-                <div class="security-warning">
-                <p>🚨 **¡Alerta de Seguridad!**</p>
-                 <p>Nunca compartas tu contraseña de Trato Seguro CL por correo electrónico, WhatsApp o redes sociales. Nosotros NUNCA te la pediremos.</p>
-                </div>
+                    <div class="security-warning">
+                        <p>🚨 ¡Alerta de Seguridad!</p>
+                        <p>Nunca compartas tu contraseña de Trato Seguro CL por correo electrónico, WhatsApp o redes sociales. Nosotros NUNCA te la pediremos.</p>
+                    </div>
                     <a href="/recuperar-clave">¿Olvidaste tu contraseña?</a>
                     <span>|</span>
                     <a href="registro.html">¿No tienes cuenta? Regístrate aquí</a>
@@ -38,6 +43,7 @@
             </form>
         </section>
     </main>
+
     <script src="config.js"></script>
     <script>
     document.getElementById('login-form').addEventListener('submit', async function(event) {
@@ -58,7 +64,7 @@
             if (respuesta.ok) {
                 localStorage.setItem('token', datos.token);
                 localStorage.setItem('usuario', datos.username);
-                ocalStorage.setItem('email', email);
+                localStorage.setItem('email', email);
                 alert('¡Bienvenido a Trato Seguro CL!');
                 window.location.href = 'index.html';
             } else {
@@ -71,5 +77,5 @@
         }
     });
     </script>
-
- </body>
+</body>
+</html>
