@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Público - Trato Seguro CL</title>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body>
+
+    <main class="general-chat-container">
+        
+        <h1>Chat Público de la Comunidad</h1>
+        
+        <div class="general-message-history" id="chat-mensajes">
+            <p style="text-align:center; color:#999;">Cargando mensajes...</p>
+        </div>
+        
+        <div class="general-message-input-area">
+            <textarea id="input-mensaje" placeholder="Escribe tu mensaje... (Sé respetuoso)"></textarea>
+            <button class="button-primary send-button" id="btn-enviar">Enviar Mensaje</button>
+        </div>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        // Verificar que el usuario está logueado
+        const token = localStorage.getItem('token');
+        const usuario = localStorage.getItem('usuario');
+
+        if (!token || !usuario) {
+            alert('Debes iniciar sesión para usar el Chat Público');
+            window.location.href = 'login.html';
+        }
+
+        // Conectar con el servidor
+        const socket = io(API_URL);
+
+        const contenedor = document.getElementById('chat-mensajes');
+        const inputMensaje = document.getElementById('input-mensaje');
+        const btnEnviar = document.getElementById('btn-enviar');
+
+        // Recibir historial de mensajes
+        socket.on('historial', (mensajes) => {
+            contenedor.innerHTML = '';
+            if (mensajes.length === 0) {
+                contenedor.innerHTML = '<p style="text-align:center; color:#999;">Sé el primero en escribir algo 👋</p>';
+                return;
+            }
+            mensajes.forEach(m => agregarMensaje(m));
+        });
+
+        // Recibir mensaje nuevo en tiempo real
+        socket.on('mensaje', (mensaje) => {
+            agregarMensaje(mensaje);
+            contenedor.scrollTop = contenedor.scrollHeight;
+        });
+
+        // Función para mostrar un mensaje
+        function agregarMensaje(m) {
+            const esPropio = m.usuario === usuario;
+            const articulo = document.createElement('article');
+            articulo.className = 'general-chat-message' + (esPropio ? ' own-message' : '');
+            articulo.innerHTML = `
+                <div class="user-info-bar">
+                    <span class="chat-avatar">${m.usuario.charAt(0).toUpperCase()}</span>
+                    <span class="chat-username">@${m.usuario}</span>
+                    <span class="message-time">${m.hora}</span>
+                </div>
+                <div class="chat-content">
+                    <p>${m.texto}</p>
+                </div>
+            `;
+            contenedor.appendChild(articulo);
+        }
+
+        // Enviar mensaje
+        function enviarMensaje() {
+            const texto = inputMensaje.value.trim();
+            if (!texto) return;
+
+            socket.emit('mensaje', { usuario, texto });
+            inputMensaje.value = '';
+        }
+
+        btnEnviar.addEventListener('click', enviarMensaje);
+
+        // Enviar con Enter
+        inputMensaje.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                enviarMensaje();
+            }
+        });
+    </script>
+</body>
+</html>

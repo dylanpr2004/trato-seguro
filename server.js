@@ -1,13 +1,18 @@
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('./database');
 const cors = require('cors');
 
 const app = express();
-app.use(cors({
-    origin: '*'
-}));
+const servidor = http.createServer(app);
+const io = new Server(servidor, {
+    cors: { origin: '*' }
+});
+
+app.use(cors());
 app.use(express.json());
 
 // Ruta de prueba
@@ -135,6 +140,26 @@ app.get('/api/perfil', (req, res) => {
         return res.status(401).json({ error: 'Sesión inválida' });
     }
 });
-app.listen(3000, () => {
+// Chat Público en tiempo real
+const mensajesChat = [];
+
+io.on('connection', (socket) => {
+    // Enviar historial al nuevo usuario
+    socket.emit('historial', mensajesChat);
+
+    // Recibir mensaje nuevo
+    socket.on('mensaje', (datos) => {
+        const mensaje = {
+            usuario: datos.usuario,
+            texto: datos.texto,
+            hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })
+        };
+        mensajesChat.push(mensaje);
+        // Enviar a todos
+        io.emit('mensaje', mensaje);
+    });
+});
+
+servidor.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
