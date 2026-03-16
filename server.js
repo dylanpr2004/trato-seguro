@@ -159,6 +159,20 @@ io.on('connection', (socket) => {
         io.emit('mensaje', mensaje);
     });
 });
+// Ruta para ver perfil público de cualquier usuario
+app.get('/api/usuario/:username', (req, res) => {
+    const { username } = req.params;
+
+    const usuario = db.prepare('SELECT id, nombre, username, email, telefono, fecha_registro FROM usuarios WHERE username = ?').get(username);
+    
+    if (!usuario) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    const productos = db.prepare('SELECT * FROM productos WHERE vendedor_id = ?').all(usuario.id);
+
+    res.json({ usuario, productos });
+});
 
 servidor.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario - Trato Seguro CL</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { background-color: #f0f2f5; font-family: Arial, sans-serif; }
+
+        .perfil-header {
+            background-color: #1a1a2e;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-volver {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .btn-volver:hover { background: rgba(255,255,255,0.25); }
+
+        .perfil-wrapper {
+            max-width: 860px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        .perfil-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .perfil-banner {
+            background: linear-gradient(135deg, #1a1a2e, #28a745);
+            height: 100px;
+        }
+
+        .perfil-info {
+            padding: 0 24px 24px;
+            position: relative;
+        }
+
+        .perfil-avatar-grande {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #1a1a2e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            border: 4px solid white;
+            margin-top: -40px;
+            margin-bottom: 12px;
+        }
+
+        .perfil-nombre {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .perfil-username {
+            font-size: 15px;
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .perfil-datos {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .perfil-dato {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .productos-titulo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .producto-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .producto-titulo {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .producto-precio {
+            font-size: 16px;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 6px;
+        }
+
+        .producto-estado {
+            font-size: 12px;
+            background: #e9f7e9;
+            color: #28a745;
+            padding: 3px 8px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .sin-productos {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-size: 15px;
+        }
+
+        .badge-verificado {
+            background: #e9f7e9;
+            color: #28a745;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="perfil-header">
+        <a href="javascript:history.back()" class="btn-volver">← Volver</a>
+        <h1 style="font-size:18px; color:white;">Perfil de Usuario</h1>
+    </div>
+
+    <div class="perfil-wrapper">
+
+        <div class="perfil-card">
+            <div class="perfil-banner"></div>
+            <div class="perfil-info">
+                <div class="perfil-avatar-grande" id="perfil-avatar">?</div>
+                <div class="perfil-nombre" id="perfil-nombre">Cargando...</div>
+                <div class="perfil-username" id="perfil-username"></div>
+                <span class="badge-verificado">✅ Usuario Registrado</span>
+                <div class="perfil-datos">
+                    <span class="perfil-dato" id="perfil-email"></span>
+                    <span class="perfil-dato" id="perfil-telefono"></span>
+                    <span class="perfil-dato" id="perfil-fecha"></span>
+                </div>
+            </div>
+        </div>
+
+        <p class="productos-titulo">Productos en Venta</p>
+        <div class="productos-grid" id="productos-grid">
+            <p class="sin-productos">Cargando productos...</p>
+        </div>
+
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Obtener username de la URL
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('user');
+
+        if (!username) {
+            alert('Usuario no encontrado');
+            window.location.href = 'index.html';
+        }
+
+        async function cargarPerfil() {
+            try {
+                const respuesta = await fetch(`${API_URL}/api/usuario/${username}`);
+                const datos = await respuesta.json();
+
+                if (!respuesta.ok) {
+                    alert('Usuario no encontrado');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                const u = datos.usuario;
+
+                document.title = `@${u.username} - Trato Seguro CL`;
+                document.getElementById('perfil-avatar').textContent = u.username.charAt(0).toUpperCase();
+                document.getElementById('perfil-nombre').textContent = u.nombre;
+                document.getElementById('perfil-username').textContent = '@' + u.username;
+                document.getElementById('perfil-email').textContent = '📧 ' + u.email;
+                document.getElementById('perfil-telefono').textContent = '📞 ' + u.telefono;
+                document.getElementById('perfil-fecha').textContent = '📅 Miembro desde ' + new Date(u.fecha_registro).toLocaleDateString('es-CL');
+
+                const grid = document.getElementById('productos-grid');
+                if (datos.productos.length === 0) {
+                    grid.innerHTML = '<p class="sin-productos">Este usuario no tiene productos publicados aún.</p>';
+                } else {
+                    grid.innerHTML = datos.productos.map(p => `
+                        <div class="producto-card">
+                            <p class="producto-titulo">${p.titulo}</p>
+                            <p class="producto-precio">$${Number(p.precio).toLocaleString('es-CL')} CLP</p>
+                            <span class="producto-estado">${p.estado}</span>
+                        </div>
+                    `).join('');
+                }
+
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        }
+
+        cargarPerfil();
+    </script>
+</body>
+</html>

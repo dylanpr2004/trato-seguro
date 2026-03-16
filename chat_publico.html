@@ -264,15 +264,15 @@
             const div = document.createElement('div');
             div.className = 'mensaje' + (esPropio ? ' propio' : '');
             div.innerHTML = `
-                <div class="avatar">${m.usuario.charAt(0).toUpperCase()}</div>
-                <div class="burbuja">
-                    <div class="burbuja-header">
-                        <span class="nombre-usuario">@${m.usuario}</span>
-                        <span class="hora">${m.hora}</span>
-                    </div>
-                    <div class="texto-mensaje">${m.texto}</div>
-                </div>
-            `;
+             <a href="perfil-publico.html?user=${m.usuario}" class="avatar" style="text-decoration:none">${m.usuario.charAt(0).toUpperCase()}</a>
+            <div class="burbuja">
+            <div class="burbuja-header">
+            <a href="perfil-publico.html?user=${m.usuario}" class="nombre-usuario" style="text-decoration:none">@${m.usuario}</a>
+            <span class="hora">${m.hora}</span>
+            </div>
+            <div class="texto-mensaje">${m.texto}</div>
+             </div>
+         `;
             contenedor.appendChild(div);
         }
 
