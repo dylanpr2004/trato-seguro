@@ -6,6 +6,74 @@
     <link rel="stylesheet" href="styles.css">
     <meta name="description" content="Un sitio donde tus compra/venta son seguras, sin riesgo de fraude.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .notif-wrapper {
+            display: none;
+            position: relative;
+            cursor: pointer;
+            margin-right: 16px;
+            align-items: center;
+        }
+
+        .notif-badge {
+            display: none;
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            font-weight: 700;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notif-panel {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 36px;
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .notif-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #eee;
+            font-weight: 700;
+            color: #1a1a2e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notif-leer {
+            font-size: 12px;
+            color: #28a745;
+            cursor: pointer;
+        }
+
+        .notif-lista {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .notif-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .notif-item.no-leida { background: #f0f7ff; }
+        .notif-texto { font-size: 13px; color: #333; }
+        .notif-fecha { font-size: 11px; color: #999; margin-top: 4px; }
+    </style>
 </head>
 <body>
 
@@ -24,6 +92,19 @@
             </div>
 
             <div class="user-access">
+                <div class="notif-wrapper" id="notif-wrapper" onclick="toggleNotificaciones()">
+                    <span style="font-size:22px;">🔔</span>
+                    <span class="notif-badge" id="notif-badge">0</span>
+                    <div class="notif-panel" id="notif-panel">
+                        <div class="notif-header">
+                            🔔 Notificaciones
+                            <span class="notif-leer" onclick="marcarLeidas(); event.stopPropagation();">Marcar leídas</span>
+                        </div>
+                        <div class="notif-lista" id="notif-lista">
+                            <p style="text-align:center; color:#999; padding:20px; font-size:13px;">No tienes notificaciones</p>
+                        </div>
+                    </div>
+                </div>
                 <a class="login-text-link" href="login.html" id="btn-acceso">HOLA, ¡inicia sesión acá!</a>
                 <span class="login-icon">👤</span>
             </div>
@@ -32,7 +113,7 @@
         <nav class="header-nav">
             <a href="/categorias" class="category-menu">☰ Categoría</a>
             <a href="chat_publico.html" class="nav-link">💬 Chat Publico</a> 
-           <a href="chat-privado.html" class="nav-link">✉️ Chat Privado</a>
+            <a href="chat-privado.html" class="nav-link">✉️ Chat Privado</a>
             <a href="/soporte" class="nav-link">Soporte</a>
             <a href="/social" class="nav-link">Social</a> 
         </nav>
@@ -96,9 +177,9 @@
             <p>&copy; 2025 Trato Seguro CL. Todos los derechos reservados.</p>
         </div>
     </footer>
+
     <script src="config.js"></script>
     <script>
-        // Detectar sesión
         const token = localStorage.getItem('token');
         const usuario = localStorage.getItem('usuario');
         const btnAcceso = document.getElementById('btn-acceso');
@@ -108,7 +189,66 @@
             btnAcceso.href = 'perfil.html';
         }
 
-        // Cargar productos reales desde la base de datos
+        async function cargarNotificaciones() {
+            if (!token) return;
+            
+            try {
+                const respuesta = await fetch(`${API_URL}/api/notificaciones`, {
+                    headers: { 'authorization': token }
+                });
+                const datos = await respuesta.json();
+
+                // Mostrar ícono
+                const wrapper = document.getElementById('notif-wrapper');
+                wrapper.style.display = 'flex';
+
+                // Badge
+                const badge = document.getElementById('notif-badge');
+                if (datos.noLeidas > 0) {
+                    badge.style.display = 'flex';
+                    badge.textContent = datos.noLeidas;
+                } else {
+                    badge.style.display = 'none';
+                }
+
+                // Lista
+                const lista = document.getElementById('notif-lista');
+                if (datos.notificaciones.length === 0) {
+                    lista.innerHTML = '<p style="text-align:center; color:#999; padding:20px; font-size:13px;">No tienes notificaciones</p>';
+                } else {
+                    lista.innerHTML = datos.notificaciones.map(n => `
+                        <div class="notif-item ${n.leida ? '' : 'no-leida'}">
+                            <p class="notif-texto">${n.mensaje}</p>
+                            <p class="notif-fecha">${new Date(n.fecha).toLocaleString('es-CL')}</p>
+                        </div>
+                    `).join('');
+                }
+
+            } catch (error) {
+                console.log('Error notificaciones:', error);
+            }
+        }
+
+        function toggleNotificaciones() {
+            const panel = document.getElementById('notif-panel');
+            const visible = panel.style.display === 'block';
+            panel.style.display = visible ? 'none' : 'block';
+            if (!visible) marcarLeidas();
+        }
+
+        async function marcarLeidas() {
+            if (!token) return;
+            try {
+                await fetch(`${API_URL}/api/notificaciones/leer`, {
+                    method: 'POST',
+                    headers: { 'authorization': token }
+                });
+                document.getElementById('notif-badge').style.display = 'none';
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        }
+
         async function cargarProductos() {
             try {
                 const respuesta = await fetch(`${API_URL}/api/productos`);
@@ -138,6 +278,8 @@
             }
         }
 
+        if (token) cargarNotificaciones();
+        setInterval(() => { if (token) cargarNotificaciones(); }, 30000);
         cargarProductos();
     </script>
 

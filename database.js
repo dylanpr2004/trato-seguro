@@ -50,6 +50,18 @@ db.exec(`
         FOREIGN KEY (destinatario_id) REFERENCES usuarios(id)
     )
 `);
+// Tabla de notificaciones
+db.exec(`
+    CREATE TABLE IF NOT EXISTS notificaciones (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario_id INTEGER NOT NULL,
+        tipo TEXT NOT NULL,
+        mensaje TEXT NOT NULL,
+        leida INTEGER DEFAULT 0,
+        fecha TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    )
+`);
 
 console.log('Base de datos lista');
 module.exports = db;

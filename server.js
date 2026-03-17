@@ -205,7 +205,12 @@ app.post('/api/mensajes', (req, res) => {
             VALUES (?, ?, ?)
         `).run(datos.id, dest.id, texto);
 
-        res.json({ mensaje: 'Mensaje enviado' });
+        db.prepare(`
+    INSERT INTO notificaciones (usuario_id, tipo, mensaje)
+    VALUES (?, 'mensaje', ?)
+    `).run(dest.id, `Nuevo mensaje de @${datos.username}`);
+
+    res.json({ mensaje: 'Mensaje enviado' });   
     } catch (error) {
         res.status(401).json({ error: 'Sesión inválida' });
     }
@@ -285,6 +290,44 @@ io.on('connection', (socket) => {
     socket.on('mensaje-privado', (datos) => {
         io.emit('mensaje-privado', datos);
     });
+});
+// Obtener notificaciones del usuario
+app.get('/api/notificaciones', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const notificaciones = db.prepare(`
+            SELECT * FROM notificaciones 
+            WHERE usuario_id = ? 
+            ORDER BY fecha DESC 
+            LIMIT 10
+        `).all(datos.id);
+
+        const noLeidas = db.prepare(`
+            SELECT COUNT(*) as count FROM notificaciones 
+            WHERE usuario_id = ? AND leida = 0
+        `).get(datos.id);
+
+        res.json({ notificaciones, noLeidas: noLeidas.count });
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
+
+// Marcar notificaciones como leídas
+app.post('/api/notificaciones/leer', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        db.prepare('UPDATE notificaciones SET leida = 1 WHERE usuario_id = ?').run(datos.id);
+        res.json({ mensaje: 'Notificaciones marcadas como leídas' });
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
 });
 
 servidor.listen(3000, () => {
