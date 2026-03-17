@@ -9,6 +9,19 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body { background-color: #f0f2f5; font-family: Arial, sans-serif; }
+        .btn-mensaje {
+    display: inline-block;
+    background: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-mensaje:hover { background: #1a1a2e; }
 
         .perfil-header {
             background-color: #1a1a2e;
@@ -176,6 +189,11 @@
                 <div class="perfil-nombre" id="perfil-nombre">Cargando...</div>
                 <div class="perfil-username" id="perfil-username"></div>
                 <span class="badge-verificado">✅ Usuario Registrado</span>
+                <div style="margin-top: 16px;">
+    <a id="btn-mensaje" href="#" class="btn-mensaje" onclick="contactar()">
+        ✉️ Enviar Mensaje Privado
+    </a>
+</div>
                 <div class="perfil-datos">
                     <span class="perfil-dato" id="perfil-email"></span>
                     <span class="perfil-dato" id="perfil-telefono"></span>
@@ -201,7 +219,15 @@
             alert('Usuario no encontrado');
             window.location.href = 'index.html';
         }
-
+function contactar() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Debes iniciar sesión para enviar mensajes');
+        window.location.href = 'login.html';
+        return;
+    }
+    window.location.href = `chat-privado.html?user=${username}`;
+}
         async function cargarPerfil() {
             try {
                 const respuesta = await fetch(`${API_URL}/api/usuario/${username}`);

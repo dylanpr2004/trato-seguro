@@ -39,6 +39,17 @@ db.exec(`
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
     )
 `);
+db.exec(`
+    CREATE TABLE IF NOT EXISTS mensajes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        remitente_id INTEGER NOT NULL,
+        destinatario_id INTEGER NOT NULL,
+        texto TEXT NOT NULL,
+        fecha TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (remitente_id) REFERENCES usuarios(id),
+        FOREIGN KEY (destinatario_id) REFERENCES usuarios(id)
+    )
+`);
 
 console.log('Base de datos lista');
 module.exports = db;

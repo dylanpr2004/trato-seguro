@@ -144,10 +144,8 @@ app.get('/api/perfil', (req, res) => {
 const mensajesChat = [];
 
 io.on('connection', (socket) => {
-    // Enviar historial al nuevo usuario
     socket.emit('historial', mensajesChat);
 
-    // Recibir mensaje nuevo
     socket.on('mensaje', (datos) => {
         const mensaje = {
             usuario: datos.usuario,
@@ -155,8 +153,12 @@ io.on('connection', (socket) => {
             hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })
         };
         mensajesChat.push(mensaje);
-        // Enviar a todos
         io.emit('mensaje', mensaje);
+    });
+
+    // Mensajes privados en tiempo real
+    socket.on('mensaje-privado', (datos) => {
+        io.emit('mensaje-privado', datos);
     });
 });
 // Ruta para ver perfil público de cualquier usuario
@@ -224,7 +226,85 @@ app.post('/api/preferencias', (req, res) => {
         res.status(401).json({ error: 'Sesión inválida' });
     }
 });
+// Guardar mensaje privado
+app.post('/api/mensajes', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
 
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const { destinatario, texto } = req.body;
+
+        const remitente = db.prepare('SELECT username FROM usuarios WHERE id = ?').get(datos.id);
+        const dest = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(destinatario);
+
+        if (!dest) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+        db.prepare(`
+            INSERT INTO mensajes (remitente_id, destinatario_id, texto)
+            VALUES (?, ?, ?)
+        `).run(datos.id, dest.id, texto);
+
+        res.json({ mensaje: 'Mensaje enviado' });
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
+
+// Obtener conversación entre dos usuarios
+app.get('/api/mensajes/:username', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const { username } = req.params;
+
+        const otroUsuario = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(username);
+        if (!otroUsuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+        const mensajes = db.prepare(`
+            SELECT m.*, u.username as remitente_username
+            FROM mensajes m
+            JOIN usuarios u ON m.remitente_id = u.id
+            WHERE (m.remitente_id = ? AND m.destinatario_id = ?)
+            OR (m.remitente_id = ? AND m.destinatario_id = ?)
+            ORDER BY m.fecha ASC
+        `).all(datos.id, otroUsuario.id, otroUsuario.id, datos.id);
+
+        res.json(mensajes);
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
+
+// Obtener lista de conversaciones
+app.get('/api/conversaciones', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+
+        const conversaciones = db.prepare(`
+            SELECT DISTINCT u.username, u.nombre,
+            (SELECT texto FROM mensajes 
+             WHERE (remitente_id = ? AND destinatario_id = u.id)
+             OR (remitente_id = u.id AND destinatario_id = ?)
+             ORDER BY fecha DESC LIMIT 1) as ultimo_mensaje
+            FROM usuarios u
+            WHERE u.id IN (
+                SELECT CASE WHEN remitente_id = ? THEN destinatario_id ELSE remitente_id END
+                FROM mensajes
+                WHERE remitente_id = ? OR destinatario_id = ?
+            )
+        `).all(datos.id, datos.id, datos.id, datos.id, datos.id);
+
+        res.json(conversaciones);
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
 servidor.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
