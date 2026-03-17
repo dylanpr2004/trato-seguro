@@ -288,8 +288,24 @@ io.on('connection', (socket) => {
     });
 
     socket.on('mensaje-privado', (datos) => {
-        io.emit('mensaje-privado', datos);
-    });
+    io.emit('mensaje-privado', datos);
+    
+    try {
+        // Buscar IDs de los usuarios
+        const remitente = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(datos.de);
+        const destinatario = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(datos.para);
+        
+        if (remitente && destinatario) {
+            // Crear notificación
+            db.prepare(`
+                INSERT INTO notificaciones (usuario_id, tipo, mensaje)
+                VALUES (?, 'mensaje', ?)
+            `).run(destinatario.id, `Nuevo mensaje de @${datos.de}`);
+        }
+    } catch (error) {
+        console.log('Error guardando notificación:', error);
+    }
+});
 });
 // Obtener notificaciones del usuario
 app.get('/api/notificaciones', (req, res) => {
