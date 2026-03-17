@@ -67,7 +67,7 @@ app.post('/api/login', async (req, res) => {
     const token = jwt.sign(
         { id: usuario.id, email: usuario.email, username: usuario.username },
         'clave-secreta-trato-seguro',
-        { expiresIn: '24h' }
+        { expiresIn: '7d' }
     );
 
     res.json({ mensaje: '¡Login exitoso!', token, username: usuario.username });
