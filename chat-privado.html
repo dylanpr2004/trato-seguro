@@ -407,9 +407,12 @@
 
         cargarConversaciones();
 
-        if (userParam) {
-            abrirChat(userParam, userParam);
-        }
+if (userParam) {
+    // Esperar que carguen las conversaciones antes de abrir el chat
+    setTimeout(() => {
+        abrirChat(userParam, userParam);
+    }, 500);
+}
     </script>
 </body>
 </html>
