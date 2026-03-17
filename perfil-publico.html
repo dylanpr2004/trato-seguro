@@ -213,7 +213,7 @@
     <script>
         // Obtener username de la URL
         const params = new URLSearchParams(window.location.search);
-        const username = params.get('user');
+        const username = params.get('user').replace('@', '');
 
         if (!username) {
             alert('Usuario no encontrado');

@@ -21,30 +21,24 @@ app.get('/', (req, res) => {
 });
 
 // Ruta de REGISTRO
-
-// Ruta de REGISTRO
 app.post('/api/registro', async (req, res) => {
-
     const { nombre, username, email, telefono, password } = req.body;
 
     if (!nombre || !username || !email || !telefono || !password) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Verificar si el email ya existe
     const emailExiste = db.prepare('SELECT id FROM usuarios WHERE email = ?').get(email);
     if (emailExiste) {
         return res.status(400).json({ error: 'Este email ya está registrado' });
     }
 
-    // Verificar si el username ya existe
     const usernameExiste = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(username);
     if (usernameExiste) {
         return res.status(400).json({ error: 'Este nombre de usuario ya está en uso' });
     }
 
     const passwordEncriptada = await bcrypt.hash(password, 10);
-
     const resultado = db.prepare(
         'INSERT INTO usuarios (nombre, username, email, telefono, password) VALUES (?, ?, ?, ?, ?)'
     ).run(nombre, username, email, telefono, passwordEncriptada);
@@ -54,7 +48,6 @@ app.post('/api/registro', async (req, res) => {
 
 // Ruta de LOGIN
 app.post('/api/login', async (req, res) => {
-
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -79,34 +72,28 @@ app.post('/api/login', async (req, res) => {
 
     res.json({ mensaje: '¡Login exitoso!', token, username: usuario.username });
 });
+
 // Ruta para PUBLICAR PRODUCTO
 app.post('/api/productos', async (req, res) => {
-
     const { titulo, descripcion, precio, region, estado } = req.body;
 
-    // Verificar que llegaron todos los datos
     if (!titulo || !descripcion || !precio || !region || !estado) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    // Verificar que el usuario está logueado
     const token = req.headers['authorization'];
     if (!token) {
         return res.status(401).json({ error: 'Debes iniciar sesión para publicar' });
     }
 
     try {
-        // Verificar el token
         const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
-
-        // Guardar el producto en la base de datos
-       const resultado = db.prepare(`
-    INSERT INTO productos (titulo, descripcion, precio, region, estado, vendedor_id, vendedor_nombre)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-    `).run(titulo, descripcion, precio, region, estado, datos.id, datos.username);
+        const resultado = db.prepare(`
+            INSERT INTO productos (titulo, descripcion, precio, region, estado, vendedor_id, vendedor_nombre)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).run(titulo, descripcion, precio, region, estado, datos.id, datos.username);
 
         res.status(201).json({ mensaje: '¡Producto publicado con éxito!', id: resultado.lastInsertRowid });
-
     } catch (error) {
         return res.status(401).json({ error: 'Sesión inválida, inicia sesión nuevamente' });
     }
@@ -117,9 +104,9 @@ app.get('/api/productos', (req, res) => {
     const productos = db.prepare('SELECT * FROM productos ORDER BY fecha DESC').all();
     res.json(productos);
 });
+
 // Ruta para obtener PERFIL del usuario logueado
 app.get('/api/perfil', (req, res) => {
-
     const token = req.headers['authorization'];
     if (!token) {
         return res.status(401).json({ error: 'Debes iniciar sesión' });
@@ -127,61 +114,34 @@ app.get('/api/perfil', (req, res) => {
 
     try {
         const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
-        
-        // Obtener datos del usuario
         const usuario = db.prepare('SELECT id, nombre, username, email, telefono, fecha_registro FROM usuarios WHERE id = ?').get(datos.id);
-        
-        // Obtener productos del usuario
         const productos = db.prepare('SELECT * FROM productos WHERE vendedor_id = ?').all(datos.id);
-
         res.json({ usuario, productos });
-
     } catch (error) {
         return res.status(401).json({ error: 'Sesión inválida' });
     }
 });
-// Chat Público en tiempo real
-const mensajesChat = [];
 
-io.on('connection', (socket) => {
-    socket.emit('historial', mensajesChat);
-
-    socket.on('mensaje', (datos) => {
-        const mensaje = {
-            usuario: datos.usuario,
-            texto: datos.texto,
-            hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })
-        };
-        mensajesChat.push(mensaje);
-        io.emit('mensaje', mensaje);
-    });
-
-    // Mensajes privados en tiempo real
-    socket.on('mensaje-privado', (datos) => {
-        io.emit('mensaje-privado', datos);
-    });
-});
 // Ruta para ver perfil público de cualquier usuario
 app.get('/api/usuario/:username', (req, res) => {
-    const { username } = req.params;
+    const usernameClean = req.params.username.replace('@', '');
 
-    const usuario = db.prepare('SELECT id, nombre, username, email, telefono, fecha_registro FROM usuarios WHERE username = ?').get(username);
-    
+    const usuario = db.prepare('SELECT id, nombre, username, email, telefono, fecha_registro FROM usuarios WHERE username = ?').get(usernameClean);
+
     if (!usuario) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
     const productos = db.prepare('SELECT * FROM productos WHERE vendedor_id = ?').all(usuario.id);
-    
     const prefs = db.prepare('SELECT * FROM preferencias WHERE usuario_id = ?').get(usuario.id);
 
-    // Ocultar teléfono si el usuario lo configuró así
     if (prefs && !prefs.mostrar_telefono) {
         usuario.telefono = null;
     }
 
     res.json({ usuario, productos });
 });
+
 // Obtener preferencias del usuario
 app.get('/api/preferencias', (req, res) => {
     const token = req.headers['authorization'];
@@ -189,9 +149,8 @@ app.get('/api/preferencias', (req, res) => {
 
     try {
         const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
-        
         let prefs = db.prepare('SELECT * FROM preferencias WHERE usuario_id = ?').get(datos.id);
-        
+
         if (!prefs) {
             db.prepare('INSERT INTO preferencias (usuario_id) VALUES (?)').run(datos.id);
             prefs = db.prepare('SELECT * FROM preferencias WHERE usuario_id = ?').get(datos.id);
@@ -226,6 +185,7 @@ app.post('/api/preferencias', (req, res) => {
         res.status(401).json({ error: 'Sesión inválida' });
     }
 });
+
 // Guardar mensaje privado
 app.post('/api/mensajes', (req, res) => {
     const token = req.headers['authorization'];
@@ -235,8 +195,8 @@ app.post('/api/mensajes', (req, res) => {
         const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
         const { destinatario, texto } = req.body;
 
-        const remitente = db.prepare('SELECT username FROM usuarios WHERE id = ?').get(datos.id);
-        const dest = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(destinatario);
+        const destinatarioClean = destinatario.replace('@', '');
+        const dest = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(destinatarioClean);
 
         if (!dest) return res.status(404).json({ error: 'Usuario no encontrado' });
 
@@ -258,9 +218,9 @@ app.get('/api/mensajes/:username', (req, res) => {
 
     try {
         const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
-        const { username } = req.params;
+        const usernameClean = req.params.username.replace('@', '');
 
-        const otroUsuario = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(username);
+        const otroUsuario = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(usernameClean);
         if (!otroUsuario) return res.status(404).json({ error: 'Usuario no encontrado' });
 
         const mensajes = db.prepare(`
@@ -305,6 +265,28 @@ app.get('/api/conversaciones', (req, res) => {
         res.status(401).json({ error: 'Sesión inválida' });
     }
 });
+
+// Chat en tiempo real
+const mensajesChat = [];
+
+io.on('connection', (socket) => {
+    socket.emit('historial', mensajesChat);
+
+    socket.on('mensaje', (datos) => {
+        const mensaje = {
+            usuario: datos.usuario,
+            texto: datos.texto,
+            hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })
+        };
+        mensajesChat.push(mensaje);
+        io.emit('mensaje', mensaje);
+    });
+
+    socket.on('mensaje-privado', (datos) => {
+        io.emit('mensaje-privado', datos);
+    });
+});
+
 servidor.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });
