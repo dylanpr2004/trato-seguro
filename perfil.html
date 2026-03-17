@@ -3,155 +3,377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario - Trato Seguro CL</title>
-    <link rel="stylesheet" href="styles.css"> 
+    <title>Mi Perfil - Trato Seguro CL</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #f0f2f5; font-family: Arial, sans-serif; }
+
+        .perfil-header {
+            background-color: #1a1a2e;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .perfil-header-left { display: flex; align-items: center; gap: 12px; }
+
+        .btn-header {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-header:hover { background: rgba(255,255,255,0.25); }
+        .btn-cerrar { background: rgba(220,53,69,0.4); }
+        .btn-cerrar:hover { background: rgba(220,53,69,0.7); }
+
+        .perfil-wrapper {
+            max-width: 1000px;
+            margin: 24px auto;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .perfil-banner { background: linear-gradient(135deg, #1a1a2e, #28a745); height: 80px; }
+        .perfil-info { padding: 0 20px 20px; }
+
+        .perfil-foto-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-top: -35px;
+            margin-bottom: 12px;
+        }
+
+        .perfil-foto {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #1a1a2e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            border: 4px solid white;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .perfil-foto img { width: 100%; height: 100%; object-fit: cover; }
+
+        .foto-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #28a745;
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        #input-foto { display: none; }
+        .perfil-nombre { font-size: 20px; font-weight: 700; color: #1a1a2e; }
+        .perfil-username { font-size: 14px; color: #28a745; font-weight: 600; margin: 2px 0 8px; }
+
+        .badge-verificado {
+            background: #e9f7e9;
+            color: #28a745;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .perfil-datos { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+        .perfil-dato { font-size: 13px; color: #555; }
+        .card-titulo { font-size: 15px; font-weight: 700; color: #1a1a2e; padding: 16px 20px 12px; border-bottom: 1px solid #f0f0f0; }
+        .card-body { padding: 16px 20px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .stat-item { background: #f8f9fa; border-radius: 10px; padding: 12px; text-align: center; }
+        .stat-numero { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+        .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+
+        .editar-form { display: none; flex-direction: column; gap: 12px; margin-top: 12px; }
+        .editar-form.activo { display: flex; }
+
+        .editar-form input {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 14px;
+            outline: none;
+            width: 100%;
+        }
+
+        .editar-form input:focus { border-color: #1a1a2e; }
+
+        .btn-verde { background: #1a1a2e; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; width: 100%; }
+        .btn-verde:hover { background: #28a745; }
+        .btn-gris { background: #f0f2f5; color: #555; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 14px; width: 100%; }
+
+        .tabs { display: flex; border-bottom: 2px solid #f0f0f0; padding: 0 20px; overflow-x: auto; }
+
+        .tab-btn { padding: 14px 16px; border: none; background: none; cursor: pointer; font-size: 13px; color: #888; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; white-space: nowrap; }
+        .tab-btn.activo { color: #1a1a2e; font-weight: 700; border-bottom-color: #28a745; }
+
+        .tab-contenido { display: none; padding: 20px; }
+        .tab-contenido.activo { display: block; }
+
+        .productos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+
+        .producto-card { background: #f8f9fa; border-radius: 10px; padding: 14px; }
+        .producto-titulo { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; }
+        .producto-precio { font-size: 15px; font-weight: 700; color: #28a745; margin-bottom: 6px; }
+        .producto-estado { font-size: 11px; background: #e9f7e9; color: #28a745; padding: 2px 8px; border-radius: 20px; }
+
+        .sin-contenido { text-align: center; color: #999; padding: 30px; font-size: 14px; }
+
+        .config-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+        .config-item:last-child { border-bottom: none; }
+        .config-label { font-size: 14px; color: #333; font-weight: 600; }
+        .config-desc { font-size: 12px; color: #999; margin-top: 2px; }
+
+        .toggle { width: 44px; height: 24px; background: #ddd; border-radius: 12px; position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+        .toggle.activo { background: #28a745; }
+        .toggle-dot { width: 18px; height: 18px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: left 0.2s; }
+        .toggle.activo .toggle-dot { left: 23px; }
+
+        @media (max-width: 768px) { .perfil-wrapper { grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
 
-    <main class="profile-container">
-        
-        <aside class="profile-sidebar">
-            
-            <section class="user-identity">
-                <span class="profile-avatar">J</span>
-                <h1 class="profile-username">Juan_VendedorSeguro</h1>
-                <span class="profile-badge verified-large">✅ Cuenta Verificada por RUT/ID</span>
-                <span class="profile-location">📍 Residente en Región Metropolitana, Chile</span>
-            </section>
-            
-            <section class="profile-reputation">
-                <h3>📈 Reputación del Vendedor</h3>
-                <div class="reputation-score level-green">
-                    <div class="progress-bar" style="width: 85%;"></div>
-                </div>
-                <span class="score-text">Nivel EXCELENTE</span>
-                <p class="score-detail">85% de transacciones exitosas / 120 ventas completadas</p>
-            </section>
-            
-            <section class="profile-metrics">
-                <h3>📊 Métricas Clave</h3>
-                <div class="metric-item">
-                    <span class="metric-label">Tiempo en la Plataforma:</span>
-                    <span class="metric-value">2 años y 4 meses</span>
-                </div>
-                <div class="metric-item">
-                    <span class="metric-label">Tasa de Respuesta (DM):</span>
-                    <span class="metric-value">98% (Respuesta promedio: 30 min)</span>
-                </div>
-                <div class="metric-item">
-                    <span class="metric-label">Última Conexión:</span>
-                    <span class="metric-value">Hoy, 15:00 hrs</span>
-                </div>
-            </section>
+    <div class="perfil-header">
+        <div class="perfil-header-left">
+            <a href="index.html" class="btn-header">← Inicio</a>
+            <h1 style="font-size:18px; color:white;">Mi Perfil</h1>
+        </div>
+        <a href="#" class="btn-header btn-cerrar" id="btn-cerrar">🚪 Cerrar Sesión</a>
+    </div>
 
-            <section class="profile-social-network">
-                <h3>Amistades y Seguidores</h3>
-                <div class="social-metrics">
-                    <div class="social-item">
-                        <span class="social-count">12</span>
-                        <span class="social-label">Amigos</span>
+    <div class="perfil-wrapper">
+        <div>
+            <div class="card">
+                <div class="perfil-banner"></div>
+                <div class="perfil-info">
+                    <div class="perfil-foto-wrapper">
+                        <div class="perfil-foto" id="perfil-foto" onclick="document.getElementById('input-foto').click()">?</div>
+                        <div class="foto-overlay" onclick="document.getElementById('input-foto').click()">✏️</div>
+                        <input type="file" id="input-foto" accept="image/*" onchange="cambiarFoto(this)">
                     </div>
-                    <div class="social-item">
-                        <span class="social-count">256</span>
-                        <span class="social-label">Seguidores</span>
+                    <div class="perfil-nombre" id="perfil-nombre">Cargando...</div>
+                    <div class="perfil-username" id="perfil-username"></div>
+                    <span class="badge-verificado">✅ Cuenta Verificada</span>
+                    <div class="perfil-datos">
+                        <span class="perfil-dato" id="perfil-email"></span>
+                        <span class="perfil-dato" id="perfil-telefono"></span>
+                        <span class="perfil-dato" id="perfil-fecha"></span>
                     </div>
                 </div>
-                <div class="friends-preview">
-                    <span class="friend-avatar" title="Pato R.">P</span>
-                    <span class="friend-avatar" title="Laura C.">L</span>
-                    <span class="friend-avatar" title="Soporte T.">S</span>
-                    <span class="friend-avatar more-count">+9</span>
+            </div>
+
+            <div class="card">
+                <div class="card-titulo">📊 Mis Estadísticas</div>
+                <div class="card-body">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-numero" id="stat-productos">0</div>
+                            <div class="stat-label">Productos publicados</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-numero">0</div>
+                            <div class="stat-label">Ventas completadas</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-numero">0</div>
+                            <div class="stat-label">Compras realizadas</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-numero">⭐ -</div>
+                            <div class="stat-label">Reputación</div>
+                        </div>
+                    </div>
                 </div>
-            </section>
-
-            <div class="profile-actions">
-                <a href="#" class="button-primary contact-btn">
-                    🚪 Cerrar Sesión
-                </a>
-            </div>
-            
-        </aside>
-        
-        <section class="profile-content">
-            
-            <div class="tab-controls">
-                <button class="tab-btn active" data-tab="listings">Productos en Venta</button>
-                <button class="tab-btn" data-tab="history">Historial Q&A</button>
             </div>
 
-            <div class="tab-content active" id="listings">
-                <p style="padding: 15px;">Cargando productos...</p>
+            <div class="card">
+                <div class="card-titulo">✏️ Editar mis Datos</div>
+                <div class="card-body">
+                    <button class="btn-verde" onclick="toggleEditar()">Editar información</button>
+                    <div class="editar-form" id="editar-form">
+                        <input type="text" id="edit-nombre" placeholder="Nombre completo">
+                        <input type="tel" id="edit-telefono" placeholder="Teléfono">
+                        <button class="btn-verde" onclick="guardarCambios()">💾 Guardar Cambios</button>
+                        <button class="btn-gris" onclick="toggleEditar()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tabs">
+                <button class="tab-btn activo" onclick="cambiarTab('productos', this)">🛒 Mis Productos</button>
+                <button class="tab-btn" onclick="cambiarTab('ventas', this)">💰 Mis Ventas</button>
+                <button class="tab-btn" onclick="cambiarTab('compras', this)">📦 Mis Compras</button>
+                <button class="tab-btn" onclick="cambiarTab('config', this)">⚙️ Configuración</button>
             </div>
 
-            <div class="tab-content hidden" id="history">
-                <p style="padding: 15px; background-color: #f7f7e9; border: 1px solid #f7f7e0; border-radius: 5px;">
-                    Historial de Actividad (Preguntas y Respuestas)
-                </p>
+            <div class="tab-contenido activo" id="tab-productos">
+                <div class="productos-grid" id="productos-grid">
+                    <p class="sin-contenido">Cargando productos...</p>
+                </div>
             </div>
-            
-        </section>
-        
-    </main>
+
+            <div class="tab-contenido" id="tab-ventas">
+                <p class="sin-contenido">📭 Aún no tienes ventas completadas.</p>
+            </div>
+
+            <div class="tab-contenido" id="tab-compras">
+                <p class="sin-contenido">📭 Aún no tienes compras realizadas.</p>
+            </div>
+
+            <div class="tab-contenido" id="tab-config">
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Notificaciones por email</div>
+                        <div class="config-desc">Recibe alertas de mensajes y ofertas</div>
+                    </div>
+                    <div class="toggle activo" onclick="this.classList.toggle('activo')">
+                        <div class="toggle-dot"></div>
+                    </div>
+                </div>
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Mostrar teléfono en perfil público</div>
+                        <div class="config-desc">Otros usuarios podrán ver tu número</div>
+                    </div>
+                    <div class="toggle activo" onclick="this.classList.toggle('activo')">
+                        <div class="toggle-dot"></div>
+                    </div>
+                </div>
+                <div class="config-item">
+                    <div>
+                        <div class="config-label">Perfil visible en búsquedas</div>
+                        <div class="config-desc">Tu perfil aparecerá en resultados</div>
+                    </div>
+                    <div class="toggle activo" onclick="this.classList.toggle('activo')">
+                        <div class="toggle-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="config.js"></script>
     <script>
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-        alert('Debes iniciar sesión para ver tu perfil');
-        window.location.href = '/index.html';
-    }
+        const token = localStorage.getItem('token');
 
-    async function cargarPerfil() {
-        try {
-            const respuesta = await fetch(`${API_URL}/api/perfil`, {
-                headers: { 'authorization': token }
-            });
-
-            const datos = await respuesta.json();
-
-            document.querySelector('.profile-username').textContent = '@' + datos.usuario.username;
-            document.querySelector('.profile-location').textContent = '📍 ' + datos.usuario.nombre;
-
-            const sidebar = document.querySelector('.profile-sidebar');
-            const contactInfo = document.createElement('div');
-            contactInfo.innerHTML = `
-                <div style="padding: 10px 15px;">
-                    <p>📧 ${datos.usuario.email}</p>
-                    <p>📞 ${datos.usuario.telefono}</p>
-                </div>
-            `;
-            sidebar.appendChild(contactInfo);
-
-            const contenedor = document.getElementById('listings');
-            if (datos.productos.length === 0) {
-                contenedor.innerHTML = '<p style="padding:15px">No tienes productos publicados aún.</p>';
-            } else {
-                contenedor.innerHTML = datos.productos.map(p => `
-                    <div class="product-card">
-                        <div class="card-body">
-                            <h3>${p.titulo}</h3>
-                            <p class="price">$${Number(p.precio).toLocaleString('es-CL')} CLP</p>
-                            <span class="security-tag">${p.estado}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-        } catch (error) {
-            console.log('Error cargando perfil:', error);
+        if (!token) {
+            alert('Debes iniciar sesión para ver tu perfil');
+            window.location.href = 'index.html';
         }
-    }
 
-    document.querySelector('.contact-btn').onclick = function(e) {
-        e.preventDefault();
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuario');
-        localStorage.removeItem('email');
-        window.location.href = '/index.html';
-    };
+        async function cargarPerfil() {
+            try {
+                const respuesta = await fetch(`${API_URL}/api/perfil`, {
+                    headers: { 'authorization': token }
+                });
 
-    cargarPerfil();
+                const datos = await respuesta.json();
+                const u = datos.usuario;
+
+                document.getElementById('perfil-foto').textContent = u.username.charAt(0).toUpperCase();
+                document.getElementById('perfil-nombre').textContent = u.nombre;
+                document.getElementById('perfil-username').textContent = '@' + u.username;
+                document.getElementById('perfil-email').textContent = '📧 ' + u.email;
+                document.getElementById('perfil-telefono').textContent = '📞 ' + u.telefono;
+                document.getElementById('perfil-fecha').textContent = '📅 Miembro desde ' + new Date(u.fecha_registro).toLocaleDateString('es-CL');
+                document.getElementById('edit-nombre').value = u.nombre;
+                document.getElementById('edit-telefono').value = u.telefono;
+                document.getElementById('stat-productos').textContent = datos.productos.length;
+
+                const grid = document.getElementById('productos-grid');
+                if (datos.productos.length === 0) {
+                    grid.innerHTML = '<p class="sin-contenido">No tienes productos publicados aún.<br><br><a href="publicar.html" style="color:#28a745; font-weight:600;">+ Publicar producto</a></p>';
+                } else {
+                    grid.innerHTML = datos.productos.map(p => `
+                        <div class="producto-card">
+                            <p class="producto-titulo">${p.titulo}</p>
+                            <p class="producto-precio">$${Number(p.precio).toLocaleString('es-CL')} CLP</p>
+                            <span class="producto-estado">${p.estado}</span>
+                        </div>
+                    `).join('');
+                }
+
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        }
+
+        function cambiarTab(tab, btn) {
+            document.querySelectorAll('.tab-contenido').forEach(t => t.classList.remove('activo'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('activo'));
+            document.getElementById('tab-' + tab).classList.add('activo');
+            btn.classList.add('activo');
+        }
+
+        function toggleEditar() {
+            document.getElementById('editar-form').classList.toggle('activo');
+        }
+
+        function guardarCambios() {
+            alert('Datos actualizados correctamente');
+            toggleEditar();
+        }
+
+        function cambiarFoto(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const foto = document.getElementById('perfil-foto');
+                foto.innerHTML = `<img src="${e.target.result}" alt="Foto de perfil">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        document.getElementById('btn-cerrar').onclick = function(e) {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('usuario');
+            localStorage.removeItem('email');
+            window.location.href = 'index.html';
+        };
+
+        cargarPerfil();
     </script>
 </body>
 </html>
