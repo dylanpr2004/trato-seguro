@@ -220,7 +220,15 @@
                 document.getElementById('perfil-nombre').textContent = u.nombre;
                 document.getElementById('perfil-username').textContent = '@' + u.username;
                 document.getElementById('perfil-email').textContent = '📧 ' + u.email;
-                document.getElementById('perfil-telefono').textContent = '📞 ' + u.telefono;
+                // Verificar preferencia de mostrar teléfono
+                const prefsResp = await fetch(`${API_URL}/api/usuario/${username}`);
+                const prefsData = await prefsResp.json();
+
+                if (prefsData.usuario.mostrar_telefono !== 0) {
+               document.getElementById('perfil-telefono').textContent = '📞 ' + u.telefono;
+            } else {
+            document.getElementById('perfil-telefono').textContent = '📞 Teléfono oculto por el usuario';
+             }
                 document.getElementById('perfil-fecha').textContent = '📅 Miembro desde ' + new Date(u.fecha_registro).toLocaleDateString('es-CL');
 
                 const grid = document.getElementById('productos-grid');

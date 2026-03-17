@@ -170,6 +170,13 @@ app.get('/api/usuario/:username', (req, res) => {
     }
 
     const productos = db.prepare('SELECT * FROM productos WHERE vendedor_id = ?').all(usuario.id);
+    
+    const prefs = db.prepare('SELECT * FROM preferencias WHERE usuario_id = ?').get(usuario.id);
+
+    // Ocultar teléfono si el usuario lo configuró así
+    if (prefs && !prefs.mostrar_telefono) {
+        usuario.telefono = null;
+    }
 
     res.json({ usuario, productos });
 });
