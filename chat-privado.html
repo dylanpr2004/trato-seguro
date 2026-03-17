@@ -386,11 +386,15 @@
             }
         }
 
-        socket.on('mensaje-privado', (datos) => {
-            if (datos.de === usuarioActivo) {
-                agregarMensaje(datos.de, datos.texto, null);
-            }
-        });
+       socket.on('mensaje-privado', (datos) => {
+    if (datos.de === usuarioActivo) {
+        agregarMensaje(datos.de, datos.texto, null);
+    }
+    // Actualizar lista de conversaciones cuando llega mensaje nuevo
+    if (datos.para === usuarioActual || datos.de === usuarioActual) {
+        cargarConversaciones();
+    }
+});
 
         document.getElementById('btn-enviar').addEventListener('click', enviarMensaje);
 

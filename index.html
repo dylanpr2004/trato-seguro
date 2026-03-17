@@ -216,12 +216,18 @@
                 if (datos.notificaciones.length === 0) {
                     lista.innerHTML = '<p style="text-align:center; color:#999; padding:20px; font-size:13px;">No tienes notificaciones</p>';
                 } else {
-                    lista.innerHTML = datos.notificaciones.map(n => `
-                        <div class="notif-item ${n.leida ? '' : 'no-leida'}">
-                            <p class="notif-texto">${n.mensaje}</p>
-                            <p class="notif-fecha">${new Date(n.fecha).toLocaleString('es-CL')}</p>
-                        </div>
-                    `).join('');
+                   lista.innerHTML = datos.notificaciones.map(n => {
+    const username = n.mensaje.includes('@') ? n.mensaje.split('@')[1] : '';
+    const link = username ? `chat-privado.html?user=${username}` : '#';
+    return `
+        <a href="${link}" style="text-decoration:none;" onclick="document.getElementById('notif-panel').style.display='none'">
+            <div class="notif-item ${n.leida ? '' : 'no-leida'}">
+                <p class="notif-texto">${n.mensaje}</p>
+                <p class="notif-fecha">${new Date(n.fecha).toLocaleString('es-CL')}</p>
+            </div>
+        </a>
+    `;
+}).join('');
                 }
 
             } catch (error) {
