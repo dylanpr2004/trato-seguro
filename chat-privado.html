@@ -31,7 +31,6 @@
         }
 
         .btn-volver:hover { background: rgba(255,255,255,0.25); }
-
         .chat-usuario-info { display: flex; align-items: center; gap: 12px; }
 
         .chat-avatar-header {
@@ -50,13 +49,8 @@
         .chat-nombre-header { font-size: 16px; font-weight: 700; }
         .chat-estado { font-size: 12px; opacity: 0.7; margin-top: 2px; }
 
-        .chat-body {
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-        }
+        .chat-body { flex: 1; display: flex; overflow: hidden; }
 
-        /* Panel izquierdo - conversaciones */
         .conversaciones-panel {
             width: 280px;
             background: white;
@@ -105,16 +99,9 @@
         .conv-info { flex: 1; overflow: hidden; }
         .conv-nombre { font-size: 14px; font-weight: 600; color: #1a1a2e; }
         .conv-ultimo { font-size: 12px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-
         .sin-convs { text-align: center; color: #999; padding: 30px 20px; font-size: 13px; }
 
-        /* Panel derecho - mensajes */
-        .mensajes-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: #f0f2f5;
-        }
+        .mensajes-panel { flex: 1; display: flex; flex-direction: column; background: #f0f2f5; }
 
         .mensajes-vacio {
             flex: 1;
@@ -233,7 +220,6 @@
     </div>
 
     <div class="chat-body">
-
         <div class="conversaciones-panel">
             <div class="conversaciones-titulo">💬 Mensajes</div>
             <div class="conversaciones-lista" id="conversaciones-lista">
@@ -254,7 +240,6 @@
                 <button class="btn-enviar" id="btn-enviar">Enviar ➤</button>
             </div>
         </div>
-
     </div>
 
     <script src="config.js"></script>
@@ -271,7 +256,6 @@
         const socket = io(API_URL);
         let usuarioActivo = null;
 
-        // Ver si viene con un usuario desde la URL
         const params = new URLSearchParams(window.location.search);
         const userParam = params.get('user');
 
@@ -284,13 +268,19 @@
 
                 const lista = document.getElementById('conversaciones-lista');
 
-                if (convs.length === 0 && !userParam) {
+                // Si viene de URL y no está en conversaciones, agregarlo igual
+                let convsList = convs;
+                if (userParam && !convs.find(c => c.username === userParam)) {
+                    convsList = [{ username: userParam, nombre: userParam, ultimo_mensaje: '' }, ...convs];
+                }
+
+                if (convsList.length === 0) {
                     lista.innerHTML = '<p class="sin-convs">No tienes conversaciones aún</p>';
                     return;
                 }
 
-                lista.innerHTML = convs.map(c => `
-                    <div class="conv-item" onclick="abrirChat('${c.username}', '${c.nombre}')">
+                lista.innerHTML = convsList.map(c => `
+                    <div class="conv-item ${usuarioActivo === c.username ? 'activo' : ''}" onclick="abrirChat('${c.username}', '${c.nombre}')">
                         <div class="conv-avatar">${c.username.charAt(0).toUpperCase()}</div>
                         <div class="conv-info">
                             <div class="conv-nombre">@${c.username}</div>
@@ -314,6 +304,11 @@
             document.getElementById('chat-input').style.display = 'flex';
 
             document.querySelectorAll('.conv-item').forEach(i => i.classList.remove('activo'));
+            document.querySelectorAll('.conv-item').forEach(i => {
+                if (i.querySelector('.conv-nombre') && i.querySelector('.conv-nombre').textContent === '@' + username) {
+                    i.classList.add('activo');
+                }
+            });
 
             try {
                 const respuesta = await fetch(`${API_URL}/api/mensajes/${username}`, {
@@ -386,15 +381,14 @@
             }
         }
 
-       socket.on('mensaje-privado', (datos) => {
-    if (datos.de === usuarioActivo) {
-        agregarMensaje(datos.de, datos.texto, null);
-    }
-    // Actualizar lista de conversaciones cuando llega mensaje nuevo
-    if (datos.para === usuarioActual || datos.de === usuarioActual) {
-        cargarConversaciones();
-    }
-});
+        socket.on('mensaje-privado', (datos) => {
+            if (datos.de === usuarioActivo) {
+                agregarMensaje(datos.de, datos.texto, null);
+            }
+            if (datos.para === usuarioActual || datos.de === usuarioActual) {
+                cargarConversaciones();
+            }
+        });
 
         document.getElementById('btn-enviar').addEventListener('click', enviarMensaje);
 
@@ -405,14 +399,12 @@
             }
         });
 
-        cargarConversaciones();
-
-if (userParam) {
-    // Esperar que carguen las conversaciones antes de abrir el chat
-    setTimeout(() => {
-        abrirChat(userParam, userParam);
-    }, 500);
-}
+        // Cargar conversaciones y abrir chat si viene desde URL
+        cargarConversaciones().then(() => {
+            if (userParam) {
+                abrirChat(userParam, userParam);
+            }
+        });
     </script>
 </body>
 </html>
