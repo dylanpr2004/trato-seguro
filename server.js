@@ -173,6 +173,50 @@ app.get('/api/usuario/:username', (req, res) => {
 
     res.json({ usuario, productos });
 });
+// Obtener preferencias del usuario
+app.get('/api/preferencias', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        
+        let prefs = db.prepare('SELECT * FROM preferencias WHERE usuario_id = ?').get(datos.id);
+        
+        if (!prefs) {
+            db.prepare('INSERT INTO preferencias (usuario_id) VALUES (?)').run(datos.id);
+            prefs = db.prepare('SELECT * FROM preferencias WHERE usuario_id = ?').get(datos.id);
+        }
+
+        res.json(prefs);
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
+
+// Guardar preferencias del usuario
+app.post('/api/preferencias', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const { mostrar_telefono, notificaciones_email, perfil_visible } = req.body;
+
+        db.prepare(`
+            INSERT INTO preferencias (usuario_id, mostrar_telefono, notificaciones_email, perfil_visible)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(usuario_id) DO UPDATE SET
+            mostrar_telefono = ?,
+            notificaciones_email = ?,
+            perfil_visible = ?
+        `).run(datos.id, mostrar_telefono, notificaciones_email, perfil_visible, mostrar_telefono, notificaciones_email, perfil_visible);
+
+        res.json({ mensaje: 'Preferencias guardadas' });
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
 
 servidor.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');

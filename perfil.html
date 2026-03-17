@@ -266,7 +266,7 @@
                         <div class="config-label">Notificaciones por email</div>
                         <div class="config-desc">Recibe alertas de mensajes y ofertas</div>
                     </div>
-                    <div class="toggle activo" onclick="this.classList.toggle('activo')">
+                    <div class="toggle" id="toggle-notif" onclick="this.classList.toggle('activo'); guardarPreferencias()">
                         <div class="toggle-dot"></div>
                     </div>
                 </div>
@@ -275,7 +275,7 @@
                         <div class="config-label">Mostrar teléfono en perfil público</div>
                         <div class="config-desc">Otros usuarios podrán ver tu número</div>
                     </div>
-                    <div class="toggle activo" onclick="this.classList.toggle('activo')">
+                    <div class="toggle" id="toggle-telefono" onclick="this.classList.toggle('activo'); guardarPreferencias()">
                         <div class="toggle-dot"></div>
                     </div>
                 </div>
@@ -284,7 +284,7 @@
                         <div class="config-label">Perfil visible en búsquedas</div>
                         <div class="config-desc">Tu perfil aparecerá en resultados</div>
                     </div>
-                    <div class="toggle activo" onclick="this.classList.toggle('activo')">
+                    <div class="toggle" id="toggle-visible" onclick="this.classList.toggle('activo'); guardarPreferencias()">
                         <div class="toggle-dot"></div>
                     </div>
                 </div>
@@ -338,6 +338,40 @@
             }
         }
 
+        async function cargarPreferencias() {
+            try {
+                const respuesta = await fetch(`${API_URL}/api/preferencias`, {
+                    headers: { 'authorization': token }
+                });
+                const prefs = await respuesta.json();
+
+                if (prefs.notificaciones_email) document.getElementById('toggle-notif').classList.add('activo');
+                if (prefs.mostrar_telefono) document.getElementById('toggle-telefono').classList.add('activo');
+                if (prefs.perfil_visible) document.getElementById('toggle-visible').classList.add('activo');
+            } catch (error) {
+                console.log('Error cargando preferencias:', error);
+            }
+        }
+
+        async function guardarPreferencias() {
+            const mostrar_telefono = document.getElementById('toggle-telefono').classList.contains('activo') ? 1 : 0;
+            const notificaciones_email = document.getElementById('toggle-notif').classList.contains('activo') ? 1 : 0;
+            const perfil_visible = document.getElementById('toggle-visible').classList.contains('activo') ? 1 : 0;
+
+            try {
+                await fetch(`${API_URL}/api/preferencias`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': token
+                    },
+                    body: JSON.stringify({ mostrar_telefono, notificaciones_email, perfil_visible })
+                });
+            } catch (error) {
+                console.log('Error guardando preferencias:', error);
+            }
+        }
+
         function cambiarTab(tab, btn) {
             document.querySelectorAll('.tab-contenido').forEach(t => t.classList.remove('activo'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('activo'));
@@ -374,6 +408,7 @@
         };
 
         cargarPerfil();
+        cargarPreferencias();
     </script>
 </body>
 </html>

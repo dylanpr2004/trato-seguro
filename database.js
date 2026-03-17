@@ -29,6 +29,16 @@ db.exec(`
         FOREIGN KEY (vendedor_id) REFERENCES usuarios(id)
     )
 `);
+// Tabla de preferencias de usuario
+db.exec(`
+    CREATE TABLE IF NOT EXISTS preferencias (
+        usuario_id INTEGER PRIMARY KEY,
+        mostrar_telefono INTEGER DEFAULT 1,
+        notificaciones_email INTEGER DEFAULT 1,
+        perfil_visible INTEGER DEFAULT 1,
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    )
+`);
 
 console.log('Base de datos lista');
 module.exports = db;
