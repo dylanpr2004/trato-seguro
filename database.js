@@ -10,6 +10,7 @@ db.exec(`
         username TEXT UNIQUE NOT NULL,
         email TEXT UNIQUE NOT NULL,
         telefono TEXT NOT NULL,
+        rut TEXT NOT NULL,
         password TEXT NOT NULL,
         fecha_registro TEXT DEFAULT CURRENT_TIMESTAMP
     )

@@ -22,9 +22,9 @@ app.get('/', (req, res) => {
 
 // Ruta de REGISTRO
 app.post('/api/registro', async (req, res) => {
-    const { nombre, username, email, telefono, password } = req.body;
+    const { nombre, username, email, telefono, rut, password } = req.body;
 
-    if (!nombre || !username || !email || !telefono || !password) {
+if (!nombre || !username || !email || !telefono || !rut || !password) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
@@ -40,8 +40,8 @@ app.post('/api/registro', async (req, res) => {
 
     const passwordEncriptada = await bcrypt.hash(password, 10);
     const resultado = db.prepare(
-        'INSERT INTO usuarios (nombre, username, email, telefono, password) VALUES (?, ?, ?, ?, ?)'
-    ).run(nombre, username, email, telefono, passwordEncriptada);
+    'INSERT INTO usuarios (nombre, username, email, telefono, rut, password) VALUES (?, ?, ?, ?, ?, ?)'
+).run(nombre, username, email, telefono, rut, passwordEncriptada);
 
     res.status(201).json({ mensaje: '¡Usuario registrado con éxito!', id: resultado.lastInsertRowid });
 });
