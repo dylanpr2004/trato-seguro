@@ -1,4 +1,4 @@
-const API_URL = 'https://Shopseguro-production.up.railway.app';
+const API_URL = 'https://trato-seguro-production.up.railway.app';
 
 // Verificar si el token expiró
 async function verificarToken() {
