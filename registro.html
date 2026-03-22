@@ -63,6 +63,7 @@
             </form>
         </section>
     </main>
+
     <script src="config.js"></script>
     <script>
     document.getElementById('registro-form').addEventListener('submit', async function(event) {
@@ -70,8 +71,9 @@
 
         const nombre = document.getElementById('full-name').value;
         const username = document.getElementById('username').value;
-        const email = document.getElementById('email-reg').value;
         const telefono = document.getElementById('telefono').value;
+        const rut = document.getElementById('rut').value;
+        const email = document.getElementById('email-reg').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirm-password').value;
 
@@ -84,7 +86,7 @@
             const respuesta = await fetch(`${API_URL}/api/registro`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre, username, email, telefono, password })
+                body: JSON.stringify({ nombre, username, email, telefono, rut, password })
             });
 
             const datos = await respuesta.json();
