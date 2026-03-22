@@ -1,0 +1,406 @@
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte - Shopseguro</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #f0f2f5; font-family: Arial, sans-serif; }
+
+        .soporte-header {
+            background-color: #1a1a2e;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-volver {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .btn-volver:hover { background: rgba(255,255,255,0.25); }
+
+        .hero-soporte {
+            background: linear-gradient(135deg, #1a1a2e, #28a745);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero-soporte h1 { font-size: 32px; margin-bottom: 12px; }
+        .hero-soporte p { font-size: 16px; opacity: 0.85; margin-bottom: 24px; }
+
+        .search-soporte {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            gap: 10px;
+        }
+
+        .search-soporte input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: none;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-soporte button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .soporte-wrapper {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
+
+        .categorias-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .categoria-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+
+        .categoria-card:hover { transform: translateY(-3px); }
+        .categoria-icon { font-size: 32px; margin-bottom: 10px; }
+        .categoria-titulo { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+        .categoria-desc { font-size: 12px; color: #999; margin-top: 4px; }
+
+        .seccion-titulo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .faq-pregunta {
+            padding: 16px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a2e;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-pregunta:hover { background: #f8f9fa; }
+
+        .faq-respuesta {
+            display: none;
+            padding: 0 20px 16px;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.7;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .faq-respuesta.activo { display: block; }
+        .faq-icon { font-size: 18px; transition: transform 0.2s; }
+        .faq-icon.activo { transform: rotate(45deg); }
+
+        .contacto-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-top: 40px;
+        }
+
+        .contacto-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .contacto-info h3 { font-size: 20px; color: #1a1a2e; margin-bottom: 16px; }
+
+        .contacto-metodo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .contacto-metodo:last-child { border-bottom: none; }
+        .contacto-metodo-icon { font-size: 24px; }
+
+        .form-contacto { display: flex; flex-direction: column; gap: 14px; }
+
+        .form-contacto input,
+        .form-contacto textarea,
+        .form-contacto select {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 14px;
+            outline: none;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-contacto input:focus,
+        .form-contacto textarea:focus,
+        .form-contacto select:focus { border-color: #1a1a2e; }
+
+        .btn-enviar {
+            background: #1a1a2e;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-enviar:hover { background: #28a745; }
+
+        @media (max-width: 600px) {
+            .contacto-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="soporte-header">
+        <a href="index.html" class="btn-volver">← Inicio</a>
+        <h1 style="font-size:18px; color:white;">Centro de Soporte</h1>
+    </div>
+
+    <div class="hero-soporte">
+        <h1>¿En qué podemos ayudarte?</h1>
+        <p>Encuentra respuestas rápidas o contáctanos directamente</p>
+        <div class="search-soporte">
+            <input type="text" id="search-faq" placeholder="Buscar en el centro de ayuda..." oninput="buscarFAQ()">
+            <button onclick="buscarFAQ()">🔍 Buscar</button>
+        </div>
+    </div>
+
+    <div class="soporte-wrapper">
+
+        <div class="categorias-grid">
+            <a href="#faq" class="categoria-card">
+                <div class="categoria-icon">🛒</div>
+                <div class="categoria-titulo">Compras</div>
+                <div class="categoria-desc">Cómo comprar seguro</div>
+            </a>
+            <a href="#faq" class="categoria-card">
+                <div class="categoria-icon">💰</div>
+                <div class="categoria-titulo">Ventas</div>
+                <div class="categoria-desc">Publica y vende fácil</div>
+            </a>
+            <a href="#faq" class="categoria-card">
+                <div class="categoria-icon">🔒</div>
+                <div class="categoria-titulo">Pagos y Escrow</div>
+                <div class="categoria-desc">Tu dinero protegido</div>
+            </a>
+            <a href="#faq" class="categoria-card">
+                <div class="categoria-icon">👤</div>
+                <div class="categoria-titulo">Mi Cuenta</div>
+                <div class="categoria-desc">Perfil y configuración</div>
+            </a>
+        </div>
+
+        <p class="seccion-titulo" id="faq">Preguntas Frecuentes</p>
+
+        <div id="faq-lista">
+            <div class="faq-item">
+                <div class="faq-pregunta" onclick="toggleFAQ(this)">
+                    ¿Cómo funciona el sistema de pago seguro (Escrow)?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-respuesta">
+                    Cuando realizas una compra, tu dinero queda retenido en nuestra plataforma. El vendedor recibe el pago solo cuando tú confirmas que recibiste el producto en las condiciones acordadas. Así ambas partes están protegidas.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta" onclick="toggleFAQ(this)">
+                    ¿Cómo publico un producto para vender?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-respuesta">
+                    Inicia sesión, haz clic en "Quiero Vender Ahora" en la página principal y completa el formulario con el título, descripción, precio y fotos del producto. Una vez publicado aparecerá en la página principal.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta" onclick="toggleFAQ(this)">
+                    ¿Es seguro comprar en Shopseguro?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-respuesta">
+                    Sí. Todos los usuarios pasan por un proceso de verificación de identidad. Además el sistema de Escrow garantiza que tu dinero está protegido hasta confirmar la recepción del producto.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta" onclick="toggleFAQ(this)">
+                    ¿Qué hago si el producto llegó en mal estado?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-respuesta">
+                    No confirmes la recepción y abre una disputa desde tu perfil. Nuestro equipo de soporte revisará el caso y mediará entre comprador y vendedor. El dinero permanecerá retenido hasta resolver la situación.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta" onclick="toggleFAQ(this)">
+                    ¿Cómo contacto a un vendedor?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-respuesta">
+                    Desde la página del producto o el perfil del vendedor puedes iniciar un Chat Privado directamente. También puedes interactuar en el Chat Público de la comunidad.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta" onclick="toggleFAQ(this)">
+                    ¿Cuánto cobra Shopseguro por cada venta?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-respuesta">
+                    Actualmente Shopseguro está en fase de lanzamiento y no cobra comisiones. En el futuro se aplicará una comisión justa y transparente, muy por debajo de la competencia.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-pregunta" onclick="toggleFAQ(this)">
+                    ¿Cómo recupero mi contraseña?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-respuesta">
+                    En la página de inicio de sesión haz clic en "¿Olvidaste tu contraseña?" e ingresa tu email. Te enviaremos un enlace para restablecerla.
+                </div>
+            </div>
+        </div>
+
+        <div class="contacto-card">
+            <div class="contacto-grid">
+                <div class="contacto-info">
+                    <h3>📬 Contáctanos</h3>
+                    <div class="contacto-metodo">
+                        <span class="contacto-metodo-icon">📧</span>
+                        <div>
+                            <strong>Email</strong><br>
+                            <span>soporte@shopseguro.com</span>
+                        </div>
+                    </div>
+                    <div class="contacto-metodo">
+                        <span class="contacto-metodo-icon">💬</span>
+                        <div>
+                            <strong>Chat en vivo</strong><br>
+                            <span>Lunes a Viernes 9:00 - 18:00</span>
+                        </div>
+                    </div>
+                    <div class="contacto-metodo">
+                        <span class="contacto-metodo-icon">⏱️</span>
+                        <div>
+                            <strong>Tiempo de respuesta</strong><br>
+                            <span>Máximo 24 horas hábiles</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="font-size:20px; color:#1a1a2e; margin-bottom:16px;">Envíanos un mensaje</h3>
+                    <div class="form-contacto">
+                        <input type="text" id="contacto-nombre" placeholder="Tu nombre">
+                        <input type="email" id="contacto-email" placeholder="Tu email">
+                        <select id="contacto-tema">
+                            <option value="">Selecciona el tema</option>
+                            <option value="compra">Problema con una compra</option>
+                            <option value="venta">Problema con una venta</option>
+                            <option value="cuenta">Problema con mi cuenta</option>
+                            <option value="pago">Problema con un pago</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                        <textarea id="contacto-mensaje" rows="4" placeholder="Describe tu problema..."></textarea>
+                        <button class="btn-enviar" onclick="enviarContacto()">Enviar mensaje ➤</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleFAQ(elemento) {
+            const respuesta = elemento.nextElementSibling;
+            const icon = elemento.querySelector('.faq-icon');
+            respuesta.classList.toggle('activo');
+            icon.classList.toggle('activo');
+        }
+
+        function buscarFAQ() {
+            const busqueda = document.getElementById('search-faq').value.toLowerCase();
+            const items = document.querySelectorAll('.faq-item');
+            items.forEach(item => {
+                const texto = item.textContent.toLowerCase();
+                item.style.display = texto.includes(busqueda) ? 'block' : 'none';
+            });
+        }
+
+        function enviarContacto() {
+            const nombre = document.getElementById('contacto-nombre').value;
+            const email = document.getElementById('contacto-email').value;
+            const mensaje = document.getElementById('contacto-mensaje').value;
+
+            if (!nombre || !email || !mensaje) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            alert('✅ Mensaje enviado correctamente. Te responderemos en menos de 24 horas.');
+            document.getElementById('contacto-nombre').value = '';
+            document.getElementById('contacto-email').value = '';
+            document.getElementById('contacto-mensaje').value = '';
+            document.getElementById('contacto-tema').value = '';
+        }
+    </script>
+
+</body>
+</html>
