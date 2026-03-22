@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 
 const db = new Database('Shopseguro.db');
-db.exec(`DROP TABLE IF EXISTS usuarios`);
+
 // Tabla de usuarios
 db.exec(`
     CREATE TABLE IF NOT EXISTS usuarios_v2 (
