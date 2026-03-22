@@ -401,6 +401,14 @@
             document.getElementById('contacto-tema').value = '';
         }
     </script>
-
+<script src="config.js"></script>
+<script>
+    // Verificar que el usuario está logueado
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Debes iniciar sesión para acceder al Soporte');
+        window.location.href = 'login.html';
+    }
+</script>
 </body>
 </html>
