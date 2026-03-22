@@ -116,7 +116,7 @@ h1, h2, h3 {
     transition: background-color 0.3s;
 }
 
-/* --- ESTILOS PARA EL BOTÓN PRINCIPAL (Unirse a Trato Seguro) --- */
+/* --- ESTILOS PARA EL BOTÓN PRINCIPAL (Unirse a Shopseguro) --- */
 
 .button-primary {
     /* Fondo: Verde Oscuro Sólido */
@@ -469,7 +469,7 @@ footer {
 
 /* Efecto al enfocar (para usabilidad y seguridad) */
 .input-group input:focus {
-    border-color: var(--color-accion); /* Se ilumina con el azul de Trato Seguro */
+    border-color: var(--color-accion); /* Se ilumina con el azul de Shopseguro */
     outline: none; /* Quita el borde de enfoque predeterminado del navegador */
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
@@ -777,7 +777,7 @@ footer {
     color: var(--color-principal);
 }
 
-/* Caja de Garantía Trato Seguro */
+/* Caja de Garantía Shopseguro */
 .assurance-box {
     background-color: #c8e6c9; /* Verde más fuerte para la seguridad */
     padding: 15px;

@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Ruta de prueba
 app.get('/', (req, res) => {
-    res.send('¡Servidor de Trato Seguro CL funcionando!');
+    res.send('¡Servidor de Shopseguro funcionando!');
 });
 
 // Ruta de REGISTRO
@@ -66,7 +66,7 @@ app.post('/api/login', async (req, res) => {
 
     const token = jwt.sign(
         { id: usuario.id, email: usuario.email, username: usuario.username },
-        'clave-secreta-trato-seguro',
+        'clave-secreta-Shopseguro',
         { expiresIn: '7d' }
     );
 
@@ -87,7 +87,7 @@ app.post('/api/productos', async (req, res) => {
     }
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
         const resultado = db.prepare(`
             INSERT INTO productos (titulo, descripcion, precio, region, estado, vendedor_id, vendedor_nombre)
             VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -113,7 +113,7 @@ app.get('/api/perfil', (req, res) => {
     }
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
         const usuario = db.prepare('SELECT id, nombre, username, email, telefono, fecha_registro FROM usuarios WHERE id = ?').get(datos.id);
         const productos = db.prepare('SELECT * FROM productos WHERE vendedor_id = ?').all(datos.id);
         res.json({ usuario, productos });
@@ -148,7 +148,7 @@ app.get('/api/preferencias', (req, res) => {
     if (!token) return res.status(401).json({ error: 'No autorizado' });
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
         let prefs = db.prepare('SELECT * FROM preferencias WHERE usuario_id = ?').get(datos.id);
 
         if (!prefs) {
@@ -168,7 +168,7 @@ app.post('/api/preferencias', (req, res) => {
     if (!token) return res.status(401).json({ error: 'No autorizado' });
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
         const { mostrar_telefono, notificaciones_email, perfil_visible } = req.body;
 
         db.prepare(`
@@ -192,7 +192,7 @@ app.post('/api/mensajes', (req, res) => {
     if (!token) return res.status(401).json({ error: 'No autorizado' });
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
         const { destinatario, texto } = req.body;
 
         const destinatarioClean = destinatario.replace('@', '');
@@ -222,7 +222,7 @@ app.get('/api/mensajes/:username', (req, res) => {
     if (!token) return res.status(401).json({ error: 'No autorizado' });
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
         const usernameClean = req.params.username.replace('@', '');
 
         const otroUsuario = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(usernameClean);
@@ -249,7 +249,7 @@ app.get('/api/conversaciones', (req, res) => {
     if (!token) return res.status(401).json({ error: 'No autorizado' });
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
 
         const conversaciones = db.prepare(`
             SELECT DISTINCT u.username, u.nombre,
@@ -313,7 +313,7 @@ app.get('/api/notificaciones', (req, res) => {
     if (!token) return res.status(401).json({ error: 'No autorizado' });
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
         const notificaciones = db.prepare(`
             SELECT * FROM notificaciones 
             WHERE usuario_id = ? 
@@ -338,7 +338,7 @@ app.post('/api/notificaciones/leer', (req, res) => {
     if (!token) return res.status(401).json({ error: 'No autorizado' });
 
     try {
-        const datos = jwt.verify(token, 'clave-secreta-trato-seguro');
+        const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
         db.prepare('UPDATE notificaciones SET leida = 1 WHERE usuario_id = ?').run(datos.id);
         res.json({ mensaje: 'Notificaciones marcadas como leídas' });
     } catch (error) {

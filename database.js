@@ -1,6 +1,6 @@
 const Database = require('better-sqlite3');
 
-const db = new Database('trato-seguro.db');
+const db = new Database('Shopseguro.db');
 
 // Tabla de usuarios
 db.exec(`

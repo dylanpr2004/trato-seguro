@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Trato Seguro CL</title>
+    <title>Registro - Shopseguro</title>
     <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
     
     <main class="login-main">
         <section class="login-box">
-            <h2>Crear Cuenta en Trato Seguro CL</h2>
+            <h2>Crear Cuenta en Shopseguro</h2>
             <p class="security-note">✅ Registro rápido y seguro. Verificamos tu identidad para proteger tu dinero.</p>
 
             <form id="registro-form">
@@ -90,7 +90,7 @@
             const datos = await respuesta.json();
 
             if (respuesta.ok) {
-                alert('¡Registro exitoso! Bienvenido a Trato Seguro CL');
+                alert('¡Registro exitoso! Bienvenido a Shopseguro');
                 window.location.href = 'login.html';
             } else {
                 alert('Error: ' + datos.error);
