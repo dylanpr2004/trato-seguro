@@ -193,6 +193,9 @@
     <a id="btn-mensaje" href="javascript:void(0)" class="btn-mensaje" onclick="contactar()">
     ✉️ Enviar Mensaje Privado
 </a>
+<a href="javascript:void(0)" class="btn-mensaje" id="btn-amigo" onclick="enviarSolicitud()" style="background:#1a1a2e; margin-left:10px;">
+    👥 Agregar Amigo
+</a>
 </div>
                 <div class="perfil-datos">
                     <span class="perfil-dato" id="perfil-email"></span>
@@ -227,6 +230,37 @@ function contactar() {
         return;
     }
     window.location.href = `chat-privado.html?user=${username}`;
+}
+async function enviarSolicitud() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Debes iniciar sesión para agregar amigos');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(`${API_URL}/api/amigos/solicitud`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': token
+            },
+            body: JSON.stringify({ username })
+        });
+
+        const datos = await respuesta.json();
+
+        if (respuesta.ok) {
+            alert('✅ Solicitud de amistad enviada');
+            document.getElementById('btn-amigo').textContent = '✅ Solicitud enviada';
+            document.getElementById('btn-amigo').onclick = null;
+        } else {
+            alert(datos.error);
+        }
+    } catch (error) {
+        alert('No se pudo conectar con el servidor');
+    }
 }
         async function cargarPerfil() {
             try {

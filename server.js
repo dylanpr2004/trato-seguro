@@ -345,6 +345,95 @@ app.post('/api/notificaciones/leer', (req, res) => {
         res.status(401).json({ error: 'Sesión inválida' });
     }
 });
+// Enviar solicitud de amistad
+app.post('/api/amigos/solicitud', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-shopseguro');
+        const { username } = req.body;
+
+        const receptor = db.prepare('SELECT id FROM usuarios WHERE username = ?').get(username);
+        if (!receptor) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+        // Verificar si ya existe solicitud
+        const existe = db.prepare(`
+            SELECT id FROM amigos 
+            WHERE (solicitante_id = ? AND receptor_id = ?) 
+            OR (solicitante_id = ? AND receptor_id = ?)
+        `).get(datos.id, receptor.id, receptor.id, datos.id);
+
+        if (existe) return res.status(400).json({ error: 'Ya existe una solicitud o ya son amigos' });
+
+        db.prepare('INSERT INTO amigos (solicitante_id, receptor_id) VALUES (?, ?)').run(datos.id, receptor.id);
+
+        // Crear notificación
+        const solicitante = db.prepare('SELECT username FROM usuarios WHERE id = ?').get(datos.id);
+        db.prepare(`INSERT INTO notificaciones (usuario_id, tipo, mensaje) VALUES (?, 'amistad', ?)`).run(receptor.id, `@${solicitante.username} te envió una solicitud de amistad`);
+
+        res.json({ mensaje: 'Solicitud enviada' });
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
+
+// Aceptar o rechazar solicitud
+app.post('/api/amigos/responder', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-shopseguro');
+        const { solicitudId, accion } = req.body;
+
+        if (accion === 'aceptar') {
+            db.prepare('UPDATE amigos SET estado = ? WHERE id = ? AND receptor_id = ?').run('aceptado', solicitudId, datos.id);
+
+            // Notificar al solicitante
+            const solicitud = db.prepare('SELECT * FROM amigos WHERE id = ?').get(solicitudId);
+            const receptor = db.prepare('SELECT username FROM usuarios WHERE id = ?').get(datos.id);
+            db.prepare(`INSERT INTO notificaciones (usuario_id, tipo, mensaje) VALUES (?, 'amistad', ?)`).run(solicitud.solicitante_id, `@${receptor.username} aceptó tu solicitud de amistad`);
+        } else {
+            db.prepare('DELETE FROM amigos WHERE id = ? AND receptor_id = ?').run(solicitudId, datos.id);
+        }
+
+        res.json({ mensaje: accion === 'aceptar' ? 'Solicitud aceptada' : 'Solicitud rechazada' });
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
+
+// Ver amigos y solicitudes pendientes
+app.get('/api/amigos', (req, res) => {
+    const token = req.headers['authorization'];
+    if (!token) return res.status(401).json({ error: 'No autorizado' });
+
+    try {
+        const datos = jwt.verify(token, 'clave-secreta-shopseguro');
+
+        const amigos = db.prepare(`
+            SELECT u.username, u.nombre, a.id, a.estado, a.solicitante_id
+            FROM amigos a
+            JOIN usuarios u ON (
+                CASE WHEN a.solicitante_id = ? THEN a.receptor_id ELSE a.solicitante_id END = u.id
+            )
+            WHERE (a.solicitante_id = ? OR a.receptor_id = ?)
+            AND a.estado = 'aceptado'
+        `).all(datos.id, datos.id, datos.id);
+
+        const pendientes = db.prepare(`
+            SELECT u.username, u.nombre, a.id
+            FROM amigos a
+            JOIN usuarios u ON a.solicitante_id = u.id
+            WHERE a.receptor_id = ? AND a.estado = 'pendiente'
+        `).all(datos.id);
+
+        res.json({ amigos, pendientes });
+    } catch (error) {
+        res.status(401).json({ error: 'Sesión inválida' });
+    }
+});
 
 servidor.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');

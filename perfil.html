@@ -243,6 +243,7 @@
                 <button class="tab-btn activo" onclick="cambiarTab('productos', this)">🛒 Mis Productos</button>
                 <button class="tab-btn" onclick="cambiarTab('ventas', this)">💰 Mis Ventas</button>
                 <button class="tab-btn" onclick="cambiarTab('compras', this)">📦 Mis Compras</button>
+                <button class="tab-btn" onclick="cambiarTab('amigos', this)">👥 Amigos</button>
                 <button class="tab-btn" onclick="cambiarTab('config', this)">⚙️ Configuración</button>
             </div>
 
@@ -259,6 +260,12 @@
             <div class="tab-contenido" id="tab-compras">
                 <p class="sin-contenido">📭 Aún no tienes compras realizadas.</p>
             </div>
+            <div class="tab-contenido" id="tab-amigos">
+    <div id="solicitudes-pendientes"></div>
+    <div id="lista-amigos">
+        <p class="sin-contenido">Cargando amigos...</p>
+    </div>
+</div>
 
             <div class="tab-contenido" id="tab-config">
                 <div class="config-item">
@@ -300,7 +307,85 @@
             alert('Debes iniciar sesión para ver tu perfil');
             window.location.href = 'index.html';
         }
+async function cargarAmigos() {
+    try {
+        const respuesta = await fetch(`${API_URL}/api/amigos`, {
+            headers: { 'authorization': token }
+        });
+        const datos = await respuesta.json();
 
+        // Solicitudes pendientes
+        const pendientes = document.getElementById('solicitudes-pendientes');
+        if (datos.pendientes.length > 0) {
+            pendientes.innerHTML = `
+                <div style="background:#fff3cd; border-radius:10px; padding:16px; margin-bottom:16px;">
+                    <p style="font-weight:700; color:#1a1a2e; margin-bottom:12px;">📬 Solicitudes pendientes (${datos.pendientes.length})</p>
+                    ${datos.pendientes.map(p => `
+                        <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0f0f0;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <div style="width:36px; height:36px; border-radius:50%; background:#1a1a2e; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                                    ${p.username.charAt(0).toUpperCase()}
+                                </div>
+                                <span style="font-size:14px; font-weight:600;">@${p.username}</span>
+                            </div>
+                            <div style="display:flex; gap:8px;">
+                                <button onclick="responderSolicitud(${p.id}, 'aceptar')" style="background:#28a745; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px;">✅ Aceptar</button>
+                                <button onclick="responderSolicitud(${p.id}, 'rechazar')" style="background:#dc3545; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px;">❌ Rechazar</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            pendientes.innerHTML = '';
+        }
+
+        // Lista de amigos
+        const lista = document.getElementById('lista-amigos');
+        if (datos.amigos.length === 0) {
+            lista.innerHTML = '<p class="sin-contenido">No tienes amigos aún. ¡Agrega algunos desde el Chat Público!</p>';
+        } else {
+            lista.innerHTML = `
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:14px;">
+                    ${datos.amigos.map(a => `
+                        <a href="perfil-publico.html?user=${a.username}" style="text-decoration:none;">
+                            <div style="background:#f8f9fa; border-radius:12px; padding:16px; text-align:center;">
+                                <div style="width:50px; height:50px; border-radius:50%; background:#1a1a2e; color:white; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:bold; margin:0 auto 8px;">
+                                    ${a.username.charAt(0).toUpperCase()}
+                                </div>
+                                <p style="font-size:13px; font-weight:600; color:#1a1a2e;">@${a.username}</p>
+                                <p style="font-size:12px; color:#999;">${a.nombre}</p>
+                            </div>
+                        </a>
+                    `).join('')}
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.log('Error:', error);
+    }
+}
+
+async function responderSolicitud(solicitudId, accion) {
+    try {
+        const respuesta = await fetch(`${API_URL}/api/amigos/responder`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': token
+            },
+            body: JSON.stringify({ solicitudId, accion })
+        });
+
+        const datos = await respuesta.json();
+        if (respuesta.ok) {
+            alert(accion === 'aceptar' ? '✅ Solicitud aceptada' : '❌ Solicitud rechazada');
+            cargarAmigos();
+        }
+    } catch (error) {
+        console.log('Error:', error);
+    }
+}
         async function cargarPerfil() {
             try {
                 const respuesta = await fetch(`${API_URL}/api/perfil`, {
@@ -409,6 +494,7 @@
 
         cargarPerfil();
         cargarPreferencias();
+        cargarAmigos();
     </script>
 </body>
 </html>
