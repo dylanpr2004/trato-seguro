@@ -4,7 +4,7 @@ const db = new Database('Shopseguro.db');
 
 // Tabla de usuarios
 db.exec(`
-    CREATE TABLE IF NOT EXISTS usuarios_v2 (
+    CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT NOT NULL,
         username TEXT UNIQUE NOT NULL,
@@ -15,6 +15,7 @@ db.exec(`
         fecha_registro TEXT DEFAULT CURRENT_TIMESTAMP
     )
 `);
+
 // Tabla de productos
 db.exec(`
     CREATE TABLE IF NOT EXISTS productos (
@@ -30,6 +31,7 @@ db.exec(`
         FOREIGN KEY (vendedor_id) REFERENCES usuarios(id)
     )
 `);
+
 // Tabla de preferencias de usuario
 db.exec(`
     CREATE TABLE IF NOT EXISTS preferencias (
@@ -40,6 +42,8 @@ db.exec(`
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
     )
 `);
+
+// Tabla de mensajes privados
 db.exec(`
     CREATE TABLE IF NOT EXISTS mensajes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,6 +55,7 @@ db.exec(`
         FOREIGN KEY (destinatario_id) REFERENCES usuarios(id)
     )
 `);
+
 // Tabla de notificaciones
 db.exec(`
     CREATE TABLE IF NOT EXISTS notificaciones (
@@ -61,6 +66,19 @@ db.exec(`
         leida INTEGER DEFAULT 0,
         fecha TEXT DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    )
+`);
+
+// Tabla de amigos
+db.exec(`
+    CREATE TABLE IF NOT EXISTS amigos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        solicitante_id INTEGER NOT NULL,
+        receptor_id INTEGER NOT NULL,
+        estado TEXT DEFAULT 'pendiente',
+        fecha TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (solicitante_id) REFERENCES usuarios(id),
+        FOREIGN KEY (receptor_id) REFERENCES usuarios(id)
     )
 `);
 
