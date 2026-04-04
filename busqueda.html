@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar - Shopseguro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #f4f6f9; color: #1a1a2e; min-width: 0; }
+
+        /* ── HEADER ── */
+        .header { background: #1a56db; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(26,86,219,0.2); }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+        .logo-icon { width: 34px; height: 34px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .logo-text { font-size: 18px; font-weight: 800; color: white; }
+        .logo-text span { color: #a5f3fc; }
+
+        /* Buscador hero en header */
+        .header-search { flex: 1; max-width: 600px; margin: 0 auto; position: relative; }
+        .header-search-form { display: flex; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .header-search-input { flex: 1; border: none; outline: none; padding: 12px 18px; font-size: 15px; font-family: 'Inter', sans-serif; color: #1a1a2e; }
+        .header-search-input::placeholder { color: #9ca3af; }
+        .header-search-btn { background: #1a56db; border: none; padding: 12px 20px; cursor: pointer; color: white; font-size: 16px; transition: background 0.2s; font-weight: 600; display: flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; }
+        .header-search-btn:hover { background: #1648c0; }
+
+        /* Sugerencias autocomplete */
+        .sugerencias {
+            display: none;
+            position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+            background: white; border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            z-index: 999; overflow: hidden; max-height: 260px; overflow-y: auto;
+        }
+        .sugerencia-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 16px; cursor: pointer;
+            transition: background 0.15s; border-bottom: 1px solid #f0f0f0;
+            text-decoration: none; color: #1a1a2e;
+        }
+        .sugerencia-item:last-child { border-bottom: none; }
+        .sugerencia-item:hover { background: #eff6ff; }
+        .sug-foto { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; background: #f4f6f9; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; overflow: hidden; }
+        .sug-foto img { width: 100%; height: 100%; object-fit: cover; }
+        .sug-info { flex: 1; min-width: 0; }
+        .sug-titulo { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sug-precio { font-size: 12px; color: #16a34a; font-weight: 700; }
+        .sug-cat { font-size: 11px; color: #9ca3af; }
+
+        .btn-volver { background: rgba(255,255,255,0.15); color: white; text-decoration: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+        .btn-volver:hover { background: rgba(255,255,255,0.25); }
+
+        /* ── HERO BÚSQUEDA ── */
+        .search-hero {
+            background: linear-gradient(135deg, #1a56db 0%, #1e40af 60%, #1e3a8a 100%);
+            padding: 28px 32px 36px;
+        }
+        .search-hero-inner { max-width: 1100px; margin: 0 auto; }
+        .search-hero h1 { font-size: 22px; font-weight: 700; color: white; margin-bottom: 6px; }
+        .search-hero p { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 20px; }
+
+        /* Tags rápidos */
+        .quick-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .quick-tag {
+            background: rgba(255,255,255,0.15); color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 5px 14px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; text-decoration: none;
+        }
+        .quick-tag:hover { background: rgba(255,255,255,0.3); }
+
+        /* ── LAYOUT PRINCIPAL ── */
+        .main-layout { max-width: 1100px; margin: 28px auto; padding: 0 32px; display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; }
+
+        /* ── FILTROS ── */
+        .filtros-panel { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: sticky; top: 88px; }
+        .filtros-titulo { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
+        .filtros-limpiar { font-size: 12px; color: #1a56db; cursor: pointer; font-weight: 500; }
+        .filtros-limpiar:hover { text-decoration: underline; }
+
+        .filtro-grupo { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #f0f0f0; }
+        .filtro-grupo:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .filtro-label { font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; display: block; }
+
+        .filtro-select { width: 100%; padding: 9px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; color: #1a1a2e; outline: none; cursor: pointer; }
+        .filtro-select:focus { border-color: #1a56db; }
+
+        .precio-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .precio-input { padding: 9px 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; color: #1a1a2e; outline: none; width: 100%; }
+        .precio-input:focus { border-color: #1a56db; }
+        .precio-sep { text-align: center; font-size: 12px; color: #9ca3af; padding-top: 10px; }
+
+        .btn-aplicar { width: 100%; background: #1a56db; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; margin-top: 4px; }
+        .btn-aplicar:hover { background: #1648c0; }
+
+        /* Opciones radio estilizadas */
+        .radio-opciones { display: flex; flex-direction: column; gap: 6px; }
+        .radio-opcion { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 7px 10px; border-radius: 8px; transition: background 0.15s; }
+        .radio-opcion:hover { background: #f4f6f9; }
+        .radio-opcion input { accent-color: #1a56db; cursor: pointer; }
+        .radio-opcion span { font-size: 13px; color: #374151; }
+
+        /* ── RESULTADOS ── */
+        .resultados-panel { min-height: 400px; }
+
+        .resultados-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+        .resultados-info { font-size: 14px; color: #6b7280; }
+        .resultados-info strong { color: #1a1a2e; font-weight: 700; }
+
+        .orden-select { padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-family: 'Inter', sans-serif; color: #1a1a2e; outline: none; cursor: pointer; }
+        .orden-select:focus { border-color: #1a56db; }
+
+        /* Grid de resultados */
+        .resultados-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+
+        .result-card { background: white; border-radius: 14px; overflow: hidden; border: 1px solid #e8ecf1; box-shadow: 0 1px 6px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; display: flex; flex-direction: column; }
+        .result-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,86,219,0.12); border-color: #1a56db; }
+
+        .result-foto { width: 100%; height: 160px; background: #f4f6f9; display: flex; align-items: center; justify-content: center; font-size: 44px; overflow: hidden; flex-shrink: 0; }
+        .result-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .result-body { padding: 13px; flex: 1; display: flex; flex-direction: column; }
+        .result-cat { font-size: 10px; color: #1a56db; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
+        .result-titulo { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .result-precio { font-size: 16px; font-weight: 700; color: #16a34a; margin-bottom: 4px; }
+        .result-estado { font-size: 11px; color: #6b7280; margin-bottom: 4px; }
+        .result-vendedor { font-size: 11px; color: #9ca3af; margin-bottom: 10px; flex: 1; }
+        .result-btn { display: block; text-align: center; background: #1a56db; color: white; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 600; transition: background 0.2s; }
+        .result-btn:hover { background: #1648c0; }
+
+        /* Estados vacío / cargando */
+        .estado-vacio { text-align: center; padding: 60px 20px; }
+        .estado-vacio .icono { font-size: 52px; margin-bottom: 16px; }
+        .estado-vacio h3 { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+        .estado-vacio p { font-size: 14px; color: #6b7280; max-width: 340px; margin: 0 auto; }
+
+        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Highlight palabras encontradas */
+        .highlight { background: #fef9c3; color: #854d0e; border-radius: 3px; padding: 0 2px; font-weight: 600; }
+    </style>
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <a href="index.html" class="logo">
+        <div class="logo-icon">🛡️</div>
+        <span class="logo-text">Shop<span>seguro</span></span>
+    </a>
+    <div class="header-search">
+        <form class="header-search-form" onsubmit="buscar(event)">
+            <input type="text" id="search-input-header" class="header-search-input" placeholder="¿Qué estás buscando?" autocomplete="off">
+            <button type="submit" class="header-search-btn">🔍 Buscar</button>
+        </form>
+        <div class="sugerencias" id="sugerencias"></div>
+    </div>
+    <a href="index.html" class="btn-volver">← Inicio</a>
+</div>
+
+<!-- Hero búsqueda -->
+<div class="search-hero">
+    <div class="search-hero-inner">
+        <h1 id="hero-titulo-busq">🔍 Resultados de búsqueda</h1>
+        <p id="hero-sub-busq">Encuentra lo que necesitas entre todos los productos publicados</p>
+        <div class="quick-tags">
+            <span class="quick-tag" onclick="buscarRapido('iPhone')">📱 iPhone</span>
+            <span class="quick-tag" onclick="buscarRapido('PlayStation')">🎮 PlayStation</span>
+            <span class="quick-tag" onclick="buscarRapido('bicicleta')">🚲 Bicicleta</span>
+            <span class="quick-tag" onclick="buscarRapido('notebook')">💻 Notebook</span>
+            <span class="quick-tag" onclick="buscarRapido('auto')">🚗 Auto</span>
+            <span class="quick-tag" onclick="buscarRapido('zapatillas')">👟 Zapatillas</span>
+            <span class="quick-tag" onclick="buscarRapido('televisor')">📺 Televisor</span>
+        </div>
+    </div>
+</div>
+
+<!-- Layout principal -->
+<div class="main-layout">
+
+    <!-- Filtros -->
+    <aside class="filtros-panel">
+        <div class="filtros-titulo">
+            Filtros
+            <span class="filtros-limpiar" onclick="limpiarFiltros()">Limpiar</span>
+        </div>
+
+        <div class="filtro-grupo">
+            <label class="filtro-label">Categoría</label>
+            <select class="filtro-select" id="filtro-categoria">
+                <option value="">Todas las categorías</option>
+                <option value="Tecnología">💻 Tecnología</option>
+                <option value="Hogar y Muebles">🛋️ Hogar y Muebles</option>
+                <option value="Vehículos">🚗 Vehículos</option>
+                <option value="Ropa y Calzado">👕 Ropa y Calzado</option>
+                <option value="Deportes">⚽ Deportes</option>
+                <option value="Juegos y Consolas">🎮 Juegos y Consolas</option>
+                <option value="Otros">📦 Otros</option>
+            </select>
+        </div>
+
+        <div class="filtro-grupo">
+            <label class="filtro-label">Condición</label>
+            <div class="radio-opciones">
+                <label class="radio-opcion"><input type="radio" name="condicion" value="" checked> <span>Todas</span></label>
+                <label class="radio-opcion"><input type="radio" name="condicion" value="Nuevo"> <span>Nuevo</span></label>
+                <label class="radio-opcion"><input type="radio" name="condicion" value="Usado - Aceptable"> <span>Usado - Aceptable</span></label>
+                <label class="radio-opcion"><input type="radio" name="condicion" value="Usado - Con Detalles"> <span>Usado - Con Detalles</span></label>
+                <label class="radio-opcion"><input type="radio" name="condicion" value="Reacondicionado"> <span>Reacondicionado</span></label>
+            </div>
+        </div>
+
+        <div class="filtro-grupo">
+            <label class="filtro-label">Rango de Precio (CLP)</label>
+            <div class="precio-inputs">
+                <input type="number" class="precio-input" id="precio-min" placeholder="Mínimo">
+                <input type="number" class="precio-input" id="precio-max" placeholder="Máximo">
+            </div>
+        </div>
+
+        <button class="btn-aplicar" onclick="aplicarFiltros()">Aplicar Filtros</button>
+    </aside>
+
+    <!-- Resultados -->
+    <main class="resultados-panel">
+        <div class="resultados-header">
+            <div class="resultados-info" id="resultados-info">Cargando...</div>
+            <select class="orden-select" id="orden-select" onchange="aplicarFiltros()">
+                <option value="reciente">Más recientes</option>
+                <option value="precio_asc">Precio: menor a mayor</option>
+                <option value="precio_desc">Precio: mayor a menor</option>
+            </select>
+        </div>
+        <div class="resultados-grid" id="resultados-grid">
+            <!-- Skeletons de carga -->
+            ${Array(6).fill('<div style="height:280px;border-radius:14px;" class="skeleton"></div>').join('')}
+        </div>
+    </main>
+</div>
+
+<script src="config.js"></script>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    let queryActual = params.get('query') || '';
+
+    // Inicializar con la búsqueda de la URL
+    document.getElementById('search-input-header').value = queryActual;
+    if (queryActual) {
+        document.getElementById('hero-titulo-busq').textContent = `🔍 "${queryActual}"`;
+    } else {
+        document.getElementById('hero-titulo-busq').textContent = '🔍 Todos los productos';
+    }
+
+    // Autocomplete
+    let timeoutSug = null;
+    document.getElementById('search-input-header').addEventListener('input', function() {
+        clearTimeout(timeoutSug);
+        const q = this.value.trim();
+        if (q.length < 2) { cerrarSugerencias(); return; }
+        timeoutSug = setTimeout(() => fetchSugerencias(q), 250);
+    });
+
+    document.getElementById('search-input-header').addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') cerrarSugerencias();
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.header-search')) cerrarSugerencias();
+    });
+
+    async function fetchSugerencias(q) {
+        try {
+            const res = await fetch(`${API_URL}/api/buscar?q=${encodeURIComponent(q)}`);
+            const datos = await res.json();
+            const panel = document.getElementById('sugerencias');
+            const items = datos.resultados.slice(0, 5);
+            if (!items.length) { cerrarSugerencias(); return; }
+
+            panel.innerHTML = items.map(p => {
+                let fotos = Array.isArray(p.fotos) ? p.fotos : [];
+                const foto = fotos.length > 0
+                    ? `<div class="sug-foto"><img src="${fotos[0]}" alt="${p.titulo}"></div>`
+                    : `<div class="sug-foto">📦</div>`;
+                return `<a href="detalle-producto.html?id=${p.id}" class="sugerencia-item" onclick="cerrarSugerencias()">
+                    ${foto}
+                    <div class="sug-info">
+                        <div class="sug-titulo">${resaltarTexto(p.titulo, q)}</div>
+                        <div class="sug-precio">$${Number(p.precio).toLocaleString('es-CL')} CLP</div>
+                        <div class="sug-cat">${p.categoria || ''}</div>
+                    </div>
+                </a>`;
+            }).join('');
+            panel.style.display = 'block';
+        } catch(e) {}
+    }
+
+    function cerrarSugerencias() {
+        document.getElementById('sugerencias').style.display = 'none';
+    }
+
+    function resaltarTexto(texto, query) {
+        const palabras = query.toLowerCase().split(/\s+/).filter(p => p.length > 0);
+        let resultado = texto;
+        palabras.forEach(p => {
+            const regex = new RegExp(`(${p})`, 'gi');
+            resultado = resultado.replace(regex, '<span class="highlight">$1</span>');
+        });
+        return resultado;
+    }
+
+    // Buscar
+    function buscar(e) {
+        if (e) e.preventDefault();
+        queryActual = document.getElementById('search-input-header').value.trim();
+        cerrarSugerencias();
+        const url = new URL(window.location);
+        url.searchParams.set('query', queryActual);
+        window.history.pushState({}, '', url);
+        document.getElementById('hero-titulo-busq').textContent = queryActual ? `🔍 "${queryActual}"` : '🔍 Todos los productos';
+        ejecutarBusqueda();
+    }
+
+    function buscarRapido(termino) {
+        document.getElementById('search-input-header').value = termino;
+        queryActual = termino;
+        document.getElementById('hero-titulo-busq').textContent = `🔍 "${termino}"`;
+        ejecutarBusqueda();
+    }
+
+    function aplicarFiltros() { ejecutarBusqueda(); }
+
+    function limpiarFiltros() {
+        document.getElementById('filtro-categoria').value = '';
+        document.querySelectorAll('input[name="condicion"]')[0].checked = true;
+        document.getElementById('precio-min').value = '';
+        document.getElementById('precio-max').value = '';
+        document.getElementById('orden-select').value = 'reciente';
+        ejecutarBusqueda();
+    }
+
+    async function ejecutarBusqueda() {
+        const grid = document.getElementById('resultados-grid');
+        const info = document.getElementById('resultados-info');
+
+        // Skeletons mientras carga
+        grid.innerHTML = Array(6).fill('<div style="height:260px;border-radius:14px;" class="skeleton"></div>').join('');
+        info.textContent = 'Buscando...';
+
+        try {
+            const categoria = document.getElementById('filtro-categoria').value;
+            const condicion = document.querySelector('input[name="condicion"]:checked').value;
+            const precioMin = document.getElementById('precio-min').value || 0;
+            const precioMax = document.getElementById('precio-max').value || 999999999;
+            const orden = document.getElementById('orden-select').value;
+
+            const url = `${API_URL}/api/buscar?q=${encodeURIComponent(queryActual)}&categoria=${encodeURIComponent(categoria)}&condicion=${encodeURIComponent(condicion)}&precio_min=${precioMin}&precio_max=${precioMax}&orden=${orden}`;
+            const res = await fetch(url);
+            const datos = await res.json();
+            const productos = datos.resultados;
+
+            // Info resultados
+            if (queryActual) {
+                info.innerHTML = productos.length > 0
+                    ? `<strong>${productos.length}</strong> resultado${productos.length !== 1 ? 's' : ''} para "<strong>${queryActual}</strong>"`
+                    : `Sin resultados para "<strong>${queryActual}</strong>"`;
+            } else {
+                info.innerHTML = `<strong>${productos.length}</strong> producto${productos.length !== 1 ? 's' : ''} encontrado${productos.length !== 1 ? 's' : ''}`;
+            }
+
+            if (!productos.length) {
+                grid.innerHTML = `
+                    <div class="estado-vacio" style="grid-column:1/-1">
+                        <div class="icono">🔍</div>
+                        <h3>Sin resultados</h3>
+                        <p>No encontramos productos que coincidan con tu búsqueda. Intenta con otras palabras o revisa los filtros.</p>
+                    </div>`;
+                return;
+            }
+
+            grid.innerHTML = productos.map(p => {
+                const fotos = Array.isArray(p.fotos) ? p.fotos : [];
+                const portada = fotos.length > 0 ? `<img src="${fotos[0]}" alt="${p.titulo}" loading="lazy">` : '📦';
+                const tituloMostrar = queryActual ? resaltarTexto(p.titulo, queryActual) : p.titulo;
+                return `<div class="result-card">
+                    <div class="result-foto">${portada}</div>
+                    <div class="result-body">
+                        <div class="result-cat">${p.categoria || ''}</div>
+                        <div class="result-titulo">${tituloMostrar}</div>
+                        <div class="result-precio">$${Number(p.precio).toLocaleString('es-CL')} CLP</div>
+                        <div class="result-estado">${p.estado}</div>
+                        <div class="result-vendedor">Por ${p.vendedor_nombre}</div>
+                        <a href="detalle-producto.html?id=${p.id}" class="result-btn">Ver Detalle →</a>
+                    </div>
+                </div>`;
+            }).join('');
+
+        } catch(e) {
+            grid.innerHTML = `<div class="estado-vacio" style="grid-column:1/-1"><div class="icono">⚠️</div><h3>Error de conexión</h3><p>No se pudo conectar con el servidor. Verifica que esté encendido.</p></div>`;
+        }
+    }
+
+    // Ejecutar al cargar
+    ejecutarBusqueda();
+</script>
+</body>
+</html>

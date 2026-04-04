@@ -4,13 +4,11 @@
 /* --- El resto de tus variables y CSS --- */
 /* 2. APLICACIÓN DE LA FUENTE AL CUERPO DE LA PÁGINA */
 body {
-    /* Establece la fuente principal. 'sans-serif' es el respaldo si Poppins falla. */
     font-family: 'Poppins', sans-serif; 
-    line-height: 1.6; /* Mejora la legibilidad separando las líneas */
-    color: var(--color-gris-oscuro); /* Asegura que el texto general sea oscuro */
-    
-    /* Regla para el diseño de escritorio (Si todavía la necesitas para evitar el colapso) */
-    min-width: 1200px; 
+    line-height: 1.6;
+    color: var(--color-gris-oscuro);
+    min-width: 0; /* RESPONSIVE: permite que el sitio se adapte a móviles */
+    overflow-x: hidden; /* Evita scroll horizontal en móvil */
 }
 h1, h2, h3 {
     font-family: 'Poppins', sans-serif;
@@ -70,7 +68,8 @@ h1, h2, h3 {
 .search-bar input {
     padding: 8px 10px;
     border: none;
-    width: 300px; /* Ancho del campo de texto */
+    width: 100%; /* Flexible en lugar de fijo */
+    min-width: 0;
 }
 
 .search-icon {

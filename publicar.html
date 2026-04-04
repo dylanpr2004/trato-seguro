@@ -5,179 +5,236 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publicar Artículo | Shopseguro</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .preview-fotos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .preview-foto {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+        .btn-publicar-loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    </style>
+    <link rel="stylesheet" href="responsive.css">
 </head>
 <body>
+<main class="publish-main">
+    <div class="publish-container">
+        <h1 class="publish-title">Publica tu Artículo en Venta</h1>
+        <p class="publish-subtitle">Completa los datos con precisión para garantizar una venta segura y rápida</p>
 
-    <main class="publish-main">
-        <div class="publish-container">
-            <h1 class="publish-title">Publica tu Artículo en Venta</h1>
-            <p class="publish-subtitle">Completa los datos con precisión para garantizar un Shopseguro y rápido</p>
+        <form class="publish-form" id="publish-form" enctype="multipart/form-data">
 
-            <form class="publish-form">
-                
-                <div class="publish-section details-section">
-                    <h2>1. Información Principal</h2> 
-                    
-                    <div class="input-group">
-                        <label for="title">Título del Artículo</label>
-                        <input type="text" id="title" name="title" placeholder="Ej: PlayStation 5 Edición Digital - Nueva" required>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="category">Categoría</label>
-                        <select id="category" name="category" required>
-                            <option value="">Selecciona una Categoría</option>
-                            <option value="tec">Tecnología</option>
-                            <option value="hogar">Hogar y Muebles</option>
-                            <option value="vehiculos">Vehículos</option>
-                        </select>
-                    </div>
+            <div class="publish-section details-section">
+                <h2>1. Información Principal</h2>
+                <div class="input-group">
+                    <label for="title">Título del Artículo</label>
+                    <input type="text" id="title" name="title" placeholder="Ej: PlayStation 5 Edición Digital - Nueva" required>
                 </div>
-
-                <div class="publish-section pricing-section">
-                    <h2>2. Precio y Stock</h2>
-                    
-                    <div class="input-group">
-                        <label for="price">Precio Solicitado (CLP)</label>
-                        <input type="number" id="price" name="price" min="1000" placeholder="Ej: 350000" required>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="quantity">Cantidad Disponible (Stock)</label>
-                        <input type="number" id="quantity" name="quantity" min="1" value="1" required>
-                    </div>
+                <div class="input-group">
+                    <label for="category">Categoría</label>
+                    <select id="category" name="category" required>
+                        <option value="">Selecciona una Categoría</option>
+                        <option value="Tecnología">💻 Tecnología</option>
+                        <option value="Hogar y Muebles">🛋️ Hogar y Muebles</option>
+                        <option value="Vehículos">🚗 Vehículos</option>
+                        <option value="Ropa y Calzado">👕 Ropa y Calzado</option>
+                        <option value="Deportes">⚽ Deportes</option>
+                        <option value="Juegos y Consolas">🎮 Juegos y Consolas</option>
+                        <option value="Otros">📦 Otros</option>
+                    </select>
                 </div>
+            </div>
 
-                <div class="publish-section full-width">
-                    <h2>3. Fotos del Artículo</h2>
-                    <div class="input-group file-upload-group">
-                        <label for="photos">Subir Fotos (Máximo 5)</label>
-                        <input type="file" id="photos" name="photos" accept="image/*" multiple required>
-                        <p class="small-note">Las fotos claras y reales aumentan la confianza del comprador.</p>
-                    </div>
+            <div class="publish-section pricing-section">
+                <h2>2. Precio y Stock</h2>
+                <div class="input-group">
+                    <label for="price">Precio Solicitado (CLP)</label>
+                    <input type="number" id="price" name="price" min="1000" placeholder="Ej: 350000" required>
                 </div>
-
-                <div class="publish-section full-width">
-                    <h2>4. Condición del Artículo</h2>
-                    
-                    <div class="input-group condition-select-group">
-                        <label for="condition">Condición del Artículo</label>
-                        <select id="condition" name="condition" required>
-                            <option value="">-- Selecciona el estado --</option>
-                            <option value="nuevo">Nuevo (Sellado)</option>
-                            <option value="usado-aceptable">Usado - Aceptable</option>
-                            <option value="usado-detalles">Usado - Con Detalles</option>
-                            <option value="reacondicionado">Reacondicionado</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group" id="detalle-condicion-group" style="display:none;">
-                        <label for="condition-details">Detalle: Fallas / Partes Reparadas</label>
-                        <textarea id="condition-details" name="condition-details" rows="3" placeholder="Ej: Rayones en la pantalla, batería al 85%, cambio de disco duro, etc."></textarea>
-                        <p class="small-note required-text">Este campo es obligatorio si el artículo NO es nuevo.</p>
-                    </div>
+                <div class="input-group">
+                    <label for="quantity">Cantidad Disponible (Stock)</label>
+                    <input type="number" id="quantity" name="quantity" min="1" value="1" required>
                 </div>
+            </div>
 
-                <div class="publish-section full-width">
-                    <h2>5. Descripción Detallada</h2>
-                    
-                    <div class="input-group">
-                        <label for="description">Descripción Detallada</label>
-                        <textarea id="description" name="description" rows="5" placeholder="Detalla el estado, características y si incluye accesorios." required></textarea>
-                    </div>
+            <div class="publish-section full-width">
+                <h2>3. Fotos del Artículo</h2>
+                <div class="input-group file-upload-group">
+                    <label for="photos">Subir Fotos (Máximo 5)</label>
+                    <input type="file" id="photos" name="fotos" accept="image/*" multiple>
+                    <p class="small-note">Las fotos claras y reales aumentan la confianza del comprador.</p>
+                    <div class="preview-fotos" id="preview-fotos"></div>
                 </div>
+            </div>
 
-                <div class="publish-section full-width">
-                    <h2>6. Motivo de Venta</h2>
-                    
-                    <div class="input-group sale-reason-group">
-                        <label for="sale-reason">Selecciona el motivo principal de la venta</label>
-                        <select id="sale-reason" name="sale-reason" required>
-                            <option value="">-- Selecciona una opción --</option>
-                            <option value="urgency">Urgencia Económica</option>
-                            <option value="upgrade">Nuevo Producto Reemplazante (Upgrade)</option>
-                            <option value="moving">Mudanza / Desuso</option>
-                            <option value="detail">Venta por Detalle/Falla Menor</option>
-                            <option value="other">Otro Motivo (Explicar)</option>
-                        </select>
-                        <p class="small-note">Este motivo se mostrará públicamente para generar confianza.</p>
-                    </div>
-
-                    <div class="input-group" id="other-reason-details-group" style="display:none;">
-                        <label for="other-reason-explanation">Explica tu motivo de venta</label>
-                        <textarea id="other-reason-explanation" name="other-reason-explanation" rows="2" placeholder="Ej: Vendo para comprar herramientas, no me gustó el color, etc."></textarea>
-                        <p class="small-note required-text">Este campo es obligatorio si seleccionaste "Otro Motivo".</p>
-                    </div>
+            <div class="publish-section full-width">
+                <h2>4. Condición del Artículo</h2>
+                <div class="input-group condition-select-group">
+                    <label for="condition">Condición del Artículo</label>
+                    <select id="condition" name="condition" required>
+                        <option value="">-- Selecciona el estado --</option>
+                        <option value="Nuevo">Nuevo (Sellado)</option>
+                        <option value="Usado - Aceptable">Usado - Aceptable</option>
+                        <option value="Usado - Con Detalles">Usado - Con Detalles</option>
+                        <option value="Reacondicionado">Reacondicionado</option>
+                    </select>
                 </div>
-
-                <div class="publish-section full-width confirmation-section">
-                    <h2>Declaración Final</h2>
-
-                    <div class="declaration-box">
-                        <p>Al hacer clic en "Confirmar Publicación", declaras y aceptas formalmente lo siguiente:</p>
-                        <ul>
-                            <li>El producto NO es falsificado y su origen es lícito.</li>
-                            <li>La información de condición y descripción es real y precisa.</li>
-                            <li>Entiendes que cualquier intento de fraude resultará en la suspensión inmediata de tu cuenta.</li>
-                        </ul>
-                    </div>
-
-                    <div class="button-group-final">
-                        <button type="submit" class="button-primary large-btn">Confirmar Publicación y Vender</button>
-                    </div>
-
-                    <p class="security-note mt-20">
-                        La publicación implica la aceptación de los 
-                        <a href="terminos-y-condiciones.pdf" target="_blank">Términos y Condiciones</a> y la 
-                        <a href="politicas-de-privacidad.pdf" target="_blank">Política de Privacidad</a> de Shopseguro.
-                    </p>
+                <div class="input-group" id="detalle-condicion-group" style="display:none;">
+                    <label for="condition-details">Detalle: Fallas / Partes Reparadas</label>
+                    <textarea id="condition-details" name="condition-details" rows="3" placeholder="Ej: Rayones en la pantalla, batería al 85%..."></textarea>
                 </div>
+            </div>
 
-            </form>
-        </div>
-    </main>
-    <script src="config.js"></script>
-    <script>
-    // Verificar que el usuario está logueado
+            <div class="publish-section full-width">
+                <h2>5. Descripción Detallada</h2>
+                <div class="input-group">
+                    <label for="description">Descripción</label>
+                    <textarea id="description" name="description" rows="5" placeholder="Detalla el estado, características y si incluye accesorios." required></textarea>
+                </div>
+            </div>
+
+            <div class="publish-section full-width">
+                <h2>6. Motivo de Venta</h2>
+                <div class="input-group sale-reason-group">
+                    <label for="sale-reason">Selecciona el motivo principal</label>
+                    <select id="sale-reason" name="sale-reason" required>
+                        <option value="">-- Selecciona una opción --</option>
+                        <option value="Urgencia económica">Urgencia Económica</option>
+                        <option value="Upgrade a nuevo producto">Upgrade (Nuevo Producto Reemplazante)</option>
+                        <option value="Mudanza / Desuso">Mudanza / Desuso</option>
+                        <option value="Venta por detalle menor">Venta por Detalle/Falla Menor</option>
+                        <option value="Otro motivo">Otro Motivo</option>
+                    </select>
+                    <p class="small-note">Este motivo se mostrará públicamente para generar confianza.</p>
+                </div>
+                <div class="input-group" id="other-reason-group" style="display:none;">
+                    <label for="other-reason">Explica tu motivo</label>
+                    <textarea id="other-reason" rows="2" placeholder="Ej: Vendo para comprar herramientas..."></textarea>
+                </div>
+            </div>
+
+            <div class="publish-section full-width confirmation-section">
+                <h2>Declaración Final</h2>
+                <div class="declaration-box">
+                    <p>Al publicar declaras formalmente:</p>
+                    <ul>
+                        <li>El producto NO es falsificado y su origen es lícito.</li>
+                        <li>La información de condición y descripción es real y precisa.</li>
+                        <li>Entiendes que el fraude resulta en suspensión inmediata de tu cuenta.</li>
+                    </ul>
+                </div>
+                <div class="button-group-final">
+                    <button type="submit" class="button-primary large-btn" id="btn-publicar">Confirmar Publicación y Vender</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<script src="config.js"></script>
+<script>
     const token = localStorage.getItem('token');
     if (!token) {
         alert('Debes iniciar sesión para publicar');
         window.location.href = 'login.html';
     }
 
-    document.querySelector('.publish-form').addEventListener('submit', async function(event) {
-        event.preventDefault();
+    // Preview de fotos
+    document.getElementById('photos').addEventListener('change', function() {
+        const preview = document.getElementById('preview-fotos');
+        preview.innerHTML = '';
+        const archivos = Array.from(this.files).slice(0, 5);
+        archivos.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-foto';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
 
-        const titulo = document.getElementById('title').value;
-        const descripcion = document.getElementById('description').value;
-        const precio = document.getElementById('price').value;
-        const region = 'Región Metropolitana';
-        const estado = document.getElementById('condition').value;
+    // Mostrar detalle condición
+    document.getElementById('condition').addEventListener('change', function() {
+        document.getElementById('detalle-condicion-group').style.display =
+            this.value && this.value !== 'Nuevo' ? 'block' : 'none';
+    });
+
+    // Mostrar campo otro motivo
+    document.getElementById('sale-reason').addEventListener('change', function() {
+        document.getElementById('other-reason-group').style.display =
+            this.value === 'Otro motivo' ? 'block' : 'none';
+    });
+
+    document.getElementById('publish-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const categoria = document.getElementById('category').value;
+        if (!categoria) { alert('⚠️ Debes seleccionar una categoría'); return; }
+
+        let motivoVenta = document.getElementById('sale-reason').value;
+        if (motivoVenta === 'Otro motivo') {
+            const otro = document.getElementById('other-reason').value.trim();
+            if (otro) motivoVenta = otro;
+        }
+
+        const btn = document.getElementById('btn-publicar');
+        btn.textContent = '⏳ Publicando...';
+        btn.classList.add('btn-publicar-loading');
+        btn.disabled = true;
 
         try {
-           const respuesta = await fetch(`${API_URL}/api/productos`, {
+            const formData = new FormData();
+            formData.append('titulo', document.getElementById('title').value);
+            formData.append('descripcion', document.getElementById('description').value);
+            formData.append('precio', document.getElementById('price').value);
+            formData.append('region', 'Región Metropolitana');
+            formData.append('estado', document.getElementById('condition').value);
+            formData.append('categoria', categoria);
+            formData.append('motivo_venta', motivoVenta);
+
+            const fotos = document.getElementById('photos').files;
+            for (let i = 0; i < Math.min(fotos.length, 5); i++) {
+                formData.append('fotos', fotos[i]);
+            }
+
+            const respuesta = await fetch(`${API_URL}/api/productos`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': token
-                },
-                body: JSON.stringify({ titulo, descripcion, precio, region, estado })
+                headers: { 'authorization': token },
+                body: formData
             });
 
             const datos = await respuesta.json();
 
             if (respuesta.ok) {
-                alert('¡Producto publicado con éxito!');
+                alert('¡Producto publicado con éxito! 🎉');
                 window.location.href = 'index.html';
             } else {
                 alert('Error: ' + datos.error);
+                btn.textContent = 'Confirmar Publicación y Vender';
+                btn.classList.remove('btn-publicar-loading');
+                btn.disabled = false;
             }
-
         } catch (error) {
             alert('No se pudo conectar con el servidor');
+            btn.textContent = 'Confirmar Publicación y Vender';
+            btn.classList.remove('btn-publicar-loading');
+            btn.disabled = false;
         }
     });
 </script>
-
 </body>
 </html>

@@ -1,293 +1,517 @@
 <!DOCTYPE html>
-<html lang="es"> 
+<html lang="es" id="html-root">
 <head>
     <meta charset="UTF-8">
-    <title>Shopseguro - Inicio</title>
-    <link rel="stylesheet" href="styles.css">
-    <meta name="description" content="Un sitio donde tus compra/venta son seguras, sin riesgo de fraude.">
+    <title>Shopseguro - Compra y Vende con Confianza</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .notif-wrapper {
-            display: none;
-            position: relative;
-            cursor: pointer;
-            margin-right: 16px;
-            align-items: center;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #f4f6f9; color: #1a1a2e; min-width: 0; }
 
-        .notif-badge {
-            display: none;
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            background: #dc3545;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            font-weight: 700;
-            align-items: center;
-            justify-content: center;
-        }
+        /* HEADER */
+        .header-principal { background: #1a56db; box-shadow: 0 2px 12px rgba(26,86,219,0.18); position: sticky; top: 0; z-index: 100; }
+        .header-top { display: flex; align-items: center; gap: 16px; padding: 0 32px; height: 64px; max-width: 1400px; margin: 0 auto; }
 
-        .notif-panel {
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+        .logo-icon { width: 36px; height: 36px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .logo-text { font-size: 20px; font-weight: 800; color: white; letter-spacing: -0.5px; }
+        .logo-text span { color: #a5f3fc; }
+
+        .search-bar { flex: 1; max-width: 500px; margin: 0 auto; }
+        .search-form-inline { display: flex; background: white; border-radius: 10px; overflow: hidden; }
+        .search-input-field { flex: 1; border: none; outline: none; padding: 10px 16px; font-size: 14px; font-family: 'Inter', sans-serif; color: #1a1a2e; }
+        .search-input-field::placeholder { color: #9ca3af; }
+        .search-icon { background: #1a56db; border: none; padding: 10px 16px; cursor: pointer; color: white; font-size: 15px; }
+        .search-icon:hover { background: #1648c0; }
+
+        .user-access { display: flex; align-items: center; gap: 12px; flex-shrink: 0; margin-left: auto; }
+
+        .btn-publicar-header { background: white; color: #1a56db; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; white-space: nowrap; transition: background 0.2s; }
+        .btn-publicar-header:hover { background: #e0e7ff; }
+
+        /* Selector idioma */
+        .idioma-wrapper { position: relative; flex-shrink: 0; }
+        .idioma-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.15); color: white;
+            border: 1px solid rgba(255,255,255,0.25);
+            padding: 6px 12px; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            transition: background 0.2s; white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+        .idioma-btn:hover { background: rgba(255,255,255,0.25); }
+        .idioma-btn span { font-size: 13px; }
+        .idioma-dropdown {
             display: none;
-            position: absolute;
-            right: 0;
-            top: 36px;
-            width: 300px;
-            background: white;
-            border-radius: 12px;
+            position: absolute; top: calc(100% + 8px); right: 0;
+            background: white; border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-            z-index: 999;
-            overflow: hidden;
+            z-index: 999; overflow: hidden; min-width: 150px;
         }
-
-        .notif-header {
-            padding: 14px 16px;
-            border-bottom: 1px solid #eee;
-            font-weight: 700;
-            color: #1a1a2e;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .idioma-opcion {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px 16px; font-size: 14px; color: #1a1a2e;
+            cursor: pointer; transition: background 0.15s;
+            font-weight: 500; border: none; background: none;
+            width: 100%; font-family: 'Inter', sans-serif;
         }
+        .idioma-opcion:hover { background: #eff6ff; color: #1a56db; }
+        .idioma-opcion.activo { background: #eff6ff; color: #1a56db; font-weight: 700; }
+        .idioma-bandera { font-size: 20px; }
 
-        .notif-leer {
-            font-size: 12px;
-            color: #28a745;
-            cursor: pointer;
+        /* Notificaciones */
+        .notif-wrapper { position: relative; cursor: pointer; display: none; align-items: center; }
+        .notif-icon { width: 38px; height: 38px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.2s; }
+        .notif-icon:hover { background: rgba(255,255,255,0.25); }
+        .notif-badge { display: none; position: absolute; top: -2px; right: -2px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: 700; align-items: center; justify-content: center; border: 2px solid #1a56db; }
+        .notif-panel { display: none; position: absolute; right: 0; top: 48px; width: 310px; background: white; border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 999; overflow: hidden; }
+        .notif-header { padding: 14px 16px; border-bottom: 1px solid #f0f0f0; font-weight: 700; color: #1a1a2e; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        .notif-leer { font-size: 12px; color: #1a56db; cursor: pointer; font-weight: 500; }
+        .notif-lista { max-height: 320px; overflow-y: auto; }
+        .notif-item { padding: 12px 16px; border-bottom: 1px solid #f5f5f5; display: flex; align-items: flex-start; gap: 10px; }
+        .notif-item:last-child { border-bottom: none; }
+        .notif-item.no-leida { background: #eff6ff; }
+        .notif-icono { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .notif-cuerpo { flex: 1; }
+        .notif-texto { font-size: 13px; color: #333; line-height: 1.4; }
+        .notif-fecha { font-size: 11px; color: #9ca3af; margin-top: 3px; }
+        .notif-accion { display: inline-block; margin-top: 6px; background: #1a56db; color: white; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; text-decoration: none; }
+        .notif-accion.verde { background: #16a34a; }
+
+        .btn-usuario { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); color: white; border-radius: 10px; padding: 7px 14px; text-decoration: none; font-size: 14px; font-weight: 600; transition: background 0.2s; white-space: nowrap; }
+        .btn-usuario:hover { background: rgba(255,255,255,0.25); }
+        .avatar-inicial { width: 26px; height: 26px; background: white; color: #1a56db; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+
+        /* NAV */
+        .header-nav { background: #1648c0; border-top: 1px solid rgba(255,255,255,0.1); }
+        .nav-inner { display: flex; align-items: center; gap: 4px; padding: 0 32px; max-width: 1400px; margin: 0 auto; height: 44px; }
+        .categoria-wrapper { position: relative; }
+        .category-menu { display: flex; align-items: center; gap: 6px; color: white; cursor: pointer; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; transition: background 0.2s; user-select: none; border: 1px solid rgba(255,255,255,0.2); }
+        .category-menu:hover { background: rgba(255,255,255,0.1); }
+        .categoria-dropdown { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: white; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); z-index: 999; min-width: 220px; overflow: hidden; padding: 6px 0; }
+        .categoria-dropdown a { display: flex; align-items: center; gap: 10px; padding: 10px 18px; font-size: 14px; color: #1a1a2e; text-decoration: none; transition: background 0.15s; font-weight: 500; }
+        .categoria-dropdown a:hover { background: #eff6ff; color: #1a56db; }
+        .categoria-dropdown .sep { height: 1px; background: #f0f0f0; margin: 4px 0; }
+        .nav-link { color: rgba(255,255,255,0.85); text-decoration: none; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+        .nav-link:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        /* HERO */
+        .hero-section { background: linear-gradient(135deg, #1a56db 0%, #1e40af 60%, #1e3a8a 100%); padding: 40px 32px; }
+        .hero-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: stretch; gap: 40px; }
+        .hero-texto { flex-shrink: 0; max-width: 320px; display: flex; flex-direction: column; justify-content: center; }
+        .hero-badge-el { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); color: #a5f3fc; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 14px; width: fit-content; }
+        .hero-titulo-el { font-size: 28px; font-weight: 800; color: white; line-height: 1.2; margin-bottom: 10px; }
+        .hero-sub-el { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 22px; }
+        .btn-vender-hero { display: inline-flex; align-items: center; gap: 8px; background: white; color: #1a56db; padding: 12px 24px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; transition: all 0.2s; width: fit-content; }
+        .btn-vender-hero:hover { background: #e0e7ff; transform: translateY(-1px); }
+
+        /* Ranking */
+        .ranking-panel { flex: 1; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; overflow: hidden; }
+        .ranking-titulo { padding: 14px 18px 12px; font-size: 13px; font-weight: 700; color: #a5f3fc; text-transform: uppercase; letter-spacing: .6px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .ranking-item { display: flex; align-items: center; gap: 12px; padding: 11px 18px; border-bottom: 1px solid rgba(255,255,255,0.07); text-decoration: none; transition: background 0.15s; }
+        .ranking-item:last-child { border-bottom: none; }
+        .ranking-item:hover { background: rgba(255,255,255,0.08); }
+        .ranking-pos { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
+        .ranking-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.2); color: white; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .ranking-info { flex: 1; min-width: 0; }
+        .ranking-nombre { font-size: 13px; font-weight: 600; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ranking-username { font-size: 11px; color: rgba(255,255,255,0.5); }
+        .ranking-stats { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; gap: 3px; }
+        .ranking-stat { font-size: 11px; color: rgba(255,255,255,0.65); white-space: nowrap; }
+        .ranking-stat strong { color: #a5f3fc; font-weight: 700; }
+        .ranking-estrellas { font-size: 11px; color: #fbbf24; }
+
+        /* PRODUCTOS */
+        #featured-products { max-width: 1400px; margin: 0 auto; padding: 40px 32px; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .section-titulo { font-size: 20px; font-weight: 700; color: #1a1a2e; }
+        .section-ver-todos { font-size: 13px; color: #1a56db; font-weight: 600; text-decoration: none; }
+        .section-ver-todos:hover { text-decoration: underline; }
+        .product-grid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important; gap: 20px !important; justify-content: unset !important; max-width: none !important; margin: 0 !important; }
+        .product-card { background: white !important; display: flex !important; flex-direction: column !important; border: 1px solid #e8ecf1 !important; border-radius: 14px !important; overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,0.05) !important; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s !important; text-align: left; }
+        .product-card:hover { transform: translateY(-3px) !important; box-shadow: 0 8px 24px rgba(26,86,219,0.12) !important; border-color: #1a56db !important; }
+        .card-foto-wrap { width: 100%; height: 170px; background: #f4f6f9; display: flex; align-items: center; justify-content: center; font-size: 48px; overflow: hidden; flex-shrink: 0; }
+        .card-foto-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-body { padding: 14px !important; display: flex; flex-direction: column; flex: 1; }
+        .card-cat { font-size: 11px; color: #1a56db; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 5px; }
+        .card-titulo { font-size: 14px; font-weight: 600; color: #1a1a2e; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-precio { font-size: 17px; font-weight: 700; color: #16a34a; margin-bottom: 4px; }
+        .card-estado { font-size: 12px; color: #6b7280; margin-bottom: 4px; }
+        .card-vendedor { font-size: 12px; color: #9ca3af; margin-bottom: 12px; flex: 1; }
+        .btn-product { display: block !important; text-align: center !important; background: #1a56db !important; color: white !important; padding: 9px !important; border-radius: 8px !important; text-decoration: none !important; font-size: 13px !important; font-weight: 600 !important; transition: background 0.2s !important; }
+        .btn-product:hover { background: #1648c0 !important; }
+
+        /* FOOTER */
+        footer { background: #111827; color: #9ca3af; padding: 40px 32px 20px; margin-top: 60px; }
+        .footer-container { max-width: 1400px; margin: 0 auto; display: flex; gap: 40px; flex-wrap: wrap; padding-bottom: 30px; border-bottom: 1px solid #1f2937; }
+        .footer-col { flex: 1; min-width: 180px; }
+        .footer-col h3 { color: white; font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+        .footer-col p, .footer-col a { font-size: 13px; color: #9ca3af; text-decoration: none; display: block; margin-bottom: 8px; }
+        .footer-col a:hover { color: white; }
+        .footer-col ul { list-style: none; }
+        .footer-bottom { max-width: 1400px; margin: 0 auto; padding-top: 20px; font-size: 12px; text-align: center; }
+
+        /* RESPONSIVE MOVIL */
+        @media (max-width: 768px) {
+            .header-top { padding: 8px 12px; height: auto; flex-wrap: wrap; gap: 8px; }
+            .search-bar { order: 3; width: 100%; max-width: 100%; margin: 0; }
+            .search-form-inline { width: 100%; }
+            .user-access { margin-left: auto; gap: 8px; }
+            .btn-publicar-header { display: none; }
+            #btn-acceso-texto { display: none; }
+            .btn-usuario { padding: 6px 10px; }
+            .idioma-btn span { display: none; }
+            .logo-text { font-size: 16px; }
+            .nav-inner { padding: 0 8px; overflow-x: auto; scrollbar-width: none; gap: 2px; height: auto; min-height: 40px; flex-wrap: nowrap; }
+            .nav-inner::-webkit-scrollbar { display: none; }
+            .nav-link { font-size: 12px; padding: 5px 8px; white-space: nowrap; }
+            .category-menu { font-size: 12px; padding: 5px 8px; white-space: nowrap; }
+            .hero-section { padding: 20px 14px; }
+            .hero-inner { flex-direction: column; gap: 16px; }
+            .hero-texto { max-width: 100%; text-align: center; align-items: center; }
+            .hero-titulo-el { font-size: 22px; }
+            .hero-sub-el { font-size: 13px; }
+            .btn-vender-hero { margin: 0 auto; font-size: 14px; padding: 11px 20px; }
+            .ranking-item { padding: 9px 12px; gap: 8px; }
+            .ranking-stats { display: none; }
+            #featured-products { padding: 20px 12px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+            .card-foto-wrap { height: 130px; }
+            .card-body { padding: 10px !important; }
+            .card-titulo { font-size: 12px; }
+            .card-precio { font-size: 14px; }
+            footer { padding: 24px 14px 14px; margin-top: 30px; }
+            .footer-container { flex-direction: column; gap: 20px; }
         }
-
-        .notif-lista {
-            max-height: 300px;
-            overflow-y: auto;
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .header-top { padding: 0 16px; }
+            .hero-section { padding: 28px 20px; }
+            .hero-titulo-el { font-size: 24px; }
+            .hero-texto { max-width: 280px; }
+            #featured-products { padding: 28px 20px; }
+            .product-grid { grid-template-columns: repeat(3, 1fr) !important; }
         }
-
-        .notif-item {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f5f5f5;
-        }
-
-        .notif-item.no-leida { background: #f0f7ff; }
-        .notif-texto { font-size: 13px; color: #333; }
-        .notif-fecha { font-size: 11px; color: #999; margin-top: 4px; }
     </style>
+    <link rel="stylesheet" href="responsive.css">
 </head>
 <body>
 
-    <header class="header-principal">
-        <div class="header-top">
-            <div class="logo">
-                <h1>Shopseguro</h1>
-            </div>
-            
-            <div class="search-bar">
-                <form action="busqueda.html" method="get" class="search-form-inline">
-                    <input type="text" placeholder="Buscar en Shopseguro" aria-label="Buscar" name="query" class="search-input-field">
-                    <button type="submit" class="search-icon">🔍</button>
-                    <a href="busqueda.html" class="advanced-filter-btn" title="Filtro Avanzado">⚙️</a>
-                </form>
-            </div>
-
-            <div class="user-access">
-                <div class="notif-wrapper" id="notif-wrapper" onclick="toggleNotificaciones()">
-                    <span style="font-size:22px;">🔔</span>
-                    <span class="notif-badge" id="notif-badge">0</span>
-                    <div class="notif-panel" id="notif-panel">
-                        <div class="notif-header">
-                            🔔 Notificaciones
-                            <span class="notif-leer" onclick="marcarLeidas(); event.stopPropagation();">Marcar leídas</span>
-                        </div>
-                        <div class="notif-lista" id="notif-lista">
-                            <p style="text-align:center; color:#999; padding:20px; font-size:13px;">No tienes notificaciones</p>
-                        </div>
-                    </div>
-                </div>
-                <a class="login-text-link" href="login.html" id="btn-acceso">HOLA, ¡inicia sesión acá!</a>
-                <span class="login-icon">👤</span>
-            </div>
-        </div>  
-        
-        <nav class="header-nav">
-            <a href="/categorias" class="category-menu">☰ Categoría</a>
-            <a href="chat_publico.html" class="nav-link">💬 Chat Publico</a> 
-            <a href="chat-privado.html" class="nav-link">✉️ Chat Privado</a>
-            <a href="soporte.html" class="nav-link">Soporte</a>
-            <a href="amigos.html" class="nav-link">👥 Amigos</a>
-        </nav>
-    </header>
-
-    <main class="hero-section">
-        <div class="hero-content">
-            <h1>Shopseguro: Compra y Vende con Confianza</h1>
-            <p class="subtitle">La única plataforma que garantiza la autenticidad y el estado del producto antes de completar el pago.</p>
-            
-            <div class="cta-buttons">
-                <a href="publicar.html" class="button-primary button-cta centered-button">
-                    Quiero Vender Ahora
-                </a>
-                <a href="busqueda.html" class="button-secondary button-cta centered-button">
-                    Explorar Productos
-                </a>
-            </div>
-        </div>
-    </main>
-
-    <section id="featured-products">
-        <h2>Productos Destacados de la Semana</h2>
-        <div class="product-grid" id="product-grid"></div>
-    </section>
-
-    <footer>
-        <div class="footer-container">
-            <div class="footer-col">
-                <h3>Shopseguro</h3>
-                <p>Tu plataforma segura en Chile para comprar y vender.</p>
-                <p>Contacto: <a href="mailto:contacto@Shopseguro.cl">contacto@Shopseguro.cl</a></p>
-                <div class="social-links">
-                    <a href="#" aria-label="Facebook">📘</a>
-                    <a href="#" aria-label="Instagram">📸</a>
-                </div>
-            </div>
-            
-            <div class="footer-col">
-                <h3>Ayuda y Legal</h3>
-                <ul>
-                    <li><a href="/faq">Preguntas Frecuentes (FAQ)</a></li>
-                    <li><a href="/soporte">Centro de Soporte</a></li>
-                    <li><a href="/terminos">Términos y Condiciones</a></li>
-                    <li><a href="/privacidad">Política de Privacidad</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-col">
-                <h3>Garantía y Pagos</h3>
-                <p>Transacciones protegidas con los siguientes medios:</p>
-                <div class="payment-logos">
-                    <img src="ruta/a/visa-logo.png" alt="Visa">
-                    <img src="ruta/a/mastercard-logo.png" alt="Mastercard">
-                </div>
-                <p class="ssl-info">🔒 Sitio con Cifrado SSL</p>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2025 Shopseguro. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <script src="config.js"></script>
-    <script>
-        const token = localStorage.getItem('token');
-        const usuario = localStorage.getItem('usuario');
-        const btnAcceso = document.getElementById('btn-acceso');
-
-        if (token && usuario) {
-            btnAcceso.textContent = '👤 ' + usuario;
-            btnAcceso.href = 'perfil.html';
-        }
-
-        async function cargarNotificaciones() {
-            if (!token) return;
-            
-            try {
-                const respuesta = await fetch(`${API_URL}/api/notificaciones`, {
-                    headers: { 'authorization': token }
-                });
-                const datos = await respuesta.json();
-
-                // Mostrar ícono
-                const wrapper = document.getElementById('notif-wrapper');
-                wrapper.style.display = 'flex';
-
-                // Badge
-                const badge = document.getElementById('notif-badge');
-                if (datos.noLeidas > 0) {
-                    badge.style.display = 'flex';
-                    badge.textContent = datos.noLeidas;
-                } else {
-                    badge.style.display = 'none';
-                }
-
-                // Lista
-                const lista = document.getElementById('notif-lista');
-                if (datos.notificaciones.length === 0) {
-                    lista.innerHTML = '<p style="text-align:center; color:#999; padding:20px; font-size:13px;">No tienes notificaciones</p>';
-                } else {
-                   lista.innerHTML = datos.notificaciones.map(n => {
-    const username = n.mensaje.includes('@') ? n.mensaje.split('@')[1] : '';
-    const link = username ? `chat-privado.html?user=${username}` : '#';
-    return `
-        <a href="${link}" style="text-decoration:none;" onclick="document.getElementById('notif-panel').style.display='none'">
-            <div class="notif-item ${n.leida ? '' : 'no-leida'}">
-                <p class="notif-texto">${n.mensaje}</p>
-                <p class="notif-fecha">${new Date(n.fecha).toLocaleString('es-CL')}</p>
-            </div>
+<header class="header-principal">
+    <div class="header-top">
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🛡️</div>
+            <span class="logo-text">Shop<span>seguro</span></span>
         </a>
-    `;
-}).join('');
-                }
 
-            } catch (error) {
-                console.log('Error notificaciones:', error);
-            }
-        }
+        <div class="search-bar">
+            <form action="busqueda.html" method="get" class="search-form-inline">
+                <input type="text" name="query" placeholder="Buscar productos, categorías..." class="search-input-field">
+                <button type="submit" class="search-icon">🔍</button>
+            </form>
+        </div>
 
-        function toggleNotificaciones() {
-            const panel = document.getElementById('notif-panel');
-            const visible = panel.style.display === 'block';
-            panel.style.display = visible ? 'none' : 'block';
-            if (!visible) marcarLeidas();
-        }
+        <div class="user-access">
+            <a href="publicar.html" class="btn-publicar-header" id="btn-publicar-header">+ Publicar</a>
 
-        async function marcarLeidas() {
-            if (!token) return;
-            try {
-                await fetch(`${API_URL}/api/notificaciones/leer`, {
-                    method: 'POST',
-                    headers: { 'authorization': token }
-                });
-                document.getElementById('notif-badge').style.display = 'none';
-            } catch (error) {
-                console.log('Error:', error);
-            }
-        }
+            <!-- Selector de idioma -->
+            <div class="idioma-wrapper" id="idioma-wrapper">
+                <button class="idioma-btn" id="idioma-btn" onclick="toggleIdioma(event)">
+                    🇨🇱 <span>ES</span> ▾
+                </button>
+                <div class="idioma-dropdown" id="idioma-dropdown">
+                    <button class="idioma-opcion" onclick="cambiarIdioma('es')">
+                        <span class="idioma-bandera">🇨🇱</span> Español
+                    </button>
+                    <button class="idioma-opcion" onclick="cambiarIdioma('en')">
+                        <span class="idioma-bandera">🇺🇸</span> English
+                    </button>
+                    <button class="idioma-opcion" onclick="cambiarIdioma('pt')">
+                        <span class="idioma-bandera">🇧🇷</span> Português
+                    </button>
+                </div>
+            </div>
 
-        async function cargarProductos() {
-            try {
-                const respuesta = await fetch(`${API_URL}/api/productos`);
-                const productos = await respuesta.json();
-
-                const grid = document.getElementById('product-grid');
-                
-                if (productos.length === 0) {
-                    grid.innerHTML = '<p style="text-align:center">No hay productos publicados aún.</p>';
-                    return;
-                }
-
-                grid.innerHTML = productos.map(p => `
-                    <div class="product-card">
-                        <div class="card-body">
-                            <h3>${p.titulo}</h3>
-                            <p class="price">$${Number(p.precio).toLocaleString('es-CL')} CLP</p>
-                            <span class="security-tag">${p.estado}</span>
-                            <p class="seller-note">Vendido por: ${p.vendedor_nombre}</p>
-                            <a href="detalle-producto.html" class="btn-product">Ver Detalle</a>
-                        </div>
+            <div class="notif-wrapper" id="notif-wrapper" onclick="toggleNotificaciones()">
+                <div class="notif-icon">🔔</div>
+                <span class="notif-badge" id="notif-badge">0</span>
+                <div class="notif-panel" id="notif-panel">
+                    <div class="notif-header">
+                        <span id="notif-titulo-texto">Notificaciones</span>
+                        <span class="notif-leer" onclick="marcarLeidas();event.stopPropagation();">Marcar leídas</span>
                     </div>
-                `).join('');
+                    <div class="notif-lista" id="notif-lista">
+                        <p style="text-align:center;color:#9ca3af;padding:24px;font-size:13px;">No tienes notificaciones</p>
+                    </div>
+                </div>
+            </div>
 
-            } catch (error) {
-                console.log('Error cargando productos:', error);
-            }
+            <a href="login.html" class="btn-usuario" id="btn-acceso">
+                <div class="avatar-inicial" id="avatar-inicial">?</div>
+                <span id="btn-acceso-texto">Iniciar sesión</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="header-nav">
+        <div class="nav-inner">
+            <div class="categoria-wrapper" id="categoria-wrapper">
+                <span class="category-menu" onclick="toggleCategorias(event)">☰ Categorías ▾</span>
+                <div class="categoria-dropdown" id="categoria-dropdown">
+                    <a href="categorias.html?cat=Tecnolog%C3%ADa"><span>💻</span> <span id="cat-tecnologia">Tecnología</span></a>
+                    <a href="categorias.html?cat=Hogar%20y%20Muebles"><span>🛋️</span> <span id="cat-hogar">Hogar y Muebles</span></a>
+                    <a href="categorias.html?cat=Veh%C3%ADculos"><span>🚗</span> <span id="cat-vehiculos">Vehículos</span></a>
+                    <a href="categorias.html?cat=Ropa%20y%20Calzado"><span>👕</span> <span id="cat-ropa">Ropa y Calzado</span></a>
+                    <a href="categorias.html?cat=Deportes"><span>⚽</span> <span id="cat-deportes">Deportes</span></a>
+                    <a href="categorias.html?cat=Juegos%20y%20Consolas"><span>🎮</span> <span id="cat-juegos">Juegos y Consolas</span></a>
+                    <div class="sep"></div>
+                    <a href="categorias.html?cat=Otros"><span>📦</span> <span id="cat-otros">Otros</span></a>
+                </div>
+            </div>
+            <a href="chat_publico.html" class="nav-link" id="nav-chat-publico">Chat Público</a>
+            <a href="chat-privado.html" class="nav-link" id="nav-mensajes">Mensajes</a>
+            <a href="soporte.html" class="nav-link" id="nav-soporte">Soporte</a>
+            <a href="amigos.html" class="nav-link" id="nav-amigos">Amigos</a>
+        </div>
+    </nav>
+</header>
+
+<section class="hero-section">
+    <div class="hero-inner">
+        <div class="hero-texto">
+            <div class="hero-badge-el" id="hero-badge">🛡️ Plataforma 100% Segura en Chile</div>
+            <h1 class="hero-titulo-el" id="hero-titulo">Vende lo que ya no usas y gana dinero hoy</h1>
+            <p class="hero-sub-el" id="hero-sub">Publica gratis, conecta con compradores reales y cobra seguro. Sin fraudes.</p>
+            <a href="publicar.html" class="btn-vender-hero" id="hero-btn">+ Quiero Vender Ahora</a>
+        </div>
+        <div class="ranking-panel">
+            <div class="ranking-titulo" id="ranking-titulo-texto">🏆 Mejores Vendedores de la Comunidad</div>
+            <div id="ranking-lista">
+                <p style="color:rgba(255,255,255,0.5);padding:24px;font-size:13px;text-align:center;">Cargando...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="featured-products">
+    <div class="section-header">
+        <h2 class="section-titulo" id="section-productos-titulo">Productos Destacados</h2>
+        <a href="busqueda.html" class="section-ver-todos" id="ver-todos-link">Ver todos →</a>
+    </div>
+    <div class="product-grid" id="product-grid">
+        <p style="grid-column:1/-1;text-align:center;padding:40px;color:#9ca3af;">Cargando productos...</p>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>🛡️ Shopseguro</h3>
+            <p id="footer-desc">La plataforma más segura de Chile para comprar y vender entre personas.</p>
+            <a href="/cdn-cgi/l/email-protection#b5d6dadbc1d4d6c1daf5c6dddac5c6d0d2c0c7da9bd6d9"><span class="__cf_email__" data-cfemail="27444849534644534867544f485754424052554809444b">[email&#160;protected]</span></a>
+        </div>
+        <div class="footer-col">
+            <h3 id="footer-ayuda">Ayuda y Legal</h3>
+            <ul>
+                <li><a href="/faq" id="footer-faq">Preguntas Frecuentes</a></li>
+                <li><a href="/soporte" id="footer-soporte">Centro de Soporte</a></li>
+                <li><a href="/terminos" id="footer-terminos">Términos y Condiciones</a></li>
+                <li><a href="/privacidad" id="footer-privacidad">Política de Privacidad</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3 id="footer-seg-titulo">Seguridad</h3>
+            <p id="footer-ssl">🔒 Cifrado SSL activo</p>
+            <p id="footer-verificado">✅ Identidad verificada con RUT</p>
+            <p id="footer-proteccion">🛡️ Protección ante fraudes</p>
+        </div>
+    </div>
+    <div class="footer-bottom"><p id="footer-copy">© 2025 Shopseguro. Todos los derechos reservados.</p></div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="config.js"></script>
+<script src="i18n.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const token = localStorage.getItem('token');
+const usuario = localStorage.getItem('usuario');
+
+if (token && usuario) {
+    document.getElementById('btn-acceso-texto').textContent = usuario;
+    document.getElementById('avatar-inicial').textContent = usuario.charAt(0).toUpperCase();
+    document.getElementById('btn-acceso').href = 'perfil.html';
+}
+
+// Aplicar idioma guardado al cargar
+aplicarIdioma();
+
+// Selector idioma
+function toggleIdioma(e) {
+    e.stopPropagation();
+    const dd = document.getElementById('idioma-dropdown');
+    dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+    // Marcar activo
+    document.querySelectorAll('.idioma-opcion').forEach(op => op.classList.remove('activo'));
+    const opciones = document.querySelectorAll('.idioma-opcion');
+    const langs = ['es','en','pt'];
+    opciones.forEach((op, i) => { if (langs[i] === idiomaActual) op.classList.add('activo'); });
+}
+
+// Menú categorías
+function toggleCategorias(e) {
+    e.stopPropagation();
+    const dd = document.getElementById('categoria-dropdown');
+    dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+}
+
+// Cerrar dropdowns al hacer click fuera
+document.addEventListener('click', function(e) {
+    const cat = document.getElementById('categoria-wrapper');
+    if (cat && !cat.contains(e.target)) document.getElementById('categoria-dropdown').style.display = 'none';
+    const idioma = document.getElementById('idioma-wrapper');
+    if (idioma && !idioma.contains(e.target)) document.getElementById('idioma-dropdown').style.display = 'none';
+});
+
+// Notificaciones
+async function cargarNotificaciones() {
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_URL}/api/notificaciones`, { headers: { 'authorization': token } });
+        const datos = await res.json();
+        document.getElementById('notif-wrapper').style.display = 'flex';
+        const badge = document.getElementById('notif-badge');
+        if (datos.noLeidas > 0) { badge.style.display = 'flex'; badge.textContent = datos.noLeidas; }
+        else badge.style.display = 'none';
+        const lista = document.getElementById('notif-lista');
+        if (!datos.notificaciones || datos.notificaciones.length === 0) {
+            lista.innerHTML = `<p style="text-align:center;color:#9ca3af;padding:24px;font-size:13px;">${t('notif_vacio')}</p>`;
+            return;
         }
+        lista.innerHTML = datos.notificaciones.map(n => {
+            const match = n.mensaje.match(/@(\S+)/);
+            const uname = match ? match[1] : '';
+            let icono = '🔔', btn = '';
+            if (n.tipo === 'mensaje') {
+                icono = '✉️';
+                if (uname) btn = `<a href="chat-privado.html?user=${uname}" class="notif-accion" onclick="cerrarPanel()">Ver mensaje</a>`;
+            } else if (n.tipo === 'amistad') {
+                icono = '👥';
+                if (n.mensaje.includes('te envió') || n.mensaje.includes('sent you') || n.mensaje.includes('enviou'))
+                    btn = `<a href="amigos.html" class="notif-accion verde" onclick="cerrarPanel()">Ver solicitud</a>`;
+                else if (uname)
+                    btn = `<a href="perfil-publico.html?user=${uname}" class="notif-accion" onclick="cerrarPanel()">Ver perfil</a>`;
+            }
+            return `<div class="notif-item ${n.leida?'':'no-leida'}">
+                <span class="notif-icono">${icono}</span>
+                <div class="notif-cuerpo">
+                    <p class="notif-texto">${n.mensaje}</p>
+                    <p class="notif-fecha">${new Date(n.fecha).toLocaleString('es-CL')}</p>
+                    ${btn}
+                </div>
+            </div>`;
+        }).join('');
+    } catch(e) {}
+}
 
-        if (token) cargarNotificaciones();
-        setInterval(() => { if (token) cargarNotificaciones(); }, 30000);
-        cargarProductos();
-    </script>
+function cerrarPanel() { document.getElementById('notif-panel').style.display = 'none'; }
+function toggleNotificaciones() {
+    const p = document.getElementById('notif-panel');
+    const v = p.style.display === 'block';
+    p.style.display = v ? 'none' : 'block';
+    if (!v) marcarLeidas();
+}
+async function marcarLeidas() {
+    if (!token) return;
+    try {
+        await fetch(`${API_URL}/api/notificaciones/leer`, { method:'POST', headers:{'authorization':token} });
+        document.getElementById('notif-badge').style.display = 'none';
+    } catch(e) {}
+}
 
+// Socket tiempo real
+if (token && usuario) {
+    const socketNotif = io(API_URL);
+    socketNotif.on('connect', () => socketNotif.emit('autenticar', usuario));
+    socketNotif.on('nueva-notificacion', () => {
+        const badge = document.getElementById('notif-badge');
+        badge.style.display = 'flex';
+        badge.textContent = (parseInt(badge.textContent) || 0) + 1;
+        cargarNotificaciones();
+        const icon = document.querySelector('.notif-icon');
+        if (icon) {
+            icon.style.transform = 'scale(1.3)';
+            icon.style.background = 'rgba(239,68,68,0.3)';
+            setTimeout(() => { icon.style.transform = ''; icon.style.background = ''; }, 400);
+        }
+    });
+    cargarNotificaciones();
+    setInterval(cargarNotificaciones, 60000);
+}
+
+// Ranking
+async function cargarRanking() {
+    try {
+        const res = await fetch(`${API_URL}/api/ranking-vendedores`);
+        const vendedores = await res.json();
+        const lista = document.getElementById('ranking-lista');
+        if (!vendedores.length) {
+            lista.innerHTML = `<p style="color:rgba(255,255,255,0.5);padding:24px;font-size:13px;text-align:center;">${t('ranking_vacio')}</p>`;
+            return;
+        }
+        const medallas = ['🥇','🥈','🥉','4°','5°'];
+        lista.innerHTML = vendedores.map((v, i) => {
+            const meses = Math.floor((new Date() - new Date(v.fecha_registro)) / (1000*60*60*24*30));
+            const ant = meses < 1 ? 'Nuevo' : meses < 12 ? meses+'m' : Math.floor(meses/12)+'a';
+            return `<a href="perfil-publico.html?user=${v.username}" class="ranking-item">
+                <div class="ranking-pos">${medallas[i]}</div>
+                <div class="ranking-avatar">${v.username.charAt(0).toUpperCase()}</div>
+                <div class="ranking-info">
+                    <div class="ranking-nombre">${v.nombre}</div>
+                    <div class="ranking-username">@${v.username} · ${ant}</div>
+                </div>
+                <div class="ranking-stats">
+                    <div class="ranking-stat"><strong>${v.total_productos}</strong> ${t('ranking_pub')}</div>
+                    <div class="ranking-stat"><strong>${v.total_amigos}</strong> ${t('ranking_amigos')}</div>
+                    <div class="ranking-estrellas" title="${t('ranking_estrellas_tip')}">★★★★★</div>
+                </div>
+            </a>`;
+        }).join('');
+    } catch(e) {}
+}
+
+// Productos
+async function cargarProductos() {
+    try {
+        const res = await fetch(`${API_URL}/api/productos`);
+        const productos = await res.json();
+        const grid = document.getElementById('product-grid');
+        if (!productos.length) {
+            grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:40px;color:#9ca3af;">${t('productos_vacio')}</p>`;
+            return;
+        }
+        grid.innerHTML = productos.map(p => {
+            let fotos = [];
+            try { fotos = JSON.parse(p.fotos || '[]'); } catch(e) {}
+            const portada = fotos.length > 0 ? `<img src="${fotos[0]}" alt="${p.titulo}" loading="lazy">` : '📦';
+            return `<div class="product-card">
+                <div class="card-foto-wrap">${portada}</div>
+                <div class="card-body">
+                    <div class="card-cat">${p.categoria || ''}</div>
+                    <div class="card-titulo">${p.titulo}</div>
+                    <div class="card-precio">$${Number(p.precio).toLocaleString('es-CL')} CLP</div>
+                    <div class="card-estado">${p.estado}</div>
+                    <div class="card-vendedor">${t('productos_por')} ${p.vendedor_nombre}</div>
+                    <a href="detalle-producto.html?id=${p.id}" class="btn-product">${t('productos_ver_detalle')}</a>
+                </div>
+            </div>`;
+        }).join('');
+    } catch(e) { console.log('Error:', e); }
+}
+
+cargarRanking();
+cargarProductos();
+</script>
 </body>
 </html>

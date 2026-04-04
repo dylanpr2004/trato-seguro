@@ -1,15 +1,12 @@
-const API_URL = 'http://localhost:3000';
- 
-// Verificar si el token expiró
+const API_URL = 'https://trato-seguro-production.up.railway.app';
+
 async function verificarToken() {
     const token = localStorage.getItem('token');
     if (!token) return;
-    
     try {
         const respuesta = await fetch(`${API_URL}/api/perfil`, {
             headers: { 'authorization': token }
         });
-        
         if (respuesta.status === 401) {
             localStorage.removeItem('token');
             localStorage.removeItem('usuario');
@@ -18,9 +15,7 @@ async function verificarToken() {
             window.location.href = 'login.html';
         }
     } catch (error) {
-        // Servidor no disponible, no cerrar sesión
         console.log('Servidor no disponible:', error.message);
     }
 }
- 
 verificarToken();

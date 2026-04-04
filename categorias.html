@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías - Shopseguro</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #f0f2f5; font-family: Arial, sans-serif; }
+
+        .page-header {
+            background: #1a1a2e;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-volver {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-volver:hover { background: rgba(255,255,255,0.25); }
+
+        .page-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 16px;
+        }
+
+        /* Chips de categorías */
+        .categorias-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .chip {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 2px solid #ddd;
+            background: white;
+            color: #555;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .chip:hover { border-color: #28a745; color: #28a745; }
+
+        .chip.activo {
+            background: #1a1a2e;
+            border-color: #1a1a2e;
+            color: white;
+        }
+
+        /* Título sección */
+        .seccion-titulo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .total-productos {
+            font-size: 14px;
+            font-weight: 400;
+            color: #888;
+        }
+
+        /* Grid de productos */
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .producto-card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .producto-categoria-badge {
+            font-size: 11px;
+            background: #e9f7e9;
+            color: #28a745;
+            padding: 3px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .producto-titulo {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .producto-precio {
+            font-size: 18px;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 6px;
+        }
+
+        .producto-estado {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .producto-vendedor {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 14px;
+        }
+
+        .btn-ver {
+            display: block;
+            text-align: center;
+            background: #1a1a2e;
+            color: white;
+            padding: 9px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-ver:hover { background: #28a745; }
+
+        .sin-productos {
+            text-align: center;
+            padding: 60px 20px;
+            color: #aaa;
+            font-size: 15px;
+            grid-column: 1 / -1;
+        }
+
+        .cargando {
+            text-align: center;
+            padding: 60px;
+            color: #aaa;
+            font-size: 15px;
+            grid-column: 1 / -1;
+        }
+    </style>
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+    <div class="page-header">
+        <a href="index.html" class="btn-volver">← Volver al Inicio</a>
+        <h1 style="font-size:18px;" id="titulo-header">📦 Categorías</h1>
+    </div>
+
+    <div class="page-wrapper">
+
+        <!-- Chips de categorías -->
+        <div class="categorias-chips" id="categorias-chips">
+            <a href="categorias.html?cat=Tecnolog%C3%ADa" class="chip">💻 Tecnología</a>
+            <a href="categorias.html?cat=Hogar%20y%20Muebles" class="chip">🛋️ Hogar y Muebles</a>
+            <a href="categorias.html?cat=Veh%C3%ADculos" class="chip">🚗 Vehículos</a>
+            <a href="categorias.html?cat=Ropa%20y%20Calzado" class="chip">👕 Ropa y Calzado</a>
+            <a href="categorias.html?cat=Deportes" class="chip">⚽ Deportes</a>
+            <a href="categorias.html?cat=Juegos%20y%20Consolas" class="chip">🎮 Juegos y Consolas</a>
+            <a href="categorias.html?cat=Otros" class="chip">📦 Otros</a>
+        </div>
+
+        <!-- Título dinámico -->
+        <div class="seccion-titulo">
+            <span id="titulo-categoria">Todos los productos</span>
+            <span class="total-productos" id="total-productos"></span>
+        </div>
+
+        <!-- Grid de productos -->
+        <div class="productos-grid" id="productos-grid">
+            <p class="cargando">Cargando productos... ⏳</p>
+        </div>
+
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        const CATEGORIAS_INFO = {
+            'Tecnología':      { icono: '💻', label: 'Tecnología' },
+            'Hogar y Muebles': { icono: '🛋️', label: 'Hogar y Muebles' },
+            'Vehículos':       { icono: '🚗', label: 'Vehículos' },
+            'Ropa y Calzado':  { icono: '👕', label: 'Ropa y Calzado' },
+            'Deportes':        { icono: '⚽', label: 'Deportes' },
+            'Juegos y Consolas':{ icono: '🎮', label: 'Juegos y Consolas' },
+            'Otros':           { icono: '📦', label: 'Otros' }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const categoriaActual = params.get('cat') || '';
+
+        // Marcar chip activo
+        document.querySelectorAll('.chip').forEach(chip => {
+            const href = decodeURIComponent(chip.getAttribute('href'));
+            if (href.includes(encodeURIComponent(categoriaActual)) || href.includes(categoriaActual)) {
+                chip.classList.add('activo');
+            }
+        });
+
+        // Actualizar título
+        if (categoriaActual && CATEGORIAS_INFO[categoriaActual]) {
+            const info = CATEGORIAS_INFO[categoriaActual];
+            document.getElementById('titulo-categoria').textContent = `${info.icono} ${info.label}`;
+            document.getElementById('titulo-header').textContent = `${info.icono} ${info.label}`;
+            document.title = `${info.label} - Shopseguro`;
+        }
+
+        async function cargarProductos() {
+            const grid = document.getElementById('productos-grid');
+            const totalEl = document.getElementById('total-productos');
+
+            try {
+                let url;
+                if (categoriaActual) {
+                    url = `${API_URL}/api/productos/categoria/${encodeURIComponent(categoriaActual)}`;
+                } else {
+                    url = `${API_URL}/api/productos`;
+                }
+
+                const respuesta = await fetch(url);
+                const productos = await respuesta.json();
+
+                totalEl.textContent = `(${productos.length} producto${productos.length !== 1 ? 's' : ''})`;
+
+                if (productos.length === 0) {
+                    grid.innerHTML = `
+                        <div class="sin-productos">
+                            <p style="font-size:40px; margin-bottom:12px;">🛒</p>
+                            <p>No hay productos en esta categoría todavía.</p>
+                            <p style="margin-top:8px; font-size:13px;">
+                                <a href="publicar.html" style="color:#28a745; font-weight:600;">¡Sé el primero en publicar uno!</a>
+                            </p>
+                        </div>`;
+                    return;
+                }
+
+                grid.innerHTML = productos.map(p => `
+                    <div class="producto-card">
+                        <span class="producto-categoria-badge">${p.categoria || 'Sin categoría'}</span>
+                        <p class="producto-titulo">${p.titulo}</p>
+                        <p class="producto-precio">$${Number(p.precio).toLocaleString('es-CL')} CLP</p>
+                        <p class="producto-estado">${p.estado}</p>
+                        <p class="producto-vendedor">👤 ${p.vendedor_nombre}</p>
+                        <a href="detalle-producto.html?id=${p.id}" class="btn-ver">Ver Detalle</a>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                grid.innerHTML = '<p class="sin-productos">No se pudo cargar. Verifica que el servidor esté encendido.</p>';
+            }
+        }
+
+        cargarProductos();
+    </script>
+
+</body>
+</html>

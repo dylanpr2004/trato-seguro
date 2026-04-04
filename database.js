@@ -2,7 +2,6 @@ const Database = require('better-sqlite3');
 
 const db = new Database('Shopseguro.db');
 
-// Tabla de usuarios
 db.exec(`
     CREATE TABLE IF NOT EXISTS usuarios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,7 +15,6 @@ db.exec(`
     )
 `);
 
-// Tabla de productos
 db.exec(`
     CREATE TABLE IF NOT EXISTS productos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,6 +23,9 @@ db.exec(`
         precio INTEGER NOT NULL,
         region TEXT NOT NULL,
         estado TEXT NOT NULL,
+        categoria TEXT DEFAULT 'Otros',
+        motivo_venta TEXT DEFAULT '',
+        fotos TEXT DEFAULT '[]',
         vendedor_id INTEGER NOT NULL,
         vendedor_nombre TEXT NOT NULL,
         fecha TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -32,7 +33,11 @@ db.exec(`
     )
 `);
 
-// Tabla de preferencias de usuario
+// Agregar columnas si la tabla ya existía
+['categoria TEXT DEFAULT "Otros"', 'motivo_venta TEXT DEFAULT ""', 'fotos TEXT DEFAULT "[]"'].forEach(col => {
+    try { db.exec(`ALTER TABLE productos ADD COLUMN ${col}`); } catch(e) {}
+});
+
 db.exec(`
     CREATE TABLE IF NOT EXISTS preferencias (
         usuario_id INTEGER PRIMARY KEY,
@@ -43,7 +48,6 @@ db.exec(`
     )
 `);
 
-// Tabla de mensajes privados
 db.exec(`
     CREATE TABLE IF NOT EXISTS mensajes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,7 +60,6 @@ db.exec(`
     )
 `);
 
-// Tabla de notificaciones
 db.exec(`
     CREATE TABLE IF NOT EXISTS notificaciones (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -69,7 +72,6 @@ db.exec(`
     )
 `);
 
-// Tabla de amigos
 db.exec(`
     CREATE TABLE IF NOT EXISTS amigos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
