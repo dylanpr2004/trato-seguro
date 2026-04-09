@@ -1,5 +1,4 @@
-const API_URL = 'https://trato-seguro-production.up.railway.app';
-
+const API_URL = 'https://shop-seguro.onrender.com';
 
 async function verificarToken() {
     const token = localStorage.getItem('token');
