@@ -1,5 +1,6 @@
 const API_URL = 'https://trato-seguro-production.up.railway.app';
 
+
 async function verificarToken() {
     const token = localStorage.getItem('token');
     if (!token) return;

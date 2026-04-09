@@ -4,93 +4,752 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle Producto - Shopseguro</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #f0f2f5; font-family: Arial, sans-serif; }
-        .page-header {
-            background: #1a1a2e; color: white; padding: 16px 24px;
-            display: flex; align-items: center; gap: 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        .btn-volver {
-            background: rgba(255,255,255,0.15); color: white; border: none;
-            padding: 8px 16px; border-radius: 8px; cursor: pointer;
-            font-size: 14px; text-decoration: none;
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f6f9;
+            color: #1a1a2e;
         }
-        .btn-volver:hover { background: rgba(255,255,255,0.25); }
+
+        /* HEADER AZUL */
+        .header-principal {
+            background: #1a56db;
+            box-shadow: 0 2px 12px rgba(26, 86, 219, 0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0 32px;
+            height: 64px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: #a5f3fc;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-form-inline {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .search-input-field {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            color: #1a1a2e;
+        }
+
+        .search-input-field::placeholder {
+            color: #9ca3af;
+        }
+
+        .search-icon {
+            background: #1a56db;
+            border: none;
+            padding: 10px 16px;
+            cursor: pointer;
+            color: white;
+            font-size: 15px;
+        }
+
+        .search-icon:hover {
+            background: #1648c0;
+        }
+
+        .user-access {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .btn-publicar-header {
+            background: white;
+            color: #1a56db;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .btn-publicar-header:hover {
+            background: #e0e7ff;
+        }
+
+        .btn-usuario {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-radius: 10px;
+            padding: 7px 14px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-usuario:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .avatar-inicial {
+            width: 26px;
+            height: 26px;
+            background: white;
+            color: #1a56db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* NAV */
+        .header-nav {
+            background: #1648c0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 44px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* CONTENIDO PRINCIPAL */
         .page-wrapper {
-            max-width: 1050px; margin: 28px auto; padding: 0 16px;
-            display: grid; grid-template-columns: 1fr 360px; gap: 24px;
+            max-width: 1400px;
+            margin: 32px auto;
+            padding: 0 32px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 32px;
         }
-        @media(max-width:768px){ .page-wrapper{ grid-template-columns:1fr; } }
 
-        /* Galería */
-        .galeria-card { background:white; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.07); overflow:hidden; }
-        .foto-principal { width:100%; height:380px; background:#f8f8f8; display:flex; align-items:center; justify-content:center; font-size:70px; overflow:hidden; }
-        .foto-principal img { width:100%; height:100%; object-fit:cover; cursor:zoom-in; }
-        .fotos-miniaturas { display:flex; gap:10px; padding:14px 16px; overflow-x:auto; }
-        .miniatura { width:72px; height:72px; border-radius:8px; object-fit:cover; border:2px solid transparent; cursor:pointer; flex-shrink:0; transition:border-color 0.2s; }
-        .miniatura.activa { border-color:#28a745; }
-        .miniatura:hover { border-color:#1a1a2e; }
+        @media (max-width: 768px) {
+            .page-wrapper {
+                grid-template-columns: 1fr;
+                padding: 0 16px;
+                margin: 20px auto;
+            }
+            .header-top {
+                padding: 8px 12px;
+                height: auto;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .search-bar {
+                order: 3;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+            }
+            .search-form-inline {
+                width: 100%;
+            }
+            .user-access {
+                margin-left: auto;
+                gap: 8px;
+            }
+            .btn-publicar-header {
+                display: none;
+            }
+            .btn-usuario {
+                padding: 6px 10px;
+            }
+            .logo-text {
+                font-size: 16px;
+            }
+            .nav-inner {
+                padding: 0 8px;
+                overflow-x: auto;
+                scrollbar-width: none;
+                height: auto;
+                min-height: 40px;
+            }
+            .nav-inner::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-link {
+                font-size: 12px;
+                padding: 5px 8px;
+                white-space: nowrap;
+            }
+        }
 
-        /* Info producto */
-        .info-card { background:white; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.07); margin-top:20px; }
-        .cat-badge { font-size:12px; background:#e9f7e9; color:#28a745; padding:4px 12px; border-radius:20px; font-weight:600; display:inline-block; margin-bottom:10px; }
-        .p-titulo { font-size:24px; font-weight:700; color:#1a1a2e; margin-bottom:10px; line-height:1.3; }
-        .p-precio { font-size:32px; font-weight:700; color:#28a745; margin-bottom:14px; }
-        .p-precio small { font-size:15px; color:#888; font-weight:400; margin-left:4px; }
-        .badges-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
-        .badge { padding:5px 14px; border-radius:20px; font-size:13px; font-weight:600; }
-        .badge-estado { background:#fff3cd; color:#856404; }
-        .badge-fecha { background:#f0f2f5; color:#555; }
-        .sep { height:1px; background:#eee; margin:18px 0; }
-        .sec-label { font-size:12px; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; }
-        .sec-text { font-size:15px; color:#333; line-height:1.7; }
-        .motivo-box { background:#f8f9fa; border-left:4px solid #28a745; border-radius:0 10px 10px 0; padding:12px 16px; }
+        /* GALERÍA */
+        .galeria-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
 
-        /* Panel derecho */
-        .panel-derecho { display:flex; flex-direction:column; gap:20px; }
+        .foto-principal {
+            width: 100%;
+            height: 420px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef2f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
 
-        /* Vendedor */
-        .vendedor-card { background:white; border-radius:16px; padding:20px; box-shadow:0 4px 20px rgba(0,0,0,0.07); }
-        .v-header { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
-        .v-avatar { width:56px; height:56px; border-radius:50%; background:#1a1a2e; color:white; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:bold; flex-shrink:0; text-decoration:none; }
-        .v-nombre { font-size:16px; font-weight:700; color:#1a1a2e; text-decoration:none; display:block; }
-        .v-nombre:hover { text-decoration:underline; }
-        .v-user { font-size:13px; color:#28a745; font-weight:600; }
-        .v-verificado { display:inline-flex; align-items:center; gap:6px; background:#e9f7e9; color:#28a745; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:700; margin-bottom:14px; }
-        .v-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px; }
-        .stat { text-align:center; background:#f8f9fa; border-radius:10px; padding:10px 4px; }
-        .stat-n { font-size:20px; font-weight:700; color:#1a1a2e; }
-        .stat-l { font-size:11px; color:#888; margin-top:2px; }
-        .v-desde { font-size:13px; color:#888; margin-bottom:16px; }
-        .btn-contactar { display:block; text-align:center; background:#28a745; color:white; padding:13px; border-radius:12px; text-decoration:none; font-size:15px; font-weight:700; transition:background 0.2s; margin-bottom:10px; }
-        .btn-contactar:hover { background:#1a1a2e; }
-        .btn-ver-perfil { display:block; text-align:center; background:#f0f2f5; color:#1a1a2e; padding:11px; border-radius:12px; text-decoration:none; font-size:14px; font-weight:600; }
-        .btn-ver-perfil:hover { background:#e0e3e8; }
+        .foto-principal img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+        }
 
-        /* Seguridad */
-        .seg-card { background:linear-gradient(135deg,#1a1a2e,#0d3b1e); border-radius:16px; padding:20px; color:white; }
-        .seg-titulo { font-size:15px; font-weight:700; margin-bottom:12px; }
-        .seg-item { display:flex; align-items:flex-start; gap:8px; font-size:13px; margin-bottom:9px; opacity:.9; line-height:1.4; }
+        .foto-principal img:hover {
+            transform: scale(1.02);
+        }
 
-        /* Modal zoom */
-        .modal-zoom { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:9999; align-items:center; justify-content:center; cursor:zoom-out; }
-        .modal-zoom.visible { display:flex; }
-        .modal-zoom img { max-width:90vw; max-height:90vh; border-radius:8px; }
+        .fotos-miniaturas {
+            display: flex;
+            gap: 12px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            background: white;
+            border-top: 1px solid #eef2f6;
+        }
 
-        .cargando { text-align:center; padding:80px; color:#aaa; font-size:16px; }
+        .miniatura {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .miniatura.activa {
+            border-color: #1a56db;
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.2);
+        }
+
+        .miniatura:hover {
+            transform: translateY(-2px);
+            border-color: #1a56db;
+        }
+
+        /* INFO PRODUCTO */
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .cat-badge {
+            font-size: 12px;
+            background: #e0e7ff;
+            color: #1a56db;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .p-titulo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .p-precio {
+            font-size: 34px;
+            font-weight: 800;
+            color: #16a34a;
+            margin-bottom: 16px;
+        }
+
+        .p-precio small {
+            font-size: 15px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-left: 4px;
+        }
+
+        .badges-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-estado {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-fecha {
+            background: #f0f2f5;
+            color: #555;
+        }
+
+        .sep {
+            height: 1px;
+            background: #eef2f6;
+            margin: 20px 0;
+        }
+
+        .sec-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .sec-text {
+            font-size: 15px;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .motivo-box {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 6px;
+        }
+
+        /* PANEL DERECHO */
+        .panel-derecho {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* VENDEDOR CARD */
+        .vendedor-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eef2f6;
+        }
+
+        .v-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .v-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a56db, #1648c0);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 700;
+            flex-shrink: 0;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .v-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .v-nombre {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            text-decoration: none;
+            display: block;
+        }
+
+        .v-nombre:hover {
+            color: #1a56db;
+            text-decoration: underline;
+        }
+
+        .v-user {
+            font-size: 13px;
+            color: #1a56db;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .v-verificado {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e0e7ff;
+            color: #1a56db;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .v-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat {
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 12px 6px;
+            transition: all 0.2s;
+        }
+
+        .stat:hover {
+            background: #f1f5f9;
+        }
+
+        .stat-n {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .stat-l {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .v-desde {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        /* BOTONES */
+        .btn-contactar, .btn-editar {
+            display: block;
+            text-align: center;
+            background: #1a56db;
+            color: white;
+            padding: 14px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 700;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .btn-contactar:hover, .btn-editar:hover {
+            background: #1648c0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 86, 219, 0.3);
+        }
+
+        .btn-ver-perfil {
+            display: block;
+            text-align: center;
+            background: #f1f5f9;
+            color: #1e293b;
+            padding: 12px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-ver-perfil:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        /* SEGURIDAD CARD - AZUL */
+        .seg-card {
+            background: linear-gradient(135deg, #1a56db 0%, #1648c0 100%);
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            box-shadow: 0 8px 24px rgba(26, 86, 219, 0.25);
+        }
+
+        .seg-titulo {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .seg-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            opacity: 0.92;
+            line-height: 1.4;
+            padding: 6px 0;
+        }
+
+        .seg-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* MODAL ZOOM */
+        .modal-zoom {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+
+        .modal-zoom.visible {
+            display: flex;
+        }
+
+        .modal-zoom img {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .cargando {
+            text-align: center;
+            padding: 80px;
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #111827;
+            color: #9ca3af;
+            padding: 40px 32px 20px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .footer-col {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .footer-col h3 {
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .footer-col p,
+        .footer-col a {
+            font-size: 13px;
+            color: #9ca3af;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .footer-col a:hover {
+            color: white;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 20px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                padding: 24px 14px 14px;
+                margin-top: 30px;
+            }
+            .footer-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .foto-principal {
+                height: 280px;
+            }
+            .p-titulo {
+                font-size: 20px;
+            }
+            .p-precio {
+                font-size: 26px;
+            }
+            .info-card {
+                padding: 20px;
+            }
+        }
     </style>
-    <link rel="stylesheet" href="responsive.css">
 </head>
 <body>
 
-<div class="page-header">
-    <a href="javascript:history.back()" class="btn-volver">← Volver</a>
-    <h1 style="font-size:17px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="titulo-header">Cargando...</h1>
-</div>
+<!-- HEADER AZUL -->
+<header class="header-principal">
+    <div class="header-top">
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🛡️</div>
+            <span class="logo-text">Shop<span>seguro</span></span>
+        </a>
 
+        <div class="search-bar">
+            <form action="busqueda.html" method="get" class="search-form-inline">
+                <input type="text" name="query" placeholder="Buscar productos, categorías..." class="search-input-field">
+                <button type="submit" class="search-icon">🔍</button>
+            </form>
+        </div>
+
+        <div class="user-access">
+            <a href="publicar.html" class="btn-publicar-header">+ Publicar</a>
+            <a href="login.html" class="btn-usuario" id="btn-acceso">
+                <div class="avatar-inicial" id="avatar-inicial">?</div>
+                <span id="btn-acceso-texto">Iniciar sesión</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="header-nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-link">🏠 Inicio</a>
+            <a href="chat_publico.html" class="nav-link">💬 Chat Público</a>
+            <a href="chat-privado.html" class="nav-link">✉️ Mensajes</a>
+            <a href="soporte.html" class="nav-link">🛡️ Soporte</a>
+            <a href="amigos.html" class="nav-link">👥 Amigos</a>
+        </div>
+    </nav>
+</header>
+
+<!-- MODAL ZOOM -->
 <div class="modal-zoom" id="modal-zoom" onclick="cerrarModal()">
     <img id="modal-img" src="" alt="Foto ampliada">
 </div>
@@ -99,10 +758,12 @@
 
 <div class="page-wrapper" id="page-wrapper" style="display:none">
 
-    <!-- Izquierda -->
+    <!-- COLUMNA IZQUIERDA -->
     <div>
         <div class="galeria-card">
-            <div class="foto-principal" id="foto-principal">📦</div>
+            <div class="foto-principal" id="foto-principal">
+                <div style="font-size: 64px; opacity: 0.5;">📦</div>
+            </div>
             <div class="fotos-miniaturas" id="fotos-miniaturas" style="display:none"></div>
         </div>
 
@@ -120,15 +781,17 @@
             <div id="bloque-motivo" style="display:none">
                 <div class="sep"></div>
                 <div class="sec-label">🤔 Motivo de Venta</div>
-                <div class="motivo-box"><div class="sec-text" id="p-motivo"></div></div>
+                <div class="motivo-box">
+                    <div class="sec-text" id="p-motivo"></div>
+                </div>
             </div>
             <div class="sep"></div>
-            <div class="sec-label">📍 Región</div>
+            <div class="sec-label">📍 Ubicación</div>
             <div class="sec-text" id="p-region"></div>
         </div>
     </div>
 
-    <!-- Derecha -->
+    <!-- COLUMNA DERECHA -->
     <div class="panel-derecho">
         <div class="vendedor-card">
             <div class="v-header">
@@ -139,26 +802,74 @@
                 </div>
             </div>
             <div class="v-verificado">✅ Usuario Verificado en Shopseguro</div>
+            
             <div class="v-stats">
-                <div class="stat"><div class="stat-n" id="v-pubs">—</div><div class="stat-l">Publicaciones</div></div>
-                <div class="stat"><div class="stat-n" id="v-amigos">—</div><div class="stat-l">Amigos</div></div>
-                <div class="stat"><div class="stat-n" id="v-antiguedad">—</div><div class="stat-l">Antigüedad</div></div>
+                <div class="stat">
+                    <div class="stat-n" id="v-pubs">—</div>
+                    <div class="stat-l">Publicaciones</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-n" id="v-amigos">—</div>
+                    <div class="stat-l">Amigos</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-n" id="v-antiguedad">—</div>
+                    <div class="stat-l">Antigüedad</div>
+                </div>
             </div>
+            
             <div class="v-desde" id="v-desde"></div>
-            <a class="btn-contactar" id="btn-contactar" href="#">✉️ Contactar al Vendedor</a>
+
+            <!-- BOTÓN DINÁMICO: 
+                 - Si es mi producto: "Editar Producto"
+                 - Si es de otro: "Contactar al Vendedor"
+            -->
+            <div id="boton-accion-container"></div>
+            
+            <!-- BOTÓN VER PERFIL (siempre visible) -->
             <a class="btn-ver-perfil" id="btn-perfil" href="#">👤 Ver Perfil Completo</a>
         </div>
 
         <div class="seg-card">
-            <div class="seg-titulo">🔒 Tu Compra está Protegida</div>
+            <div class="seg-titulo">
+                🔒 Tu Compra está Protegida
+            </div>
             <div class="seg-item">✅ Vendedor verificado con RUT chileno</div>
-            <div class="seg-item">✅ Nunca pagues fuera de la plataforma</div>
-            <div class="seg-item">✅ Descripción auditada por Shopseguro</div>
-            <div class="seg-item">✅ Ante problemas, contacta a <strong>Soporte</strong></div>
+            <div class="seg-item">💰 Nunca pagues fuera de la plataforma</div>
+            <div class="seg-item">📋 Descripción auditada por Shopseguro</div>
+            <div class="seg-item">🛡️ Ante problemas, contacta a Soporte</div>
         </div>
     </div>
-
 </div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>🛡️ Shopseguro</h3>
+            <p>La plataforma más segura de Chile para comprar y vender entre personas.</p>
+            <a href="/cdn-cgi/l/email-protection#52313d3c263331263d12213a3d2221373527203d7c313e"><span class="__cf_email__" data-cfemail="73101c1d071210071c33001b1c0300161406011c5d101f">[email&#160;protected]</span></a>
+        </div>
+        <div class="footer-col">
+            <h3>Ayuda y Legal</h3>
+            <ul>
+                <li><a href="/faq">Preguntas Frecuentes</a></li>
+                <li><a href="/soporte">Centro de Soporte</a></li>
+                <li><a href="/terminos">Términos y Condiciones</a></li>
+                <li><a href="/privacidad">Política de Privacidad</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3>Seguridad</h3>
+            <p>🔒 Cifrado SSL activo</p>
+            <p>✅ Identidad verificada con RUT</p>
+            <p>🛡️ Protección ante fraudes</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 Shopseguro. Todos los derechos reservados.</p>
+    </div>
+</footer>
 
 <script src="config.js"></script>
 <script>
@@ -167,14 +878,25 @@
     const tokenActual = localStorage.getItem('token');
     const usuarioActual = localStorage.getItem('usuario');
 
-    if (!productoId) { window.location.href = 'index.html'; }
+    // Actualizar header con sesión
+    if (tokenActual && usuarioActual) {
+        document.getElementById('btn-acceso-texto').textContent = usuarioActual;
+        document.getElementById('avatar-inicial').textContent = usuarioActual.charAt(0).toUpperCase();
+        document.getElementById('btn-acceso').href = 'perfil.html';
+    }
+
+    if (!productoId) {
+        window.location.href = 'index.html';
+    }
 
     let fotosProducto = [];
 
     function mostrarFoto(index) {
         const principal = document.getElementById('foto-principal');
         principal.innerHTML = `<img src="${fotosProducto[index]}" alt="Foto" onclick="abrirModal('${fotosProducto[index]}')">`;
-        document.querySelectorAll('.miniatura').forEach((m, i) => m.classList.toggle('activa', i === index));
+        document.querySelectorAll('.miniatura').forEach((m, i) => {
+            m.classList.toggle('activa', i === index);
+        });
     }
 
     function abrirModal(src) {
@@ -196,68 +918,90 @@
     async function cargarProducto() {
         try {
             const res = await fetch(`${API_URL}/api/productos/${productoId}`);
-            if (!res.ok) { alert('Producto no encontrado'); window.location.href = 'index.html'; return; }
+            if (!res.ok) {
+                alert('Producto no encontrado');
+                window.location.href = 'index.html';
+                return;
+            }
 
             const { producto, vendedor } = await res.json();
 
             document.getElementById('cargando').style.display = 'none';
             document.getElementById('page-wrapper').style.display = 'grid';
             document.title = producto.titulo + ' - Shopseguro';
-            document.getElementById('titulo-header').textContent = producto.titulo;
 
-            // Galería
+            // Galería de fotos
             fotosProducto = Array.isArray(producto.fotos) ? producto.fotos : [];
             if (fotosProducto.length > 0) {
                 mostrarFoto(0);
                 if (fotosProducto.length > 1) {
                     const mins = document.getElementById('fotos-miniaturas');
                     mins.style.display = 'flex';
-                    mins.innerHTML = fotosProducto.map((u, i) =>
-                        `<img src="${u}" class="miniatura ${i===0?'activa':''}" onclick="mostrarFoto(${i})" alt="Foto ${i+1}">`
+                    mins.innerHTML = fotosProducto.map((url, i) =>
+                        `<img src="${url}" class="miniatura ${i === 0 ? 'activa' : ''}" onclick="mostrarFoto(${i})" alt="Foto ${i + 1}">`
                     ).join('');
                 }
+            } else {
+                document.getElementById('foto-principal').innerHTML = '<div style="font-size: 80px;">📦</div>';
             }
 
-            // Info
+            // Información del producto
             document.getElementById('p-cat').textContent = producto.categoria || 'Sin categoría';
             document.getElementById('p-titulo').textContent = producto.titulo;
             document.getElementById('p-precio').innerHTML = `$${Number(producto.precio).toLocaleString('es-CL')}<small> CLP</small>`;
             document.getElementById('p-estado').textContent = '🏷️ ' + producto.estado;
             document.getElementById('p-fecha').textContent = '📅 ' + new Date(producto.fecha).toLocaleDateString('es-CL');
             document.getElementById('p-desc').textContent = producto.descripcion;
-            document.getElementById('p-region').textContent = producto.region;
+            document.getElementById('p-region').textContent = producto.region || 'No especificada';
 
             if (producto.motivo_venta) {
                 document.getElementById('bloque-motivo').style.display = 'block';
                 document.getElementById('p-motivo').textContent = producto.motivo_venta;
             }
 
-            // Vendedor
-            const pUrl = `perfil-publico.html?user=${vendedor.username}`;
+            // Información del vendedor
+            const perfilUrl = `perfil-publico.html?user=${vendedor.username}`;
             document.getElementById('v-avatar').textContent = vendedor.username.charAt(0).toUpperCase();
-            document.getElementById('v-avatar').href = pUrl;
+            document.getElementById('v-avatar').href = perfilUrl;
             document.getElementById('v-nombre').textContent = vendedor.nombre;
-            document.getElementById('v-nombre').href = pUrl;
+            document.getElementById('v-nombre').href = perfilUrl;
             document.getElementById('v-user').textContent = '@' + vendedor.username;
-            document.getElementById('v-pubs').textContent = vendedor.total_productos;
-            document.getElementById('v-amigos').textContent = vendedor.total_amigos;
+            document.getElementById('v-pubs').textContent = vendedor.total_productos || 0;
+            document.getElementById('v-amigos').textContent = vendedor.total_amigos || 0;
             document.getElementById('v-antiguedad').textContent = calcularAntiguedad(vendedor.fecha_registro);
-            document.getElementById('v-desde').textContent = '📅 Miembro desde ' + new Date(vendedor.fecha_registro).toLocaleDateString('es-CL');
-            document.getElementById('btn-perfil').href = pUrl;
+            document.getElementById('v-desde').innerHTML = `📅 Miembro desde ${new Date(vendedor.fecha_registro).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+            document.getElementById('btn-perfil').href = perfilUrl;
 
-            const btnC = document.getElementById('btn-contactar');
+            // 🔥 LÓGICA DEL BOTÓN DINÁMICO 🔥
+            const contenedor = document.getElementById('boton-accion-container');
+            
             if (!tokenActual) {
-                btnC.href = 'login.html';
-                btnC.textContent = '🔒 Inicia sesión para contactar';
-                btnC.style.background = '#555';
+                // Usuario NO logueado: mostrar "Inicia sesión para contactar"
+                contenedor.innerHTML = `
+                    <a class="btn-contactar" href="login.html">
+                        🔒 Inicia sesión para contactar
+                    </a>
+                `;
             } else if (usuarioActual === vendedor.username) {
-                btnC.style.display = 'none';
+                // Es MI producto: mostrar "Editar Producto"
+                contenedor.innerHTML = `
+                    <a class="btn-editar" href="editar-producto.html?id=${productoId}">
+                        ✏️ Editar Producto
+                    </a>
+                `;
             } else {
-                btnC.href = `chat-privado.html?user=${vendedor.username}`;
+                // Es producto de OTRO usuario: mostrar "Contactar al Vendedor"
+                contenedor.innerHTML = `
+                    <a class="btn-contactar" href="chat-privado.html?user=${vendedor.username}">
+                        ✉️ Contactar al Vendedor
+                    </a>
+                `;
             }
 
-        } catch(e) {
-            document.getElementById('cargando').textContent = '❌ No se pudo cargar. Verifica que el servidor esté encendido.';
+        } catch (e) {
+            console.error('Error:', e);
+            document.getElementById('cargando').textContent = '❌ No se pudo cargar el producto. Verifica que el servidor esté funcionando.';
+            document.getElementById('cargando').style.color = '#dc2626';
         }
     }
 

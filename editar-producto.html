@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto - Shopseguro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #f4f6f9; color: #1a1a2e; }
+
+        /* HEADER */
+        .header { background: #1a56db; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(26,86,219,0.2); }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 36px; height: 36px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .logo-text { font-size: 18px; font-weight: 800; color: white; }
+        .logo-text span { color: #a5f3fc; }
+        .btn-volver { background: rgba(255,255,255,0.15); color: white; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-left: auto; transition: background 0.2s; white-space: nowrap; }
+        .btn-volver:hover { background: rgba(255,255,255,0.25); }
+
+        /* HERO */
+        .page-hero { background: linear-gradient(135deg, #1a56db 0%, #1e40af 60%, #1e3a8a 100%); padding: 28px 32px; }
+        .page-hero-inner { max-width: 860px; margin: 0 auto; }
+        .page-hero h1 { font-size: 24px; font-weight: 800; color: white; margin-bottom: 6px; }
+        .page-hero p { font-size: 14px; color: rgba(255,255,255,0.75); }
+
+        /* LAYOUT */
+        .page { max-width: 860px; margin: 28px auto; padding: 0 16px; }
+
+        /* SECCIÓN */
+        .seccion { background: white; border-radius: 16px; border: 1px solid #e8ecf1; padding: 22px; margin-bottom: 18px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+        .seccion-titulo { font-size: 13px; font-weight: 700; color: #1a56db; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 18px; display: flex; align-items: center; gap: 6px; }
+
+        .fila-dos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media(max-width:600px) { .fila-dos { grid-template-columns: 1fr; } .header { padding: 0 14px; } .page-hero { padding: 20px 16px; } }
+
+        .campo { margin-bottom: 16px; }
+        .campo:last-child { margin-bottom: 0; }
+        .campo label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+        .campo input, .campo select, .campo textarea {
+            width: 100%; padding: 11px 14px;
+            border: 1.5px solid #e5e7eb; border-radius: 10px;
+            font-size: 14px; font-family: 'Inter', sans-serif;
+            color: #1a1a2e; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .campo input:focus, .campo select:focus, .campo textarea:focus {
+            border-color: #1a56db;
+            box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+        }
+        .campo textarea { resize: vertical; min-height: 100px; }
+        .campo-nota { font-size: 11px; color: #9ca3af; margin-top: 5px; }
+
+        /* FOTOS ACTUALES */
+        .fotos-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+        .foto-item { position: relative; width: 90px; height: 90px; border-radius: 10px; overflow: hidden; border: 2px solid #e5e7eb; }
+        .foto-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .foto-eliminar {
+            position: absolute; top: 4px; right: 4px;
+            width: 22px; height: 22px; background: rgba(220,38,38,0.9);
+            color: white; border: none; border-radius: 50%;
+            font-size: 13px; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
+            transition: background 0.2s; font-weight: 700; line-height: 1;
+        }
+        .foto-eliminar:hover { background: #dc2626; }
+
+        .upload-area {
+            border: 2px dashed #d1d5db; border-radius: 12px;
+            padding: 20px; text-align: center; cursor: pointer;
+            transition: all 0.2s; background: #fafafa;
+        }
+        .upload-area:hover { border-color: #1a56db; background: #eff6ff; }
+        .upload-area input { display: none; }
+        .upload-icon { font-size: 28px; margin-bottom: 6px; }
+        .upload-texto { font-size: 13px; color: #6b7280; }
+        .upload-texto strong { color: #1a56db; }
+
+        .preview-nuevas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .preview-nueva { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; border: 2px solid #1a56db; }
+
+        /* ZONA PELIGRO */
+        .zona-peligro { background: #fef2f2; border: 1px solid #fecaca; border-radius: 16px; padding: 20px; margin-bottom: 18px; }
+        .zona-peligro-titulo { font-size: 13px; font-weight: 700; color: #dc2626; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 12px; }
+        .zona-peligro p { font-size: 13px; color: #6b7280; margin-bottom: 14px; line-height: 1.5; }
+        .btn-eliminar-producto { background: #dc2626; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; }
+        .btn-eliminar-producto:hover { background: #b91c1c; }
+
+        /* BOTONES PRINCIPALES */
+        .acciones { display: flex; gap: 12px; margin-top: 8px; }
+        .btn-guardar { flex: 1; background: #1a56db; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-guardar:hover { background: #1648c0; }
+        .btn-guardar:disabled { opacity: 0.65; cursor: not-allowed; }
+        .btn-cancelar { background: #f4f6f9; color: #374151; border: none; padding: 14px 24px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; text-decoration: none; display: flex; align-items: center; }
+        .btn-cancelar:hover { background: #e5e7eb; }
+
+        /* MENSAJES */
+        .msg { display: none; border-radius: 10px; padding: 12px 16px; font-size: 14px; font-weight: 500; margin-bottom: 16px; }
+        .msg-error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        .msg-exito { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+        .cargando-page { text-align: center; padding: 80px; color: #9ca3af; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <a href="index.html" class="logo">
+        <div class="logo-icon">🛡️</div>
+        <span class="logo-text">Shop<span>seguro</span></span>
+    </a>
+    <a href="javascript:history.back()" class="btn-volver">← Volver al producto</a>
+</header>
+
+<!-- HERO -->
+<div class="page-hero">
+    <div class="page-hero-inner">
+        <h1>✏️ Editar Producto</h1>
+        <p>Actualiza la información de tu publicación</p>
+    </div>
+</div>
+
+<div class="page" id="page-contenido" style="display:none">
+
+    <div id="msg-error" class="msg msg-error"></div>
+    <div id="msg-exito" class="msg msg-exito"></div>
+
+    <form id="form-editar" enctype="multipart/form-data">
+
+        <!-- Información principal -->
+        <div class="seccion">
+            <div class="seccion-titulo">📋 Información Principal</div>
+            <div class="campo">
+                <label for="titulo">Título del Producto</label>
+                <input type="text" id="titulo" required placeholder="Ej: iPhone 15 Pro Max 256GB">
+            </div>
+            <div class="fila-dos">
+                <div class="campo">
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria" required>
+                        <option value="">Selecciona una categoría</option>
+                        <option value="Tecnología">💻 Tecnología</option>
+                        <option value="Hogar y Muebles">🛋️ Hogar y Muebles</option>
+                        <option value="Vehículos">🚗 Vehículos</option>
+                        <option value="Ropa y Calzado">👕 Ropa y Calzado</option>
+                        <option value="Deportes">⚽ Deportes</option>
+                        <option value="Juegos y Consolas">🎮 Juegos y Consolas</option>
+                        <option value="Otros">📦 Otros</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="precio">Precio (CLP)</label>
+                    <input type="number" id="precio" required min="1000" placeholder="Ej: 350000">
+                </div>
+            </div>
+        </div>
+
+        <!-- Condición y motivo -->
+        <div class="seccion">
+            <div class="seccion-titulo">🏷️ Condición y Motivo</div>
+            <div class="fila-dos">
+                <div class="campo">
+                    <label for="estado">Condición</label>
+                    <select id="estado" required>
+                        <option value="">Selecciona la condición</option>
+                        <option value="Nuevo">Nuevo (Sellado)</option>
+                        <option value="Usado - Aceptable">Usado - Aceptable</option>
+                        <option value="Usado - Con Detalles">Usado - Con Detalles</option>
+                        <option value="Reacondicionado">Reacondicionado</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="region">Región</label>
+                    <input type="text" id="region" placeholder="Ej: Región Metropolitana">
+                </div>
+            </div>
+            <div class="campo">
+                <label for="motivo_venta">Motivo de Venta (opcional)</label>
+                <input type="text" id="motivo_venta" placeholder="Ej: Upgrade a nuevo modelo">
+            </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="seccion">
+            <div class="seccion-titulo">📝 Descripción</div>
+            <div class="campo">
+                <label for="descripcion">Descripción detallada</label>
+                <textarea id="descripcion" required placeholder="Describe el estado, características, accesorios incluidos..."></textarea>
+            </div>
+        </div>
+
+        <!-- Fotos -->
+        <div class="seccion">
+            <div class="seccion-titulo">📸 Fotos del Producto</div>
+
+            <div id="fotos-actuales-container">
+                <p style="font-size:13px; color:#6b7280; margin-bottom:10px;">Fotos actuales — haz clic en ✕ para eliminar:</p>
+                <div class="fotos-grid" id="fotos-actuales"></div>
+            </div>
+
+            <div class="upload-area" onclick="document.getElementById('fotos-nuevas').click()">
+                <input type="file" id="fotos-nuevas" accept="image/*" multiple>
+                <div class="upload-icon">📁</div>
+                <div class="upload-texto">Haz clic para agregar fotos nuevas<br><strong>Máximo 5 fotos en total</strong></div>
+            </div>
+            <div class="preview-nuevas" id="preview-nuevas"></div>
+            <p class="campo-nota">Las fotos eliminadas no se pueden recuperar. Las fotos existentes que no elimines se mantendrán.</p>
+        </div>
+
+        <!-- Acciones guardar -->
+        <div class="acciones">
+            <button type="submit" class="btn-guardar" id="btn-guardar">
+                💾 Guardar Cambios
+            </button>
+            <a href="javascript:history.back()" class="btn-cancelar">Cancelar</a>
+        </div>
+
+    </form>
+
+    <!-- ZONA DE PELIGRO -->
+    <div class="zona-peligro" style="margin-top:32px;">
+        <div class="zona-peligro-titulo">⚠️ Zona de Peligro</div>
+        <p>Eliminar el producto lo borrará permanentemente de Shopseguro. Esta acción no se puede deshacer.</p>
+        <button class="btn-eliminar-producto" onclick="eliminarProducto()">🗑️ Eliminar Producto</button>
+    </div>
+
+</div>
+
+<p class="cargando-page" id="cargando-page">⏳ Cargando producto...</p>
+
+<script src="config.js"></script>
+<script>
+    const token = localStorage.getItem('token');
+    const usuario = localStorage.getItem('usuario');
+
+    if (!token) {
+        alert('Debes iniciar sesión');
+        window.location.href = 'login.html';
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    // Limpiar el id — extraer solo los dígitos por si viene con caracteres extra
+    const productoId = params.get('id') ? params.get('id').replace(/[^0-9]/g, '') : null;
+    if (!productoId) { window.location.href = 'index.html'; }
+
+    let fotosExistentes = []; // URLs de fotos que se conservan
+    let archivosNuevos = [];  // Archivos nuevos a subir
+
+    async function cargarProducto() {
+        try {
+            const res = await fetch(`${API_URL}/api/productos/${productoId}`);
+            if (!res.ok) { alert('Producto no encontrado'); window.location.href = 'index.html'; return; }
+
+            const { producto, vendedor } = await res.json();
+
+            // Verificar que es el dueño
+            if (vendedor.username !== usuario) {
+                alert('No tienes permiso para editar este producto');
+                window.location.href = `detalle-producto.html?id=${productoId}`;
+                return;
+            }
+
+            // Llenar el formulario
+            document.getElementById('titulo').value = producto.titulo;
+            document.getElementById('categoria').value = producto.categoria || '';
+            document.getElementById('precio').value = producto.precio;
+            document.getElementById('estado').value = producto.estado;
+            document.getElementById('region').value = producto.region || '';
+            document.getElementById('motivo_venta').value = producto.motivo_venta || '';
+            document.getElementById('descripcion').value = producto.descripcion;
+
+            document.title = `Editar: ${producto.titulo} - Shopseguro`;
+
+            // Cargar fotos existentes
+            fotosExistentes = Array.isArray(producto.fotos) ? [...producto.fotos] : [];
+            renderFotosActuales();
+
+            document.getElementById('cargando-page').style.display = 'none';
+            document.getElementById('page-contenido').style.display = 'block';
+
+        } catch(e) {
+            document.getElementById('cargando-page').textContent = '❌ Error cargando el producto';
+        }
+    }
+
+    function renderFotosActuales() {
+        const grid = document.getElementById('fotos-actuales');
+        const container = document.getElementById('fotos-actuales-container');
+
+        if (fotosExistentes.length === 0) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'block';
+        grid.innerHTML = fotosExistentes.map((url, i) => `
+            <div class="foto-item" id="foto-existente-${i}">
+                <img src="${url}" alt="Foto ${i+1}">
+                <button type="button" class="foto-eliminar" onclick="eliminarFotoExistente(${i})" title="Eliminar foto">✕</button>
+            </div>
+        `).join('');
+    }
+
+    function eliminarFotoExistente(index) {
+        fotosExistentes.splice(index, 1);
+        renderFotosActuales();
+    }
+
+    // Preview fotos nuevas
+    document.getElementById('fotos-nuevas').addEventListener('change', function() {
+        archivosNuevos = Array.from(this.files);
+        const totalFotos = fotosExistentes.length + archivosNuevos.length;
+
+        if (totalFotos > 5) {
+            mostrarError(`Solo puedes tener máximo 5 fotos. Tienes ${fotosExistentes.length} existentes y ${archivosNuevos.length} nuevas.`);
+            this.value = '';
+            archivosNuevos = [];
+            return;
+        }
+
+        const preview = document.getElementById('preview-nuevas');
+        preview.innerHTML = '';
+        archivosNuevos.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-nueva';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // Guardar cambios
+    document.getElementById('form-editar').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        ocultarMensajes();
+
+        const btn = document.getElementById('btn-guardar');
+        btn.disabled = true;
+        btn.textContent = '⏳ Guardando...';
+
+        try {
+            const formData = new FormData();
+            formData.append('titulo', document.getElementById('titulo').value.trim());
+            formData.append('descripcion', document.getElementById('descripcion').value.trim());
+            formData.append('precio', document.getElementById('precio').value);
+            formData.append('region', document.getElementById('region').value.trim() || 'Región Metropolitana');
+            formData.append('estado', document.getElementById('estado').value);
+            formData.append('categoria', document.getElementById('categoria').value);
+            formData.append('motivo_venta', document.getElementById('motivo_venta').value.trim());
+            formData.append('fotos_existentes', JSON.stringify(fotosExistentes));
+
+            // Agregar archivos nuevos
+            archivosNuevos.forEach(file => formData.append('fotos_nuevas', file));
+
+            const res = await fetch(`${API_URL}/api/productos/${productoId}`, {
+                method: 'PUT',
+                headers: { 'authorization': token },
+                body: formData
+            });
+
+            const datos = await res.json();
+
+            if (res.ok) {
+                mostrarExito('✅ ¡Producto actualizado con éxito! Redirigiendo...');
+                setTimeout(() => window.location.href = `detalle-producto.html?id=${productoId}`, 1500);
+            } else {
+                mostrarError('❌ ' + datos.error);
+                btn.disabled = false;
+                btn.textContent = '💾 Guardar Cambios';
+            }
+        } catch(e) {
+            mostrarError('❌ No se pudo conectar con el servidor');
+            btn.disabled = false;
+            btn.textContent = '💾 Guardar Cambios';
+        }
+    });
+
+    async function eliminarProducto() {
+        const confirmar = confirm('⚠️ ¿Estás seguro de que quieres eliminar este producto?\n\nEsta acción NO se puede deshacer.');
+        if (!confirmar) return;
+
+        const confirmar2 = confirm('¿Confirmas que deseas eliminar permanentemente este producto?');
+        if (!confirmar2) return;
+
+        try {
+            const res = await fetch(`${API_URL}/api/productos/${productoId}`, {
+                method: 'DELETE',
+                headers: { 'authorization': token }
+            });
+            const datos = await res.json();
+            if (res.ok) {
+                alert('✅ Producto eliminado correctamente');
+                window.location.href = 'perfil.html';
+            } else {
+                mostrarError('❌ ' + datos.error);
+            }
+        } catch(e) {
+            mostrarError('❌ No se pudo conectar con el servidor');
+        }
+    }
+
+    function mostrarError(msg) {
+        const el = document.getElementById('msg-error');
+        el.textContent = msg;
+        el.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function mostrarExito(msg) {
+        const el = document.getElementById('msg-exito');
+        el.textContent = msg;
+        el.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function ocultarMensajes() {
+        document.getElementById('msg-error').style.display = 'none';
+        document.getElementById('msg-exito').style.display = 'none';
+    }
+
+    cargarProducto();
+</script>
+</body>
+</html>
