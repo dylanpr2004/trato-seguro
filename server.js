@@ -155,19 +155,19 @@ app.post('/api/productos', upload.array('fotos', 5), async (req, res) => {
 // --- Rutas de PRODUCTOS ---
 app.get('/api/productos', (req, res) => {
     try {
-        // LEFT JOIN es la clave: muestra el producto aunque el usuario no aparezca
-        const query = `
-            SELECT 
-                p.*, 
-                IFNULL(u.nombre, 'Usuario de Shopseguro') AS vendedor_nombre 
-            FROM productos p
-            LEFT JOIN usuarios u ON p.usuario_id = u.id
-            ORDER BY p.id DESC
-        `;
-        const productos = db.prepare(query).all();
-        res.json(productos);
+        // Opción ultra-segura: Traemos todo de la tabla productos. 
+        // Si hay datos en la tabla, se van a mostrar sí o sí.
+        const productos = db.prepare('SELECT * FROM productos ORDER BY id DESC').all();
+        
+        // Formateamos para que el frontend no falle si no encuentra al vendedor
+        const productosFormateados = productos.map(p => ({
+            ...p,
+            vendedor_nombre: p.vendedor_nombre || 'Usuario Shopseguro'
+        }));
+
+        res.json(productosFormateados);
     } catch (error) {
-        console.error("Error al obtener productos:", error);
+        console.error("Error crítico en API:", error);
         res.status(500).json({ error: 'Error al obtener productos' });
     }
 });
