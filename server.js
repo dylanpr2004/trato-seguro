@@ -155,19 +155,20 @@ app.post('/api/productos', upload.array('fotos', 5), async (req, res) => {
 // --- Rutas de PRODUCTOS ---
 app.get('/api/productos', (req, res) => {
     try {
-        // Opción ultra-segura: Traemos todo de la tabla productos. 
-        // Si hay datos en la tabla, se van a mostrar sí o sí.
-        const productos = db.prepare('SELECT * FROM productos ORDER BY id DESC').all();
-        
-        // Formateamos para que el frontend no falle si no encuentra al vendedor
-        const productosFormateados = productos.map(p => ({
-            ...p,
-            vendedor_nombre: p.vendedor_nombre || 'Usuario Shopseguro'
-        }));
-
-        res.json(productosFormateados);
+        // Esta consulta une las tablas y ELIMINA los productos cuyo usuario ya no existe.
+        // Es automática: si el usuario es real, el producto sale. Si no, desaparece.
+        const query = `
+            SELECT 
+                p.*, 
+                u.nombre AS vendedor_nombre 
+            FROM productos p
+            INNER JOIN usuarios u ON p.usuario_id = u.id
+            ORDER BY p.id DESC
+        `;
+        const productos = db.prepare(query).all();
+        res.json(productos);
     } catch (error) {
-        console.error("Error crítico en API:", error);
+        console.error("Error en la consulta de productos:", error);
         res.status(500).json({ error: 'Error al obtener productos' });
     }
 });
