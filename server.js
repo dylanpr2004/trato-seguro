@@ -568,5 +568,5 @@ app.delete('/api/productos/:id', (req, res) => {
 });
 
 servidor.listen(3000, () => {
-    console.log('Servidor corriendo en http://localhost:3000');
+    console.log('Servidor corriendo en http://localhost:4000');
 });
