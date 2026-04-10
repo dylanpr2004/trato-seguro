@@ -155,12 +155,11 @@ app.post('/api/productos', upload.array('fotos', 5), async (req, res) => {
 // --- Rutas de PRODUCTOS ---
 app.get('/api/productos', (req, res) => {
     try {
-        // Cambiamos INNER JOIN por LEFT JOIN
-        // Esto muestra el producto aunque el usuario tenga problemas
+        // LEFT JOIN es la clave: muestra el producto aunque el usuario no aparezca
         const query = `
             SELECT 
                 p.*, 
-                u.nombre AS vendedor_nombre 
+                IFNULL(u.nombre, 'Usuario de Shopseguro') AS vendedor_nombre 
             FROM productos p
             LEFT JOIN usuarios u ON p.usuario_id = u.id
             ORDER BY p.id DESC
