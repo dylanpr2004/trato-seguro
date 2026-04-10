@@ -118,29 +118,37 @@ app.post('/api/login', async (req, res) => {
     res.json({ mensaje: '¡Login exitoso!', token, username: usuario.username });
 });
 
-// Ruta para PUBLICAR PRODUCTO
-app.post('/api/productos', async (req, res) => {
-    const { titulo, descripcion, precio, region, estado } = req.body;
-
-    if (!titulo || !descripcion || !precio || !region || !estado) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    }
-
+// PUBLICAR PRODUCTO
+app.post('/api/productos', upload.array('fotos', 5), async (req, res) => {
     const token = req.headers['authorization'];
-    if (!token) {
-        return res.status(401).json({ error: 'Debes iniciar sesión para publicar' });
-    }
+    if (!token) return res.status(401).json({ error: 'Debes iniciar sesión para publicar' });
 
     try {
         const datos = jwt.verify(token, 'clave-secreta-Shopseguro');
+        const { titulo, descripcion, precio, region, estado, categoria, motivo_venta } = req.body;
+
+        if (!titulo || !descripcion || !precio || !region || !estado)
+            return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+
+        let urlsFotos = [];
+        if (req.files && req.files.length > 0) {
+            for (const file of req.files) {
+                try {
+                    const url = await subirFotoCloudinary(file.buffer, file.mimetype);
+                    urlsFotos.push(url);
+                } catch(e) { console.log('Error foto:', e.message); }
+            }
+        }
+
         const resultado = db.prepare(`
-            INSERT INTO productos (titulo, descripcion, precio, region, estado, vendedor_id, vendedor_nombre)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `).run(titulo, descripcion, precio, region, estado, datos.id, datos.username);
+            INSERT INTO productos (titulo, descripcion, precio, region, estado, categoria, motivo_venta, fotos, vendedor_id, vendedor_nombre)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(titulo, descripcion, precio, region, estado, categoria || 'Otros', motivo_venta || '', JSON.stringify(urlsFotos), datos.id, datos.username);
 
         res.status(201).json({ mensaje: '¡Producto publicado con éxito!', id: resultado.lastInsertRowid });
-    } catch (error) {
-        return res.status(401).json({ error: 'Sesión inválida, inicia sesión nuevamente' });
+    } catch(e) {
+        console.log('Error publicar:', e);
+        return res.status(401).json({ error: 'Sesión inválida' });
     }
 });
 
