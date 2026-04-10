@@ -144,10 +144,26 @@ app.post('/api/productos', async (req, res) => {
     }
 });
 
-// Ruta para VER TODOS LOS PRODUCTOS
+// --- Rutas de PRODUCTOS ---
+
 app.get('/api/productos', (req, res) => {
-    const productos = db.prepare('SELECT * FROM productos ORDER BY fecha DESC').all();
-    res.json(productos);
+    try {
+        // Usamos INNER JOIN para asegurar que el usuario (vendedor) exista.
+        // Si el usuario fue borrado, el producto ya no saldrá en el Index.
+        const query = `
+            SELECT 
+                p.*, 
+                u.nombre AS vendedor_nombre 
+            FROM productos p
+            INNER JOIN usuarios u ON p.usuario_id = u.id
+            ORDER BY p.id DESC
+        `;
+        const productos = db.prepare(query).all();
+        res.json(productos);
+    } catch (error) {
+        console.error("Error al obtener productos:", error);
+        res.status(500).json({ error: 'Error al obtener productos' });
+    }
 });
 // VER DETALLE DE UN PRODUCTO
 app.get('/api/productos/:id', (req, res) => {
