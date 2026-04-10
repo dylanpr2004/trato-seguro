@@ -155,21 +155,20 @@ app.post('/api/productos', upload.array('fotos', 5), async (req, res) => {
 // --- Rutas de PRODUCTOS ---
 app.get('/api/productos', (req, res) => {
     try {
-        // Esta consulta une las tablas y ELIMINA los productos cuyo usuario ya no existe.
-        // Es automática: si el usuario es real, el producto sale. Si no, desaparece.
-        const query = `
-            SELECT 
-                p.*, 
-                u.nombre AS vendedor_nombre 
-            FROM productos p
-            INNER JOIN usuarios u ON p.usuario_id = u.id
-            ORDER BY p.id DESC
-        `;
-        const productos = db.prepare(query).all();
-        res.json(productos);
+        // Traemos los productos directamente sin intentar unirlos a otra tabla
+        // Esto evita el error "no such column"
+        const productos = db.prepare('SELECT * FROM productos ORDER BY id DESC').all();
+        
+        // Nos aseguramos de que el frontend siempre reciba un nombre de vendedor
+        const productosFormateados = productos.map(p => ({
+            ...p,
+            vendedor_nombre: p.vendedor_nombre || p.nombre_vendedor || 'Usuario Shopseguro'
+        }));
+
+        res.json(productosFormateados);
     } catch (error) {
-        console.error("Error en la consulta de productos:", error);
-        res.status(500).json({ error: 'Error al obtener productos' });
+        console.error("Error al obtener productos:", error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 // VER DETALLE DE UN PRODUCTO
