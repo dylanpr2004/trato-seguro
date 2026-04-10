@@ -153,17 +153,16 @@ app.post('/api/productos', upload.array('fotos', 5), async (req, res) => {
 });
 
 // --- Rutas de PRODUCTOS ---
-
 app.get('/api/productos', (req, res) => {
     try {
-        // Usamos INNER JOIN para asegurar que el usuario (vendedor) exista.
-        // Si el usuario fue borrado, el producto ya no saldrá en el Index.
+        // Cambiamos INNER JOIN por LEFT JOIN
+        // Esto muestra el producto aunque el usuario tenga problemas
         const query = `
             SELECT 
                 p.*, 
                 u.nombre AS vendedor_nombre 
             FROM productos p
-            INNER JOIN usuarios u ON p.usuario_id = u.id
+            LEFT JOIN usuarios u ON p.usuario_id = u.id
             ORDER BY p.id DESC
         `;
         const productos = db.prepare(query).all();
@@ -576,5 +575,5 @@ app.delete('/api/productos/:id', (req, res) => {
 });
 
 servidor.listen(3000, () => {
-    console.log('Servidor corriendo en http://localhost:4000');
+    console.log('Servidor corriendo en http://localhost:3000');
 });
