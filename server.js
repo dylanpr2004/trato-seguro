@@ -11,7 +11,7 @@ const FormData = require('form-data');
 
 // Configuración de base de datos Neon
 const pool = new Pool({
-    connectionString: 'AQUÍ_PEGA_TU_LINK_DE_NEON_QUE_VIMOS_EN_LA_CAPTURA',
+    connectionString: 'postgresql://neondb_owner:TU_CONTRASEÑA_AQUÍ@ep-polished-cloud-amkbdwvv-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require',
     ssl: { rejectUnauthorized: false }
 });
 
