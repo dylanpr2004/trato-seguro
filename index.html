@@ -303,137 +303,118 @@
     <div class="product-grid" id="product-grid">
         <p style="grid-column:1/-1;text-align:center;padding:40px;color:#9ca3af;">Cargando productos...</p>
     </div>
+<section class="seccion-categorias-amazon">
+    <h2 class="titulo-amazon">Explorar por categorías</h2>
+    <div class="grid-categorias-amazon">
+        
+        <div class="tarjeta-categoria">
+            <h3>Tecnología</h3>
+            <div class="grid-imagenes">
+                <div class="item-img"><img src="https://media.metrolatam.com/2020/07/22/template55-c9bb6c6cabea621446cc8156fe18a61b-1200x800.jpg"><span>Celulares</span></div>
+                <div class="item-img"><img src="https://img.global.news.samsung.com/mx/wp-content/uploads/2019/01/Notebook-9-Pro-3.jpg"><span>Computadores</span></div>
+                <div class="item-img"><img src="https://cdn.shopify.com/s/files/1/0578/8182/1257/files/historia-del-reloj-7_480x480.png?v=1669066105"><span>Relojes</span></div>
+                <div class="item-img"><img src="https://i.pinimg.com/originals/a4/08/7e/a4087e6a20e50436b5d24e9f89e23fc9.jpg"><span>Cargadores</span></div>
+            </div>
+            <a href="#" class="ver-mas-link">Ver más en Tecnología</a>
+        </div>
+
+        <div class="tarjeta-categoria">
+            <h3>Juegos y Consolas</h3>
+            <div class="grid-imagenes">
+                <div class="item-img"><img src="img/consolas.jpg"><span>Consolas</span></div>
+                <div class="item-img"><img src="img/juegos.jpg"><span>Juegos</span></div>
+                <div class="item-img"><img src="img/accesorios.jpg"><span>Accesorios</span></div>
+                <div class="item-img"><img src="img/ofertas.jpg"><span>Ofertas</span></div>
+            </div>
+            <a href="#" class="ver-mas-link">Explorar ahora</a>
+        </div>
+
+        <div class="tarjeta-categoria">
+            <h3>Hogar y Muebles</h3>
+            <div class="grid-imagenes">
+                <div class="item-img"><img src="img/muebles.jpg"><span>Muebles</span></div>
+                <div class="item-img"><img src="img/decoracion.jpg"><span>Decoración</span></div>
+                <div class="item-img"><img src="img/cocina.jpg"><span>Cocina</span></div>
+                <div class="item-img"><img src="img/iluminacion.jpg"><span>Iluminación</span></div>
+            </div>
+            <a href="#" class="ver-mas-link">Ver decoración</a>
+        </div>
+
+        <div class="tarjeta-categoria">
+            <h3>Deportes</h3>
+            <div class="grid-imagenes">
+                <div class="item-img"><img src="img/futbol.jpg"><span>Fútbol</span></div>
+                <div class="item-img"><img src="img/gym.jpg"><span>Gym</span></div>
+                <div class="item-img"><img src="img/bici.jpg"><span>Bici</span></div>
+                <div class="item-img"><img src="img/tenis.jpg"><span>Tenis</span></div>
+            </div>
+            <a href="#" class="ver-mas-link">Ver todo</a>
+        </div>
+
+    </div>
 </section>
-<section class="contenedor-seccion-nueva">
-  <h2 class="titulo-amazon-fixed">Explorar por categorías</h2>
-  <div class="grid-amazon-fixed">
-
-    <div class="tarjeta-amazon" onclick="window.location.href='categorias.html?cat=Tecnología'">
-      <h3>Tecnología</h3>
-      <div class="grilla-collage">
-        <div class="cuadro-foto">
-          <img src="img/celular.jpg" class="img-amazon-full">
-          <p>Celulares</p>
-        </div>
-        <div class="cuadro-foto">
-          <img src="img/laptop.jpg" class="img-amazon-full">
-          <p>Laptops</p>
-        </div>
-        <div class="cuadro-foto">
-          <img src="img/reloj.jpg" class="img-amazon-full">
-          <p>Relojes</p>
-        </div>
-        <div class="cuadro-foto">
-          <img src="img/audio.jpg" class="img-amazon-full">
-          <p>Audio</p>
-        </div>
-      </div>
-      <span class="link-amazon">Ver más</span>
-    </div>
-
-    <div class="tarjeta-amazon" onclick="window.location.href='categorias.html?cat=Juegos'">
-      <h3>Juegos y Consolas</h3>
-      <div class="foto-grande-wrap">
-        <img src="img/consolas.jpg" class="img-amazon-full">
-      </div>
-      <span class="link-amazon">Explorar ahora</span>
-    </div>
-
-    <div class="tarjeta-amazon" onclick="window.location.href='categorias.html?cat=Hogar'">
-      <h3>Hogar y Muebles</h3>
-      <div class="foto-grande-wrap">
-        <img src="img/hogar.jpg" class="img-amazon-full">
-      </div>
-      <span class="link-amazon">Ver decoración</span>
-    </div>
-
-  </div>
-</section>
-<style>
-  .contenedor-seccion-nueva {
+<style> 
+/* Contenedor principal */
+.seccion-categorias-amazon {
+    padding: 20px 40px !important;
     background-color: #eaeded !important;
-    padding: 40px 20px !important;
-    display: block !important;
-  }
+}
 
-  .titulo-amazon-fixed {
-    max-width: 1200px;
-    margin: 0 auto 20px auto !important;
-    font-size: 22px !important;
-    text-align: left !important;
-    color: #111 !important;
-  }
+.titulo-amazon {
+    font-size: 21px !important;
+    font-weight: 700 !important;
+    margin-bottom: 20px !important;
+}
 
-  .grid-amazon-fixed {
+/* El grid que alinea las 4 tarjetas */
+.grid-categorias-amazon {
     display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    grid-template-columns: repeat(4, 1fr) !important; /* 4 columnas fijas */
     gap: 20px !important;
-    max-width: 1200px !important;
-    margin: 0 auto !important;
-  }
+}
 
-  .tarjeta-amazon {
+/* La tarjeta blanca */
+.tarjeta-categoria {
     background: white !important;
     padding: 20px !important;
     display: flex !important;
     flex-direction: column !important;
     height: 420px !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-    cursor: pointer !important;
-  }
+}
 
-  .tarjeta-amazon h3 {
-    font-size: 19px !important;
-    margin: 0 0 15px 0 !important;
-    text-align: left !important;
-    color: #0f1111 !important;
-  }
-
-  /* COLLAGE */
-  .grilla-collage {
+/* El mini-grid dentro de cada tarjeta */
+.grid-imagenes {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 10px !important;
     flex-grow: 1 !important;
-  }
+}
 
-  .cuadro-foto {
+.item-img {
     display: flex !important;
     flex-direction: column !important;
-  }
-
-  .cuadro-foto p {
-    font-size: 11px !important;
-    margin: 4px 0 0 0 !important;
-    color: #111 !important;
-    min-height: auto !important;
     text-align: left !important;
-  }
+}
 
-  /* EL ARREGLO FINAL PARA LA IMAGEN */
-  .img-amazon-full {
+/* Forzar imágenes a rellenar */
+.item-img img {
     width: 100% !important;
-    height: 120px !important; /* Altura fija para que todas las miniaturas sean iguales */
-    object-fit: cover !important; /* Esto evita que la imagen se vea "estirada" */
+    height: 120px !important; /* Ajusta esto si quieres más alto */
+    object-fit: cover !important;
     display: block !important;
-    margin: 0 !important;
 }
 
-.foto-grande-wrap .img-amazon-full {
-    height: 300px !important; /* La imagen grande de juegos/hogar se mantiene alta */
+.item-img span {
+    font-size: 12px !important;
+    margin-top: 5px !important;
 }
 
-  .foto-grande-wrap .img-amazon-full {
-    height: 280px !important; /* Para la imagen única */
-  }
-
-  .link-amazon {
+.ver-mas-link {
     color: #007185 !important;
     font-size: 13px !important;
-    margin-top: 15px !important;
-    text-align: left !important;
-    font-weight: 500 !important;
-  }
+    margin-top: 10px !important;
+    text-decoration: none !important;
+}
 </style>
 <footer>
     <div class="footer-container">
