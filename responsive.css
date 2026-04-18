@@ -530,10 +530,6 @@ img { max-width: 100%; height: auto; }
         margin: 20px auto !important;
     }
 
-    .categorias-grid {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 10px !important;
-    }
 
     .categoria-card { padding: 16px !important; }
     .categoria-icon { font-size: 26px !important; }

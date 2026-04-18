@@ -74,12 +74,7 @@
             padding: 0 16px;
         }
 
-        .categorias-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 40px;
-        }
+        
 
         .categoria-card {
             background: white;
@@ -222,41 +217,7 @@
 
     <div class="soporte-wrapper">
 
-        <div class="categorias-grid">
-            <a href="#faq" class="categoria-card">
-                <div class="categoria-icon">🛒</div>
-                <div class="categoria-titulo">Compras</div>
-                <div class="categoria-desc">Cómo comprar seguro</div>
-            </a>
-            <a href="#faq" class="categoria-card">
-                <div class="categoria-icon">💰</div>
-                <div class="categoria-titulo">Ventas</div>
-                <div class="categoria-desc">Publica y vende fácil</div>
-            </a>
-            <a href="#faq" class="categoria-card">
-                <div class="categoria-icon">🔒</div>
-                <div class="categoria-titulo">Pagos y Escrow</div>
-                <div class="categoria-desc">Tu dinero protegido</div>
-            </a>
-            <a href="#faq" class="categoria-card">
-                <div class="categoria-icon">👤</div>
-                <div class="categoria-titulo">Mi Cuenta</div>
-                <div class="categoria-desc">Perfil y configuración</div>
-            </a>
-        </div>
-
         <p class="seccion-titulo" id="faq">Preguntas Frecuentes</p>
-
-        <div id="faq-lista">
-            <div class="faq-item">
-                <div class="faq-pregunta" onclick="toggleFAQ(this)">
-                    ¿Cómo funciona el sistema de pago seguro (Escrow)?
-                    <span class="faq-icon">+</span>
-                </div>
-                <div class="faq-respuesta">
-                    Cuando realizas una compra, tu dinero queda retenido en nuestra plataforma. El vendedor recibe el pago solo cuando tú confirmas que recibiste el producto en las condiciones acordadas. Así ambas partes están protegidas.
-                </div>
-            </div>
 
             <div class="faq-item">
                 <div class="faq-pregunta" onclick="toggleFAQ(this)">
@@ -274,7 +235,7 @@
                     <span class="faq-icon">+</span>
                 </div>
                 <div class="faq-respuesta">
-                    Sí. Todos los usuarios pasan por un proceso de verificación de identidad. Además el sistema de Escrow garantiza que tu dinero está protegido hasta confirmar la recepción del producto.
+                    Sí. Todos los usuarios pasan por un proceso de verificación de identidad. Siempre verifica que la cuenta del vendedor sea verificada. 
                 </div>
             </div>
 
@@ -300,11 +261,11 @@
 
             <div class="faq-item">
                 <div class="faq-pregunta" onclick="toggleFAQ(this)">
-                    ¿Cuánto cobra Shopseguro por cada venta?
+                    ¿Shopseguro cobra por cada venta?
                     <span class="faq-icon">+</span>
                 </div>
                 <div class="faq-respuesta">
-                    Actualmente Shopseguro está en fase de lanzamiento y no cobra comisiones. En el futuro se aplicará una comisión justa y transparente, muy por debajo de la competencia.
+                    La respuesta es no, este sitio viene ayudarte a vender no a perder dinero en tus ventas. 
                 </div>
             </div>
 
@@ -327,7 +288,7 @@
                         <span class="contacto-metodo-icon">📧</span>
                         <div>
                             <strong>Email</strong><br>
-                            <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f5869a859a878190b5869d9a8586909280879adb969a98">[email&#160;protected]</a></span>
+                            <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f5869a859a878190b5869d9a8586909280879adb969a98">contacto.shopseguro@gmail.com</a></span>
                         </div>
                     </div>
                     <div class="contacto-metodo">
@@ -346,23 +307,31 @@
                     </div>
                 </div>
 
-                <div>
-                    <h3 style="font-size:20px; color:#1a1a2e; margin-bottom:16px;">Envíanos un mensaje</h3>
-                    <div class="form-contacto">
-                        <input type="text" id="contacto-nombre" placeholder="Tu nombre">
-                        <input type="email" id="contacto-email" placeholder="Tu email">
-                        <select id="contacto-tema">
-                            <option value="">Selecciona el tema</option>
-                            <option value="compra">Problema con una compra</option>
-                            <option value="venta">Problema con una venta</option>
-                            <option value="cuenta">Problema con mi cuenta</option>
-                            <option value="pago">Problema con un pago</option>
-                            <option value="otro">Otro</option>
-                        </select>
-                        <textarea id="contacto-mensaje" rows="4" placeholder="Describe tu problema..."></textarea>
-                        <button class="btn-enviar" onclick="enviarContacto()">Enviar mensaje ➤</button>
-                    </div>
-                </div>
+            <div>
+                <h3 style="font-size:20px; color:#1a1a2e; margin-bottom:16px;">Envíanos un mensaje</h3>
+                <form action="https://formsubmit.co/contacto.shopseguro@gmail.com" method="POST" class="form-contacto">
+                <input type="text" name="Nombre" id="contacto-nombre" placeholder="Tu nombre" required>
+    
+                <input type="email" name="Email" id="contacto-email" placeholder="Tu email" required>
+    
+                <select name="Tema" id="contacto-tema" required>
+                <option value="">Selecciona el tema</option>
+                <option value="compra">Problema con una compra</option>
+                <option value="venta">Problema con una venta</option>
+                <option value="cuenta">Problema con mi cuenta</option>
+                <option value="pago">Problema con un pago</option>
+                <option value="otro">Otro</option>
+                </select>
+                
+                <textarea name="Mensaje" id="contacto-mensaje" rows="4" placeholder="Describe tu problema..." required></textarea>
+
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" value="https://shop-seguro.onrender.com">
+
+                <button type="submit" class="btn-enviar">Enviar mensaje ➤</button>
+             </form>
+             </div>
             </div>
         </div>
 

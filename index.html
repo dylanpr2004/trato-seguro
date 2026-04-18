@@ -304,13 +304,143 @@
         <p style="grid-column:1/-1;text-align:center;padding:40px;color:#9ca3af;">Cargando productos...</p>
     </div>
 </section>
+<section class="contenedor-seccion-nueva">
+  <h2 class="titulo-amazon-fixed">Explorar por categorías</h2>
+  <div class="grid-amazon-fixed">
 
+    <div class="tarjeta-amazon" onclick="window.location.href='categorias.html?cat=Tecnología'">
+      <h3>Tecnología</h3>
+      <div class="grilla-collage">
+        <div class="cuadro-foto">
+          <img src="img/celular.jpg" class="img-amazon-full">
+          <p>Celulares</p>
+        </div>
+        <div class="cuadro-foto">
+          <img src="img/laptop.jpg" class="img-amazon-full">
+          <p>Laptops</p>
+        </div>
+        <div class="cuadro-foto">
+          <img src="img/reloj.jpg" class="img-amazon-full">
+          <p>Relojes</p>
+        </div>
+        <div class="cuadro-foto">
+          <img src="img/audio.jpg" class="img-amazon-full">
+          <p>Audio</p>
+        </div>
+      </div>
+      <span class="link-amazon">Ver más</span>
+    </div>
+
+    <div class="tarjeta-amazon" onclick="window.location.href='categorias.html?cat=Juegos'">
+      <h3>Juegos y Consolas</h3>
+      <div class="foto-grande-wrap">
+        <img src="img/consolas.jpg" class="img-amazon-full">
+      </div>
+      <span class="link-amazon">Explorar ahora</span>
+    </div>
+
+    <div class="tarjeta-amazon" onclick="window.location.href='categorias.html?cat=Hogar'">
+      <h3>Hogar y Muebles</h3>
+      <div class="foto-grande-wrap">
+        <img src="img/hogar.jpg" class="img-amazon-full">
+      </div>
+      <span class="link-amazon">Ver decoración</span>
+    </div>
+
+  </div>
+</section>
+<style>
+  .contenedor-seccion-nueva {
+    background-color: #eaeded !important;
+    padding: 40px 20px !important;
+    display: block !important;
+  }
+
+  .titulo-amazon-fixed {
+    max-width: 1200px;
+    margin: 0 auto 20px auto !important;
+    font-size: 22px !important;
+    text-align: left !important;
+    color: #111 !important;
+  }
+
+  .grid-amazon-fixed {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: 20px !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+  }
+
+  .tarjeta-amazon {
+    background: white !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 420px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    cursor: pointer !important;
+  }
+
+  .tarjeta-amazon h3 {
+    font-size: 19px !important;
+    margin: 0 0 15px 0 !important;
+    text-align: left !important;
+    color: #0f1111 !important;
+  }
+
+  /* COLLAGE */
+  .grilla-collage {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    flex-grow: 1 !important;
+  }
+
+  .cuadro-foto {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .cuadro-foto p {
+    font-size: 11px !important;
+    margin: 4px 0 0 0 !important;
+    color: #111 !important;
+    min-height: auto !important;
+    text-align: left !important;
+  }
+
+  /* EL ARREGLO FINAL PARA LA IMAGEN */
+  .img-amazon-full {
+    width: 100% !important;
+    height: 120px !important; /* Altura fija para que todas las miniaturas sean iguales */
+    object-fit: cover !important; /* Esto evita que la imagen se vea "estirada" */
+    display: block !important;
+    margin: 0 !important;
+}
+
+.foto-grande-wrap .img-amazon-full {
+    height: 300px !important; /* La imagen grande de juegos/hogar se mantiene alta */
+}
+
+  .foto-grande-wrap .img-amazon-full {
+    height: 280px !important; /* Para la imagen única */
+  }
+
+  .link-amazon {
+    color: #007185 !important;
+    font-size: 13px !important;
+    margin-top: 15px !important;
+    text-align: left !important;
+    font-weight: 500 !important;
+  }
+</style>
 <footer>
     <div class="footer-container">
         <div class="footer-col">
             <h3>🛡️ Shopseguro</h3>
             <p id="footer-desc">La plataforma más segura de Chile para comprar y vender entre personas.</p>
-            <a href="/cdn-cgi/l/email-protection#b5d6dadbc1d4d6c1daf5c6dddac5c6d0d2c0c7da9bd6d9"><span class="__cf_email__" data-cfemail="27444849534644534867544f485754424052554809444b">[email&#160;protected]</span></a>
+            <a href="/cdn-cgi/l/email-protection#b5d6dadbc1d4d6c1daf5c6dddac5c6d0d2c0c7da9bd6d9"><span class="__cf_email__" data-cfemail="27444849534644534867544f485754424052554809444b">contacto.shopseguro@gmail.com</span></a>
         </div>
         <div class="footer-col">
             <h3 id="footer-ayuda">Ayuda y Legal</h3>
@@ -344,20 +474,20 @@ if (token && usuario) {
     document.getElementById('btn-acceso').href = 'perfil.html';
 }
 
-// Aplicar idioma guardado al cargar
-aplicarIdioma();
+    // Aplicar idioma guardado al cargar
+    aplicarIdioma();
 
-// Selector idioma
-function toggleIdioma(e) {
-    e.stopPropagation();
-    const dd = document.getElementById('idioma-dropdown');
-    dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
-    // Marcar activo
-    document.querySelectorAll('.idioma-opcion').forEach(op => op.classList.remove('activo'));
-    const opciones = document.querySelectorAll('.idioma-opcion');
-    const langs = ['es','en','pt'];
-    opciones.forEach((op, i) => { if (langs[i] === idiomaActual) op.classList.add('activo'); });
-}
+    // Selector idioma
+    function toggleIdioma(e) {
+        e.stopPropagation();
+        const dd = document.getElementById('idioma-dropdown');
+        dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+        // Marcar activo
+        document.querySelectorAll('.idioma-opcion').forEach(op => op.classList.remove('activo'));
+        const opciones = document.querySelectorAll('.idioma-opcion');
+        const langs = ['es','en','pt'];
+        opciones.forEach((op, i) => { if (langs[i] === idiomaActual) op.classList.add('activo'); });
+    }
 
 // Menú categorías
 function toggleCategorias(e) {
